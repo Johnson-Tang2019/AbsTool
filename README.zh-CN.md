@@ -117,3 +117,28 @@ Servux 连续三次超时后会重新握手并尝试 Jade。只有新的有效�
 名称仅显示最接近准星的目标，避免密集阵列文字重叠。
 Fabric 已目视验证 Iris 1.11.4、Sodium 0.9.2 和 Complementary Reimagined r5.9.1 的穿墙框线，
 不代表所有光影包均已验证。两种加载器均已连接官方 Servux 0.11.5 服务器测试，Fabric 的备用通道已测试 Jade 26.2.11。
+
+### 可选熔炉兼容性测试
+
+下面的脚本仅向忽略的 build 目录下载固定版本测试模组，并检查官方 SHA-512 校验值：
+
+```powershell
+./tools/Prepare-CompatibilityTests.ps1
+./gradlew.bat -PworldTests -PfurnaceTests -PacceptMinecraftEula -PwithJadeTest -PwithIrisTest :fabric:runClientGameTest
+```
+
+仅在接受 Minecraft EULA 后使用 `-PacceptMinecraftEula`。测试创建隔离本地服务器，使用 Servux v2 协议测试夹具，
+并测试真实 Jade 备用通道、范围切换、修复、过期、请求限速和启用光影后的截图。
+去掉 `-PwithIrisTest` 可测试原版渲染。测试夹具不进入正式 JAR。
+
+官方 Servux 服务器测试使用单独的本地目录。先启动服务器，再在另一个终端运行其中一个客户端测试，结束后停止测试服务器：
+
+```powershell
+./tools/Prepare-CompatibilityTests.ps1 -PrepareServuxServer -AcceptMinecraftEula
+./gradlew.bat -PwithRealServuxTest :fabric:runServuxTestServer
+./gradlew.bat -PclientSmoke -PexternalServuxTests :fabric:runClient
+./gradlew.bat -PclientSmoke -PexternalServuxTests :neoforge:runClient
+```
+
+协议参考：[Servux 26.2 entity provider](https://github.com/sakura-ryoko/servux/blob/e40a7562f87b3ac0e557439728f8208aba9b66a6/src/main/java/fi/dy/masa/servux/dataproviders/EntitiesDataProvider.java)、
+[Jade 26.2 furnace provider](https://github.com/Snownee/Jade/blob/747effeddcea3094b940772c7963c272bb2a07df/src/main/java/snownee/jade/addon/vanilla/FurnaceProvider.java)。

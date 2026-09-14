@@ -136,3 +136,30 @@ Keep gameplay code loader independent in common and registration adapters in
 each loader. Reference client-only game classes only from client code.
 Use English identifiers and comments, localize visible strings, and update both READMEs.
 Metadata currently declares All Rights Reserved, matching the reference project.
+
+### Optional furnace compatibility tests
+
+Download pinned, checksum-verified test mods into the ignored build directory:
+
+```powershell
+./tools/Prepare-CompatibilityTests.ps1
+./gradlew.bat -PworldTests -PfurnaceTests -PacceptMinecraftEula -PwithJadeTest -PwithIrisTest :fabric:runClientGameTest
+```
+
+Use `-PacceptMinecraftEula` only after accepting Minecraft's EULA. The furnace test creates
+an isolated local server, uses a Servux v2 protocol fixture, and checks actual Jade fallback,
+range changes, repair, stale state, request limits and screenshots with shaders enabled.
+Omit `-PwithIrisTest` to check vanilla rendering. The test fixture is never shipped.
+
+For the official Servux server test, prepare its separate local directory, launch the server,
+then run either client smoke command in another terminal. Stop the test server afterwards:
+
+```powershell
+./tools/Prepare-CompatibilityTests.ps1 -PrepareServuxServer -AcceptMinecraftEula
+./gradlew.bat -PwithRealServuxTest :fabric:runServuxTestServer
+./gradlew.bat -PclientSmoke -PexternalServuxTests :fabric:runClient
+./gradlew.bat -PclientSmoke -PexternalServuxTests :neoforge:runClient
+```
+
+Protocol references: [Servux 26.2 entity provider](https://github.com/sakura-ryoko/servux/blob/e40a7562f87b3ac0e557439728f8208aba9b66a6/src/main/java/fi/dy/masa/servux/dataproviders/EntitiesDataProvider.java)
+and [Jade 26.2 furnace provider](https://github.com/Snownee/Jade/blob/747effeddcea3094b940772c7963c272bb2a07df/src/main/java/snownee/jade/addon/vanilla/FurnaceProvider.java).

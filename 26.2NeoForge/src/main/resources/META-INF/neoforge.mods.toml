@@ -14,7 +14,7 @@ version="${version}"
 displayName="Ab's Tool"
 displayURL="https://github.com/Johnson-Tang2019/AbsTool"
 authors="AbyssRedemption"
-description='''Client utilities for Minecraft 26.2, including configurable ominous vault tracking.'''
+description='''Client utilities for Minecraft 26.2: ominous vault tracking and furnace input blockage tracking.'''
 
 [[dependencies.abstool]]
 modId="neoforge"

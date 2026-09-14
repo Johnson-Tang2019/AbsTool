@@ -21,7 +21,7 @@ public final class FurnaceSettings {
         category.addEntry(entries.startIntField(text("jade_range"), config.jadeExtraRange).setMin(0).setMax(1000).setDefaultValue(21)
                 .setTooltip(text("jade_range_hint")).setSaveConsumer(v -> config.jadeExtraRange = v).build());
         category.addEntry(entries.startBooleanToggle(text("tracers"), config.tracers).setDefaultValue(true).setSaveConsumer(v -> config.tracers = v).build());
-        category.addEntry(entries.startBooleanToggle(text("labels"), config.labels).setDefaultValue(true).setSaveConsumer(v -> config.labels = v).build());
+        category.addEntry(entries.startBooleanToggle(text("labels"), config.labels).setDefaultValue(true).setTooltip(text("labels_hint")).setSaveConsumer(v -> config.labels = v).build());
         category.addEntry(entries.startBooleanToggle(text("show_stale"), config.showStale).setDefaultValue(true).setSaveConsumer(v -> config.showStale = v).build());
         category.addEntry(entries.startColorField(text("color"), config.color).setDefaultValue(0xFF4040).setSaveConsumer(v -> config.color = v).build());
         category.addEntry(entries.startColorField(text("tracer_color"), config.tracerColor).setDefaultValue(0xFFB040).setSaveConsumer(v -> config.tracerColor = v).build());

@@ -56,6 +56,7 @@ public final class FurnaceTracker {
 
     private static final class Entry {
         final BlockPos pos;
+        final long discoveredAt = System.nanoTime() / 1_000_000;
         ResourceKey<RecipePropertySet> kind;
         long lastRequest, validAt, pendingAt, token;
         boolean blocked, jade, timedOut;
@@ -102,7 +103,7 @@ public final class FurnaceTracker {
         if (now < quarantineUntil || (!servux && handshakeAt != 0 && now - handshakeAt < TIMEOUT)) return;
         while (budget >= 1) {
             budget -= 1;
-            Entry entry = choose(client, now, sequence++ % 3 != 2);
+            Entry entry = choose(client, now, Math.floorMod(sequence++, 3));
             if (entry == null) break;
             entry.lastRequest = now;
             entry.pendingAt = now;
@@ -113,9 +114,10 @@ public final class FurnaceTracker {
         }
     }
 
-    private Entry choose(Minecraft client, long now, boolean priority) {
-        Comparator<Entry> order = Comparator.comparingLong(e -> e.lastRequest);
-        if (priority) order = Comparator.<Entry>comparingInt(e -> e.lastRequest == 0 ? 0 : e.blocked ? 1 : 2).thenComparing(order);
+    private Entry choose(Minecraft client, long now, int queue) {
+        Comparator<Entry> order = Comparator.comparingLong(e -> e.lastRequest == 0 ? e.discoveredAt : e.lastRequest);
+        if (queue == 0) order = Comparator.<Entry>comparingInt(e -> e.lastRequest == 0 ? 0 : 1).thenComparing(order);
+        if (queue == 1) order = Comparator.<Entry>comparingInt(e -> e.blocked ? 0 : 1).thenComparing(order);
         return targets.values().stream()
                 .filter(e -> e.pendingAt == 0 && now - e.lastRequest >= (e.blocked ? 2000 : 5000) && active(client, e))
                 .min(order).orElse(null);
@@ -203,6 +205,8 @@ public final class FurnaceTracker {
             buf.readVarInt(); buf.readVarInt();
             List<ItemStack> inventory = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf);
             if (inventory.size() == 3 && !buf.isReadable()) accept(e, inventory.getFirst());
+        } catch (RuntimeException ignored) {
+            // Invalid provider data must expire as unknown, including local replies.
         } finally { buf.release(); }
     }
 

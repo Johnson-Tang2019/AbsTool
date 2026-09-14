@@ -17,16 +17,33 @@ public final class FurnaceWorldTest implements FabricClientGameTest {
             server.runCommand("setblock 2 100 4 minecraft:blast_furnace{Items:[{Slot:0b,id:\"minecraft:potato\",count:1}]}");
             server.runCommand("setblock -2 100 4 minecraft:smoker{Items:[{Slot:0b,id:\"minecraft:raw_iron\",count:1}]}");
             server.runCommand("setblock 0 100 6 minecraft:furnace{Items:[{Slot:0b,id:\"minecraft:raw_iron\",count:1}]}");
+            server.runOnServer(gameServer -> {
+                // Generate the distant fixture before the client receives this chunk.
+                var world = gameServer.overworld();
+                var pos = new net.minecraft.core.BlockPos(140, 100, 4);
+                world.getChunk(pos);
+                world.setBlockAndUpdate(pos, net.minecraft.world.level.block.Blocks.FURNACE.defaultBlockState());
+                ((net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity) world.getBlockEntity(pos))
+                        .setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIRT));
+            });
             context.runOnClient(client -> {
                 ConfigManager.get().enabled = false;
                 var config = FurnaceTracker.config(); config.enabled = true; config.jadeFallback = false;
+                client.options.renderDistance().set(16);
+                client.options.broadcastOptions();
             });
-            context.waitFor(client -> FurnaceTracker.INSTANCE.extract(client).boxes().targets().size() == 3, 400);
+            context.waitFor(client -> FurnaceTracker.INSTANCE.extract(client).boxes().targets().size() == 4, 500);
+            context.runOnClient(client -> {
+                FurnaceTracker.config().range = com.abyssredemption.abstool.client.furnace.FurnaceConfig.Range.BLOCKS_128;
+                var distant = FurnaceTracker.INSTANCE.extract(client).boxes().targets().stream().filter(t -> t.x() == 140).findFirst().orElseThrow();
+                if (distant.color() != 0xFF999999) throw new AssertionError("Outside range must be retained as stale");
+                FurnaceTracker.config().range = com.abyssredemption.abstool.client.furnace.FurnaceConfig.Range.ALL_LOADED;
+            });
             context.getInput().lookAt(new net.minecraft.core.BlockPos(0, 100, 4));
             context.waitTicks(10);
             context.takeScreenshot("abstool-furnace-blocked");
             server.runCommand("data merge block 0 100 4 {Items:[]}");
-            context.waitFor(client -> FurnaceTracker.INSTANCE.extract(client).boxes().targets().size() == 2, 200);
+            context.waitFor(client -> FurnaceTracker.INSTANCE.extract(client).boxes().targets().size() == 3, 200);
             server.runCommand("fill -3 100 3 3 102 3 minecraft:stone");
             context.waitTicks(10);
             context.takeScreenshot("abstool-furnace-through-wall");
