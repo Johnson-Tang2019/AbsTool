@@ -133,7 +133,7 @@ if (providers.gradleProperty('worldTests').isPresent()) {
         dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/jade.jar')) }
     }
     if (providers.gradleProperty('withIrisTest').isPresent()) {
-        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/iris.jar'), rootProject.file('build/reference/testmods/sodium.jar')) }
+        dependencies { runtimeOnly files(rootProject.file(providers.gradleProperty('iris112Test').isPresent() ? 'build/reference/testmods/iris-1.11.2.jar' : 'build/reference/testmods/iris.jar'), rootProject.file(providers.gradleProperty('iris112Test').isPresent() ? 'build/reference/testmods/sodium-0.9.1.jar' : 'build/reference/testmods/sodium.jar')) }
         tasks.named('runClientGameTest', JavaExec) {
             doFirst {
                 def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile

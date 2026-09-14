@@ -15,7 +15,8 @@ unknown JSON fields, and vault records are retained.
 
 The experimental **Fabric** Litematica/Iris adapter is under Optimization.
 AUTO supports only Minecraft 26.2, Litematica 0.28.8, MaLiLib 0.29.6,
-Iris 1.11.4+mc26.2, and Sodium 0.9.2+mc26.2 on OpenGL. Install these separately.
+either Iris 1.11.4+mc26.2 with Sodium 0.9.2+mc26.2 or Iris 1.11.2+mc26.2
+with Sodium 0.9.1+mc26.2 on OpenGL. Install these separately.
 OFF restores upstream drawing. NeoForge does not enable this new adapter.
 Textured and translucent projections were checked in game with Complementary
 Reimagined r5.9.1; this is not a guarantee for other packs or versions.

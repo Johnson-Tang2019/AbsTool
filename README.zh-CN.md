@@ -13,8 +13,8 @@ R+B 打开统一设置页，分类为 **全部／追踪／优化**。
 ModMenu 和 NeoForge 设置按钮使用同一界面；保留已有设置、未知 JSON 字段和宝库记录。
 
 “优化”中新增实验性的 **Fabric** Litematica／Iris 适配。AUTO 仅适用于
-Minecraft 26.2、Litematica 0.28.8、MaLiLib 0.29.6、Iris 1.11.4+mc26.2、
-Sodium 0.9.2+mc26.2 和 OpenGL，需要分别安装依赖。OFF 恢复上游绘制。
+Minecraft 26.2、Litematica 0.28.8、MaLiLib 0.29.6、Iris 1.11.4+mc26.2 + Sodium 0.9.2+mc26.2
+或 Iris 1.11.2+mc26.2 + Sodium 0.9.1+mc26.2，以及 OpenGL，需要分别安装依赖。OFF 恢复上游绘制。
 NeoForge 暂不启用这项新适配。
 已在 Complementary Reimagined r5.9.1 下实际检查带贴图、半透明投影，
 不代表所有光影包或其他版本均已兼容。客户端诊断命令：`/abstool schematicshader status`。

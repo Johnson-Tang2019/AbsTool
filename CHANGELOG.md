@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 — 2026-09-14
+
+- Add Fabric projection shader compatibility for Iris 1.11.2+mc26.2 paired with
+  Sodium 0.9.1+mc26.2. Keep Iris 1.11.4 / Sodium 0.9.2 support.
+- Validate the additional Iris release bytecode and show installed versions in diagnostics.
+- 新增 Iris 1.11.2 + Sodium 0.9.1 的投影光影适配，保留原版本组合。
+  Litematica 0.28.8 与 MaLiLib 0.29.6 版本要求不变。
+
+
 ## 0.2.0 — 2026-09-14
 
 - Add All / Tracking / Optimization tabs to the existing shared settings screen.

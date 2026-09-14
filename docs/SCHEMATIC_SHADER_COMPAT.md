@@ -14,8 +14,8 @@ tracking render pipelines are independent of the optional compatibility Mixins.
 | Minecraft | 26.2 | Existing project |
 | Litematica | 0.28.8 | Modrinth CuniXtbo; source 5bd793d44ad5f047cad3f4b389e8dd0368b6e5a8 |
 | MaLiLib | 0.29.6 | Modrinth KvjmGjAV; source 5c028ed94037a73c07118cdc8170f89dc4a6e516 |
-| Iris | 1.11.4+mc26.2 | Modrinth gxZWWnKH |
-| Sodium | 0.9.2+mc26.2 | Modrinth xJZxADzI |
+| Iris | 1.11.4+mc26.2 / 1.11.2+mc26.2 | Modrinth gxZWWnKH / oaD6KQls |
+| Sodium | 0.9.2+mc26.2 / 0.9.1+mc26.2 | Modrinth xJZxADzI / 2Yom1N68 |
 | Complementary Reimagined | r5.9.1 | Modrinth ErCjThzb, default HIGH profile |
 
 The test preparation script downloads official artifacts and verifies their
@@ -89,3 +89,11 @@ ArrayIndexOutOfBoundsException even before a projection exists. The opt-in test
 Mixin pads only this validation result with null slots. Validation remains
 enabled. This fixture is not packaged in either release JAR and is not counted
 as a production compatibility fix.
+
+## Additional 0.2.1 dependency pair
+
+Iris 1.11.2 requires the supported Sodium 0.9.1 pair; Sodium 0.9.2 explicitly
+breaks Iris <=1.11.2 in its Fabric metadata. The original Iris 1.11.4 / Sodium
+0.9.2 pair remains supported. Litematica and MaLiLib pins are unchanged.
+Iris 1.11.2 has separate hashes for IrisRenderingPipeline and MixinRenderPipeline;
+ImmediateState is byte-identical. Unknown binaries and cross-pairs remain gated.

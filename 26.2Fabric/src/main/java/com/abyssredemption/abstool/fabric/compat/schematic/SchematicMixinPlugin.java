@@ -36,7 +36,15 @@ public final class SchematicMixinPlugin implements IMixinConfigPlugin {
             for (var target : TARGETS) {
                 var path = loader.getModContainer(target.mod()).orElseThrow().findPath(target.resource()).orElseThrow();
                 String actual = java.util.HexFormat.of().formatHex(digest.digest(java.nio.file.Files.readAllBytes(path)));
-                if (!actual.equals(target.sha256())) { reason = "Unsupported bytecode: " + target.resource(); return; }
+                String expected = target.sha256();
+                if (target.mod().equals("iris") && installed.get("iris").equals("1.11.2+mc26.2")) {
+                    expected = switch (target.resource()) {
+                        case "net/irisshaders/iris/pipeline/IrisRenderingPipeline.class" -> "92442d66f2750e2e45e751f005dd53bb99867e04ec6bfb6ea22a41bf144c7097";
+                        case "net/irisshaders/iris/mixin/MixinRenderPipeline.class" -> "eb1f13bfbf0d626b0d8984111120ef4c18cfa66e7ec9c7ac5e63d1abe4026d7d";
+                        default -> expected;
+                    };
+                }
+                if (!actual.equals(expected)) { reason = "Unsupported bytecode: " + target.resource(); return; }
             }
             supported = true;
             reason = "Supported pinned combination";

@@ -42,3 +42,15 @@ entrypoint list is restored by resource processing.
 
 Screenshot acceptance must inspect actual textures and real-world shading.
 Passing client assertions means only that the exercised assertions passed.
+
+### Iris 1.11.2 / Sodium 0.9.1
+
+After preparing optional test dependencies, run the same isolated projection
+fixture with the additional pair (no existing tracking tests):
+
+```powershell
+./gradlew.bat --offline -PworldTests -PschematicTests -PwithIrisTest -Piris112Test :fabric:runClientGameTest
+```
+
+The flag selects both release JARs together. Omitting it retains the original
+Iris 1.11.4 / Sodium 0.9.2 fixture. Do not combine Iris 1.11.2 with Sodium 0.9.2.

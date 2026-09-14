@@ -1,5 +1,10 @@
 # Development status
 
+Version 0.2.1 additionally supports Iris 1.11.2 with Sodium 0.9.1 on Fabric.
+The isolated projection game test passed; actual textured/translucent meshes,
+occlusion, resource reload and a large schematic were visually inspected.
+Litematica 0.28.8 and MaLiLib 0.29.6 remain required.
+
 Version 0.2.0 adds All / Tracking / Optimization settings tabs and a Fabric-only
 experimental Litematica/Iris adapter. The pinned combination passed actual
 textured and translucent projection checks with Complementary Reimagined r5.9.1,

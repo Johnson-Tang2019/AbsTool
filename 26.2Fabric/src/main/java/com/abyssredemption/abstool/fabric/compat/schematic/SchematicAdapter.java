@@ -45,7 +45,7 @@ public final class SchematicAdapter {
                 : failure != null ? SchematicShaderStatus.State.ERROR
                 : !IrisApi.getInstance().isShaderPackInUse() ? SchematicShaderStatus.State.SHADERS_OFF
                 : active() ? SchematicShaderStatus.State.ACTIVE : SchematicShaderStatus.State.UNSUPPORTED_BACKEND;
-        return new SchematicShaderStatus.Snapshot(state, "Experimental local schematic pass; Litematica 0.28.8 / MaLiLib 0.29.6 / Iris 1.11.4 / Sodium 0.9.2; "
+        return new SchematicShaderStatus.Snapshot(state, "Experimental local schematic pass; Litematica 0.28.8 / MaLiLib 0.29.6 / Iris " + net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("iris").orElseThrow().getMetadata().getVersion().getFriendlyString() + " / Sodium " + net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("sodium").orElseThrow().getMetadata().getVersion().getFriendlyString() + "; "
                 + RenderSystem.getDevice().getDeviceInfo().backendName() + (failure == null ? "" : "; " + failure), draws);
     }
     public static boolean active() {

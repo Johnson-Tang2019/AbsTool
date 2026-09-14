@@ -1,4 +1,4 @@
-# Compatibility evidence — 0.2.0
+# Compatibility evidence — 0.2.1
 
 The user confirmed the displayed in-game result. Support remains experimental
 and limited to the pinned Fabric/OpenGL combination in SCHEMATIC_SHADER_COMPAT.md.
@@ -36,7 +36,7 @@ overlay, wall, transformation, layer, third-person, reload, resize, settings, an
 large-schematic images follow. The successful extended run is recorded in
 `build/schematic-extended-world.log`.
 
-## Measured frame intervals
+## Measured frame intervals (original 0.2.0 pair)
 
 Windows 11, Core i5-14600K, RTX 5070 Ti, driver 610.62, OpenGL,
 Complementary Reimagined r5.9.1 default HIGH, view distance 5 chunks, cap 120 FPS.
@@ -58,8 +58,7 @@ Other shader packs, every connecting/waterlogged model state, animated/modded
 block entities, arbitrary mod renderers, large-coordinate and negative-origin
 placement precision, view-bob/motion stress, subregion toggling, fullscreen,
 dimension/rejoin stress, and long-duration memory/performance behavior remain
-unverified. Physical dedicated-server startup and an actual older optional-mod
-binary were not rerun for this increment; physical-server/unknown-version gates
+unverified. Physical dedicated-server startup was not rerun for this increment; physical-server/unknown-version gates
 were verified in the isolated policy test. No combined tracking benchmark was run after the user asked to stop
 retesting existing features. These are explicit coverage limits, not silently
 hidden projection types. Existing Litematica features keep their upstream paths.
@@ -71,3 +70,23 @@ hidden projection types. Existing Litematica features keep their upstream paths.
 retained MIT notice, absence of test classes and third-party mod classes, and
 absence of the Fabric adapter in the NeoForge JAR. Exact checksums accompany the
 GitHub Release as SHA256SUMS.txt.
+
+## 0.2.1: Iris 1.11.2 / Sodium 0.9.1
+
+The isolated client world test passed with the official Iris 1.11.2+mc26.2 and
+Sodium 0.9.1+mc26.2 release JARs, Litematica 0.28.8, MaLiLib 0.29.6 and the same
+Complementary Reimagined r5.9.1/OpenGL setup. Log:
+`build/schematic-iris112-world.log`; 14 screenshots:
+`build/schematic-evidence/iris112/`.
+
+Visual inspection confirmed the OFF/AUTO comparison, actual textured translucent
+block meshes, the model grid, wall occlusion, resource reload and the large
+hollow-brick projection. The fixture also exercised shader toggling, opacity,
+rotation/mirror, layers, third person and resize; final ACTIVE and submitted-index
+assertions passed. This does not extend certification to other shader packs or
+all model states. Existing tracking tests were not repeated.
+
+Sodium 0.9.2 rejects Iris <=1.11.2 at Fabric resolution time; the supported old
+pair therefore uses Sodium 0.9.1. Version-policy verification covers rejection
+of that mismatched pair and an untested Iris version. The original pair remains
+accepted. Both release loaders are assembled for 0.2.1.

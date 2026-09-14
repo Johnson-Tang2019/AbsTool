@@ -11,6 +11,13 @@ public final class SchematicVerification {
         var versions = com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.PINNED;
         require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, true).isEmpty(), "Pinned combination must pass");
         require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, false).isEmpty(), "Physical server must not load rendering hooks");
+        var iris112 = new java.util.HashMap<>(versions);
+        iris112.put("iris", "1.11.2+mc26.2");
+        require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(iris112, true).isEmpty(), "Incompatible Iris/Sodium pair must remain gated");
+        iris112.put("sodium", "0.9.1+mc26.2");
+        require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(iris112, true).isEmpty(), "Iris 1.11.2 must be supported");
+        iris112.put("iris", "1.11.3+mc26.2");
+        require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(iris112, true).isEmpty(), "Untested Iris versions must remain gated");
         for (String id : versions.keySet()) {
             var changed = new java.util.HashMap<>(versions);
             changed.remove(id);
