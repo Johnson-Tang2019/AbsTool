@@ -81,8 +81,10 @@ Red boxes, tracers, and item names indicate confirmed blockage. Entries outside 
 scan area, timed-out entries, and data older than 30 seconds (configurable) are gray and labeled
 **last seen blocked (stale)**. Settings show discovered and unknown/expired counts. Up to 8192
 entries are held in memory; disconnecting or changing dimension clears them to prevent world
-mixups. Furnace records do not persist across sessions. Rendering uses the same extraction
-and custom geometry path as the vault tracker; shader-pack compatibility needs explicit testing.
+mixups. Furnace records do not persist across sessions. To prevent overlapping text in dense arrays, the name nearest the crosshair is shown.
+Fabric was visually checked with Iris 1.11.4, Sodium 0.9.2 and Complementary Reimagined r5.9.1,
+including through-wall boxes. This is not a guarantee for every shader pack. Both loaders were
+checked against the official Servux 0.11.5 server, and Fabric fallback against Jade 26.2.11.
 
 ## Build and run
 

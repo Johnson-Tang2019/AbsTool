@@ -1,5 +1,5 @@
 {
-  "text.abstool.vault.title": "Ab's Tool — Ominous Vault",
+  "text.abstool.vault.title": "Ab's Tool Settings",
   "text.abstool.vault.category.general": "Highlight",
   "text.abstool.vault.category.tracer": "Tracers",
   "text.abstool.vault.category.refresh": "Refresh",
@@ -38,7 +38,7 @@
   "text.abstool.furnace.expiry": "Data expiry (seconds)",
   "text.abstool.furnace.jade": "Use Jade when Servux is unavailable",
   "text.abstool.furnace.tracers": "Draw tracers",
-  "text.abstool.furnace.labels": "Show blocked item names",
+  "text.abstool.furnace.labels": "Show targeted item name",
   "text.abstool.furnace.show_stale": "Keep stale locations in gray",
   "text.abstool.furnace.color": "Blocked furnace color",
   "text.abstool.furnace.tracer_color": "Tracer color",
@@ -46,5 +46,6 @@
   "text.abstool.furnace.stale": "Last seen blocked (stale): %s",
   "text.abstool.furnace.status": "Servux handshake: %s | Discovered: %s | Unknown / expired: %s",
   "text.abstool.furnace.jade_range": "Jade extra query range",
-  "text.abstool.furnace.jade_range_hint": "Default 21, plus player interaction range. Increase only to match the server rule. Jade always enforces its own distance and permissions."
+  "text.abstool.furnace.jade_range_hint": "Default 21, plus player interaction range. Increase only to match the server rule. Jade always enforces its own distance and permissions.",
+  "text.abstool.furnace.labels_hint": "Show one name nearest the crosshair to keep dense furnace arrays readable."
 }
