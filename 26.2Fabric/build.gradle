@@ -1,0 +1,101 @@
+plugins { id 'net.fabricmc.fabric-loom' }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    implementation "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+    compileOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+    if (providers.gradleProperty('withModMenu').isPresent()) {
+        runtimeOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+    }
+}
+
+loom { accessWidenerPath = file('src/main/resources/abstool.accesswidener') }
+if (providers.gradleProperty('externalServuxTests').isPresent()) {
+    loom.runs.client { programArgs '--username', 'Dev' }
+}
+
+if (providers.gradleProperty('withRealServuxTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/servux.jar')) }
+    loom.runs {
+        servuxTestServer {
+            server()
+            runDir 'build/run/servuxServer'
+        }
+    }
+}
+
+if (providers.gradleProperty('clientSmoke').isPresent()) {
+    loom.mods {
+        abstool { sourceSet sourceSets.main }
+        abstool_smoke { sourceSet sourceSets.smoke }
+    }
+    tasks.named('runClient', JavaExec) {
+        dependsOn tasks.named('smokeClasses')
+        classpath += sourceSets.smoke.output
+    }
+    tasks.named('generateDLIConfig') { dependsOn tasks.named('smokeClasses') }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+sourceSets {
+    verification {
+        java.srcDir rootProject.file('common/src/verification/java')
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+
+def verifyVault = tasks.register('verifyVault', JavaExec) {
+    group = 'verification'
+    description = 'Verify vault persistence, refresh scope, configuration and shortcut behavior.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.VaultVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('vault-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
+}
+tasks.named('check') { dependsOn verifyVault }
+
+if (providers.gradleProperty('worldTests').isPresent()) {
+    fabricApi.configureTests {
+        createSourceSet = true
+        modId = 'abstool_world_test'
+        enableGameTests = false
+        enableClientGameTests = true
+    }
+    if (providers.gradleProperty('furnaceTests').isPresent()) {
+        tasks.named('runClientGameTest', JavaExec) {
+            systemProperty 'abstool.furnaceTests', 'true'
+            if (providers.gradleProperty('acceptMinecraftEula').isPresent()) {
+                doFirst {
+                    def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile
+                    testRun.mkdirs()
+                    new File(testRun, 'eula.txt').text = 'eula=true\n'
+                }
+            }
+        }
+    }
+    if (providers.gradleProperty('withJadeTest').isPresent()) {
+        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/jade.jar')) }
+    }
+    if (providers.gradleProperty('withIrisTest').isPresent()) {
+        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/iris.jar'), rootProject.file('build/reference/testmods/sodium.jar')) }
+        tasks.named('runClientGameTest', JavaExec) {
+            doFirst {
+                def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile
+                new File(testRun, 'config').mkdirs()
+                new File(testRun, 'shaderpacks').mkdirs()
+                new File(testRun, 'config/iris.properties').text = 'enableShaders=true\nshaderPack=ComplementaryReimagined.zip\n'
+                java.nio.file.Files.copy(rootProject.file('build/reference/testmods/ComplementaryReimagined.zip').toPath(),
+                        new File(testRun, 'shaderpacks/ComplementaryReimagined.zip').toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
+    }
+}

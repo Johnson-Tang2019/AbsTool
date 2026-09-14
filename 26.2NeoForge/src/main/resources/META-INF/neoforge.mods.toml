@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All Rights Reserved"
+
+[[mixins]]
+config="abstool.mixins.json"
+
+[[mixins]]
+config="abstool.neoforge.mixins.json"
+
+[[mods]]
+modId="abstool"
+version="${version}"
+displayName="Ab's Tool"
+displayURL="https://github.com/Johnson-Tang2019/AbsTool"
+authors="AbyssRedemption"
+description='''Client utilities for Minecraft 26.2, including configurable ominous vault tracking.'''
+
+[[dependencies.abstool]]
+modId="neoforge"
+type="required"
+versionRange="[26.2.0.77,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.abstool]]
+modId="cloth_config"
+type="required"
+versionRange="[26.2.155,)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.abstool]]
+modId="minecraft"
+type="required"
+versionRange="[26.2]"
+ordering="NONE"
+side="BOTH"

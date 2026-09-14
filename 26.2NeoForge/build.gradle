@@ -1,0 +1,41 @@
+plugins { id 'net.neoforged.moddev' }
+
+dependencies {
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
+}
+
+neoForge {
+    version = rootProject.neo_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+    }
+    mods {
+        abstool { sourceSet sourceSets.main }
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('META-INF/neoforge.mods.toml') { expand version: project.version }
+}
+
+if (providers.gradleProperty('clientSmoke').isPresent()) {
+    neoForge.mods {
+        abstool_smoke { sourceSet sourceSets.smoke }
+    }
+    tasks.named('prepareClientRun') { dependsOn tasks.named('smokeClasses') }
+}
+
+// ModDevGradle 2.0.146 leaves apostrophes unquoted in Java argument files.
+// A checkout such as Ab'sTool otherwise resolves its asset directory as D:\Ab.
+tasks.named('prepareClientRun') {
+    doLast {
+        ['clientRunProgramArgs.txt', 'clientRunVmArgs.txt'].each { name ->
+            def argsFile = layout.buildDirectory.file("moddev/${name}").get().asFile
+            argsFile.setText(argsFile.readLines('UTF-8').collect { line ->
+                line.contains("'") && !line.startsWith('"') ? '"' + line + '"' : line
+            }.join(System.lineSeparator()) + System.lineSeparator(), 'UTF-8')
+        }
+    }
+}

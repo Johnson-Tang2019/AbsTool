@@ -1,0 +1,52 @@
+plugins {
+    id 'base'
+    id 'net.neoforged.moddev' version '2.0.146' apply false
+    id 'net.fabricmc.fabric-loom' version '1.17.20' apply false
+}
+
+tasks.named('wrapper', Wrapper) {
+    gradleVersion = '9.5.1'
+    distributionType = Wrapper.DistributionType.BIN
+    distributionSha256Sum = 'bafc141b619ad6350fd975fc903156dd5c151998cc8b058e8c1044ab5f7b031f'
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    group = rootProject.mod_group_id
+    version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
+    base.archivesName = "abstool-${project.name}"
+    repositories {
+        maven { url = 'https://maven.shedaniel.me/' }
+        maven { url = 'https://maven.terraformersmc.com/releases/' }
+    }
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(25)
+        withSourcesJar()
+    }
+    sourceSets.main.java.srcDir rootProject.file('common/src/main/java')
+    sourceSets.main.resources.srcDir rootProject.file('common/src/main/resources')
+    if (providers.gradleProperty('clientSmoke').isPresent()) {
+        sourceSets {
+            smoke {
+                java.srcDir rootProject.file('common/src/smoke/java')
+                compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+                runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+            }
+        }
+        if (providers.gradleProperty('externalServuxTests').isPresent()) {
+            tasks.withType(JavaExec).configureEach {
+                systemProperty 'abstool.externalServuxTests', 'true'
+            }
+        }
+    }
+    tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+    tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+    // IDEs may request wrapper relative to a loader subproject.
+    tasks.register('wrapper') {
+        group = 'build setup'
+        description = 'Generate the shared Gradle Wrapper in the repository root.'
+        dependsOn rootProject.tasks.named('wrapper')
+    }
+}
+
+tasks.named('build') { dependsOn ':fabric:build', ':neoforge:build' }

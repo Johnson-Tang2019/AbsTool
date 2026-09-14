@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "abstool_world_test",
+  "version": "1.0.0",
+  "name": "Ab's Tool world verification",
+  "environment": "client",
+  "entrypoints": {
+    "main": ["com.abyssredemption.abstool.verification.FurnaceProtocolFixture"],
+    "fabric-client-gametest": ["com.abyssredemption.abstool.verification.VaultWorldTest", "com.abyssredemption.abstool.verification.FurnaceWorldTest"]
+  },
+  "depends": { "abstool": "*" }
+}

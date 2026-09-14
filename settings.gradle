@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.neoforged.net/releases' }
+        maven { url = 'https://maven.fabricmc.net/' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'abstool'
+include 'neoforge', 'fabric'
+project(':neoforge').projectDir = file('26.2NeoForge')
+project(':fabric').projectDir = file('26.2Fabric')

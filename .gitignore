@@ -1,0 +1,20 @@
+.gradle/
+.gradle-user-home/
+**/build/
+**/run/
+**/out/
+**/.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+hs_err_pid*
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+
+# Local third-party visual references; excluded from distribution.
+/references/slashblade/
