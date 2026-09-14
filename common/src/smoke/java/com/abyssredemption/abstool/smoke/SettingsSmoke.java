@@ -30,7 +30,22 @@ public final class SettingsSmoke {
             }
         }
         if (ticks == 40) {
+            var schematicStatus = com.abyssredemption.abstool.client.schematic.SchematicShaderStatus.get();
+            LoggerFactory.getLogger("abstool-smoke").info("ABSTOOL_SCHEMATIC_STARTUP {}", schematicStatus);
+            String expectedState = System.getProperty("abstool.expectedSchematicState");
+            if (expectedState != null && !schematicStatus.state().name().equals(expectedState)) {
+                throw new AssertionError("Unexpected schematic startup state: " + schematicStatus);
+            }
             var config = (me.shedaniel.clothconfig2.gui.AbstractConfigScreen) settings;
+            var categories = config.getCategorizedEntries();
+            var keys = java.util.List.copyOf(categories.keySet());
+            var expected = java.util.List.of("all", "tracking", "optimization").stream()
+                    .map(key -> net.minecraft.network.chat.Component.translatable("text.abstool.category." + key)).toList();
+            if (!keys.equals(expected)) throw new AssertionError("Expected All / Tracking / Optimization tabs: " + keys);
+            if (!categories.get(keys.get(0)).containsAll(categories.get(keys.get(1)))
+                    || !categories.get(keys.get(0)).containsAll(categories.get(keys.get(2)))) {
+                throw new AssertionError("All tab must share category editors to preserve pending edits");
+            }
             config.getCategorizedEntries().values().forEach(entries -> entries.forEach(entry -> {
                 if (entry instanceof me.shedaniel.clothconfig2.gui.entries.BooleanListEntry
                         || entry instanceof me.shedaniel.clothconfig2.gui.entries.EnumListEntry) {

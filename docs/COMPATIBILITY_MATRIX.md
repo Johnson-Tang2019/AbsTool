@@ -1,0 +1,73 @@
+# Compatibility evidence — 0.2.0
+
+The user confirmed the displayed in-game result. Support remains experimental
+and limited to the pinned Fabric/OpenGL combination in SCHEMATIC_SHADER_COMPAT.md.
+
+| Check | Result |
+| --- | --- |
+| Initial clean HEAD and dual-loader build | Passed at 9df1062; no reset |
+| Existing vault game test and R+B | Passed initially; not repeated after user requested this |
+| All / Tracking / Optimization actual settings screen | Captured in game; shared-editor assertions passed |
+| Legacy configuration and unknown nested fields | Migration, backups, repeated saves and record preservation passed |
+| Real generated brick projection, shaders off | Textured block visible |
+| Same projection with shaders, adapter OFF | Selection visible; projected texture absent |
+| Same projection with adapter AUTO | Texture and translucency visible; world shaders remain enabled |
+| Bricks, glass, stained glass, pane, leaves, flowers/grass | Present in actual model-grid screenshot |
+| Stairs, slab, door, trapdoor, fence, wall, static redstone | Present in model grid; all state variants are not certified |
+| Upstream missing-block overlays / selection | Displayed with block meshes |
+| Real stone wall in front of projection | Correctly occludes block meshes |
+| Rotation + mirror, single layer, first/third person | Captured in game |
+| Shader OFF/ON and adapter OFF/AUTO | Exercised in the same scene |
+| Resource reload and window resize | Survived; screenshots captured with textures |
+| Large 32 x 8 x 32 hollow-brick schematic | Visible; over 1,000 submitted indices required before sampling |
+| Chest, sign and water | Included as exploratory fixtures; block-entity animation/text and fluid parity are not certified |
+| Full dependencies with shaders disabled | Startup passed with SHADERS_OFF |
+| No optional dependencies | Startup and settings passed |
+| Sodium only / Litematica + MaLiLib / Iris + Sodium | Startup and settings passed; MISSING_DEPENDENCY reported |
+| NeoForge settings | Startup passed; UNSUPPORTED_LOADER shown for projection adapter |
+| NeoForge new projection feature | Unsupported by design; settings show that status |
+| Vulkan, unpinned versions / altered dependency bytecode | Unsupported; version policy rejects unknown combinations |
+
+The fixture captures actual Litematica schematics from a generated isolated
+world and places them elsewhere. It never replaces a projection with a debug
+box. Evidence is under `build/schematic-evidence/extended/`; the first three
+images compare adapter OFF, adapter AUTO, and shaders OFF. Model, low-opacity,
+overlay, wall, transformation, layer, third-person, reload, resize, settings, and
+large-schematic images follow. The successful extended run is recorded in
+`build/schematic-extended-world.log`.
+
+## Measured frame intervals
+
+Windows 11, Core i5-14600K, RTX 5070 Ti, driver 610.62, OpenGL,
+Complementary Reimagined r5.9.1 default HIGH, view distance 5 chunks, cap 120 FPS.
+Each sample spans 60 simulation ticks (about 3 seconds) after a settling period.
+Intervals are measured between completed GameRenderer render calls, include
+frame pacing, and are **not GPU execution times**. They cannot establish an FPS
+improvement. The large case uses a different resolution and scene.
+
+| Scene | Resolution | Frames | Median ms | p95 ms | Mean ms |
+| --- | --- | ---: | ---: | ---: | ---: |
+| No visible projection | 854x480 | 356 | 8.359 | 9.284 | 8.404 |
+| One projected block | 854x480 | 348 | 8.364 | 9.253 | 8.480 |
+| Model grid | 854x480 | 353 | 8.364 | 9.897 | 8.453 |
+| Hollow-brick volume 8192 | 1024x640 | 352 | 8.380 | 9.272 | 8.407 |
+
+## Limits not certified in this release
+
+Other shader packs, every connecting/waterlogged model state, animated/modded
+block entities, arbitrary mod renderers, large-coordinate and negative-origin
+placement precision, view-bob/motion stress, subregion toggling, fullscreen,
+dimension/rejoin stress, and long-duration memory/performance behavior remain
+unverified. Physical dedicated-server startup and an actual older optional-mod
+binary were not rerun for this increment; physical-server/unknown-version gates
+were verified in the isolated policy test. No combined tracking benchmark was run after the user asked to stop
+retesting existing features. These are explicit coverage limits, not silently
+hidden projection types. Existing Litematica features keep their upstream paths.
+
+## Final packaging
+
+`assemble :fabric:verifySchematic -PclientSmoke :neoforge:runClient` passed for
+0.2.0. Both JARs were inspected for correct metadata, translation parity, the
+retained MIT notice, absence of test classes and third-party mod classes, and
+absence of the Fabric adapter in the NeoForge JAR. Exact checksums accompany the
+GitHub Release as SHA256SUMS.txt.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "mixins": ["abstool.mixins.json"],
+  "mixins": ["abstool.mixins.json", "abstool.schematic_compat.mixins.json"],
   "id": "abstool",
   "version": "${version}",
   "name": "Ab's Tool",

@@ -22,6 +22,9 @@ public final class ClothConfigScreenFactory {
                 .setTitle(Component.translatable("text.abstool.vault.title"))
                 .setSavingRunnable(ConfigManager::save);
         ConfigEntryBuilder entries = builder.entryBuilder();
+        ConfigCategory all = builder.getOrCreateCategory(Component.translatable("text.abstool.category.all"));
+        ConfigCategory tracking = builder.getOrCreateCategory(Component.translatable("text.abstool.category.tracking"));
+        ConfigCategory optimization = builder.getOrCreateCategory(Component.translatable("text.abstool.category.optimization"));
 
         ConfigCategory general = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.general"));
         general.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.enabled"), config.enabled)
@@ -101,6 +104,21 @@ public final class ClothConfigScreenFactory {
                 .build());
 
         com.abyssredemption.abstool.client.furnace.FurnaceSettings.add(builder);
+        com.abyssredemption.abstool.client.schematic.SchematicShaderSettings.add(builder);
+        for (ConfigCategory category : java.util.List.of(general, keybinds, tracer, refresh,
+                builder.getOrCreateCategory(Component.translatable("text.abstool.furnace.category")))) {
+            tracking.addEntry(entries.startTextDescription(category.getCategoryKey()).build());
+            tracking.getEntries().addAll(category.getEntries());
+            builder.removeCategory(category.getCategoryKey());
+        }
+        ConfigCategory schematic = builder.getOrCreateCategory(Component.translatable("text.abstool.schematic.category"));
+        optimization.addEntry(entries.startTextDescription(schematic.getCategoryKey()).build());
+        optimization.getEntries().addAll(schematic.getEntries());
+        builder.removeCategory(schematic.getCategoryKey());
+        // Share the same editor instances: switching tabs cannot resurrect stale values on save.
+        all.getEntries().addAll(tracking.getEntries());
+        all.getEntries().addAll(optimization.getEntries());
+        builder.setFallbackCategory(all);
         return builder.build();
     }
 }

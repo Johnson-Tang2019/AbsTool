@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "package": "com.abyssredemption.abstool.fabric.compat.schematic.mixin",
+  "plugin": "com.abyssredemption.abstool.fabric.compat.schematic.SchematicMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["SchematicBuffersMixin", "SchematicDrawMixin", "SchematicLevelMixin", "SchematicOpacityMixin"],
+  "injectors": {"defaultRequire": 1}
+}

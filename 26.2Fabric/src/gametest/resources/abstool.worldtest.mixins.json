@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "com.abyssredemption.abstool.verification.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["DevelopmentVertexBindingsMixin", "FrameSamplesMixin"],
+  "injectors": {"defaultRequire": 1}
+}

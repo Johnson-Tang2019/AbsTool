@@ -21,6 +21,7 @@ public final class AbsToolFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking::canSend;
         AbsToolClient.init(FabricLoader.getInstance().getConfigDir());
+        com.abyssredemption.abstool.fabric.compat.schematic.SchematicBootstrap.init();
         VaultTrackerController controller = new VaultTrackerController();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             AbsToolClient.tickShortcut(client);

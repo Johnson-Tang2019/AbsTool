@@ -2,6 +2,7 @@
 package com.abyssredemption.abstool.client.vault.config;
 
 public class ModConfig {
+    public com.abyssredemption.abstool.client.schematic.SchematicShaderConfig schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();
     public com.abyssredemption.abstool.client.furnace.FurnaceConfig furnace = new com.abyssredemption.abstool.client.furnace.FurnaceConfig();
     public boolean enabled = false;
     public int highlightColor = 0xFF3C3C;
@@ -20,6 +21,8 @@ public class ModConfig {
     public int dailyResetHour = 0;
 
     public void validate() {
+        if (schematicShaderCompat == null) schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();
+        schematicShaderCompat.validate();
         if (furnace == null) furnace = new com.abyssredemption.abstool.client.furnace.FurnaceConfig();
         furnace.validate();
         renderRadius = Math.max(1, Math.min(32, renderRadius));

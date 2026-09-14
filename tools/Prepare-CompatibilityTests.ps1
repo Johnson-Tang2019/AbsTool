@@ -8,6 +8,8 @@ $versions = [ordered]@{
     'jade.jar' = 'ue8CO97w'
     'iris.jar' = 'gxZWWnKH'
     'sodium.jar' = 'xJZxADzI'
+    'litematica.jar' = 'CuniXtbo'
+    'malilib.jar' = 'KvjmGjAV'
     'ComplementaryReimagined.zip' = 'ErCjThzb'
 }
 foreach ($entry in $versions.GetEnumerator()) {

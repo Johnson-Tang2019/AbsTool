@@ -1,6 +1,11 @@
 plugins { id 'net.fabricmc.fabric-loom' }
 
+repositories { maven { url = 'https://api.modrinth.com/maven' } }
+
 dependencies {
+    compileOnly 'maven.modrinth:litematica:CuniXtbo'
+    compileOnly 'maven.modrinth:malilib:KvjmGjAV'
+    compileOnly 'maven.modrinth:iris:gxZWWnKH'
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
@@ -12,6 +17,17 @@ dependencies {
 }
 
 loom { accessWidenerPath = file('src/main/resources/abstool.accesswidener') }
+if (providers.gradleProperty('schematicStartup').isPresent()) {
+    def profile = providers.gradleProperty('schematicStartup').get()
+    def profiles = [none: [], sodium: ['sodium'], litematica: ['litematica', 'malilib'],
+                    iris: ['iris', 'sodium'], full: ['litematica', 'malilib', 'iris', 'sodium']]
+    if (!profiles.containsKey(profile)) throw new GradleException("Unknown schematic startup profile: ${profile}")
+    dependencies { runtimeOnly files(profiles[profile].collect { rootProject.file("build/reference/testmods/${it}.jar") }) }
+    loom.runs.client { runDir "build/run/schematicStartup/${profile}" }
+    tasks.named('runClient', JavaExec) {
+        systemProperty 'abstool.expectedSchematicState', profile == 'full' ? 'SHADERS_OFF' : 'MISSING_DEPENDENCY'
+    }
+}
 if (providers.gradleProperty('externalServuxTests').isPresent()) {
     loom.runs.client { programArgs '--username', 'Dev' }
 }
@@ -62,6 +78,17 @@ def verifyVault = tasks.register('verifyVault', JavaExec) {
     doFirst { workingDir.mkdirs() }
 }
 tasks.named('check') { dependsOn verifyVault }
+def verifySchematic = tasks.register('verifySchematic', JavaExec) {
+    group = 'verification'
+    description = 'Verify incremental schematic configuration migration.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.SchematicVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('schematic-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
+}
+tasks.named('check') { dependsOn verifySchematic }
 
 if (providers.gradleProperty('worldTests').isPresent()) {
     fabricApi.configureTests {
@@ -69,6 +96,26 @@ if (providers.gradleProperty('worldTests').isPresent()) {
         modId = 'abstool_world_test'
         enableGameTests = false
         enableClientGameTests = true
+    }
+    tasks.named('processGametestResources') {
+        inputs.property('schematicOnly', providers.gradleProperty('schematicTests').isPresent())
+    }
+    if (providers.gradleProperty('schematicTests').isPresent()) {
+        dependencies {
+            runtimeOnly files(rootProject.file('build/reference/testmods/litematica.jar'), rootProject.file('build/reference/testmods/malilib.jar'))
+            gametestCompileOnly files(rootProject.file('build/reference/testmods/litematica.jar'), rootProject.file('build/reference/testmods/malilib.jar'))
+        }
+        sourceSets.gametest.java.srcDir 'src/schematicTest/java'
+        tasks.named('processGametestResources') {
+            doLast {
+                def manifest = new File(destinationDir, 'fabric.mod.json')
+                def json = new groovy.json.JsonSlurper().parse(manifest)
+                json.entrypoints['fabric-client-gametest'] = ['com.abyssredemption.abstool.verification.SchematicTestEntry']
+                manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+            }
+            outputs.upToDateWhen { false }
+        }
+        tasks.named('runClientGameTest', JavaExec) { systemProperty 'abstool.schematicTests', 'true' }
     }
     if (providers.gradleProperty('furnaceTests').isPresent()) {
         tasks.named('runClientGameTest', JavaExec) {

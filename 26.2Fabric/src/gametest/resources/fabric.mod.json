@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "name": "Ab's Tool world verification",
   "environment": "client",
+  "mixins": ["abstool.worldtest.mixins.json"],
   "entrypoints": {
     "main": ["com.abyssredemption.abstool.verification.FurnaceProtocolFixture"],
-    "fabric-client-gametest": ["com.abyssredemption.abstool.verification.VaultWorldTest", "com.abyssredemption.abstool.verification.FurnaceWorldTest"]
+    "fabric-client-gametest": ["com.abyssredemption.abstool.verification.VaultWorldTest", "com.abyssredemption.abstool.verification.FurnaceWorldTest", "com.abyssredemption.abstool.verification.SchematicTestEntry"]
   },
   "depends": { "abstool": "*" }
 }
