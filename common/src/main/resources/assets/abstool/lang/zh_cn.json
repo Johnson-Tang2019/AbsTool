@@ -65,5 +65,19 @@
   "text.abstool.schematic.state.active": "兼容路径运行中（实验）",
   "text.abstool.schematic.state.error": "兼容路径发生错误",
   "text.abstool.schematic.mode.auto": "自动",
-  "text.abstool.schematic.mode.off": "关闭"
+  "text.abstool.schematic.mode.off": "关闭",
+  "text.abstool.category.quick": "快捷设置",
+  "text.abstool.quick.tweakermore": "TweakerMore · 潜影盒",
+  "text.abstool.quick.finite": "请输入有限数值",
+  "text.abstool.quick.option.autoCollectMaterialListItemShulkerBoxFillThreshold": "收集潜影盒的装填阈值",
+  "text.abstool.quick.option.autoCollectMaterialListItemTakeShulkerBoxes": "收集材料时取走潜影盒",
+  "text.abstool.quick.option.shulkerBoxItemContentHint": "显示内容图标",
+  "text.abstool.quick.option.shulkerBoxItemContentHintScale": "内容图标缩放",
+  "text.abstool.quick.option.shulkerBoxItemContentHintShowBarOnMixed": "混合物品显示装填条",
+  "text.abstool.quick.option.shulkerBoxItemContentHintCustomNamesOverrideItem": "自定义名称优先决定图标",
+  "text.abstool.quick.option.shulkerBoxTooltipEnchantmentHint": "提示中显示附魔",
+  "text.abstool.quick.option.shulkerBoxTooltipFillLevelHint": "提示中显示装填量",
+  "text.abstool.quick.option.shulkerBoxTooltipHintLengthLimit": "物品提示长度上限",
+  "text.abstool.quick.option.shulkerBoxTooltipPotionInfoHint": "提示中显示药水信息",
+  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "预览末影箱内容"
 }

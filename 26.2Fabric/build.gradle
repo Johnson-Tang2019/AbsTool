@@ -158,3 +158,9 @@ if (providers.gradleProperty('worldTests').isPresent()) {
         }
     }
 }
+
+if (providers.gradleProperty('withTweakerMoreTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/tweakermore.jar'), rootProject.file('build/reference/testmods/malilib.jar')) }
+    loom.runs.client { runDir 'build/run/tweakerMoreQuick' }
+    tasks.named('runClient', JavaExec) { systemProperty 'abstool.quickSettingsTest', 'true' }
+}

@@ -26,6 +26,11 @@ NeoForge 暂不启用这项新适配。
 已在 Complementary Reimagined r5.9.1 下实际检查带贴图、半透明投影，
 不代表所有光影包或其他版本均已兼容。客户端诊断命令：`/abstool schematicshader status`。
 
+Fabric 安装 TweakerMore 后显示 **快捷设置** 分类，可编辑当前可用的潜影盒相关选项，
+包括内容提示、提示缩放、装填量和物品提示信息等；“全部”中也会显示同一组选项。
+读取 TweakerMore 的当前值、默认值及数值范围，保存时直接写入其原配置。
+放弃修改不会改变原配置；未安装 TweakerMore 时隐藏该分类，不增加必装前置。
+
 [实现与限制](docs/SCHEMATIC_SHADER_COMPAT.md) ·
 [验证记录](docs/COMPATIBILITY_MATRIX.md) · [测试命令](docs/TESTING.md)
 

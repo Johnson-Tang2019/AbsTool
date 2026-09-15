@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.3 — 2026-09-15
+
+- Add a conditional Quick Settings category for applicable TweakerMore shulker-box
+  settings on Fabric, also shared with All. Hide it when TweakerMore is absent.
+- Use original configuration values, defaults, bounds, callbacks and persistence;
+  discard edits without changing the optional mod. Keep both loaders independent
+  of a required TweakerMore/MaLiLib runtime dependency.
+- 新增快捷设置：安装 TweakerMore 时显示其可用潜影盒相关配置，未安装时隐藏。
+
+
 ## 0.2.2 — 2026-09-15
 
 - Expand Fabric schematic shader support to audited Litematica 0.28.3/4/5/6/8

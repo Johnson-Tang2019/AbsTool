@@ -30,6 +30,13 @@ Textured and translucent projections were checked in game with Complementary
 Reimagined r5.9.1; this is not a guarantee for other packs or versions.
 Use `/abstool schematicshader status` for local diagnostics.
 
+When TweakerMore is installed on Fabric, **Quick Settings** shows its applicable
+shulker-box options, including content hints, scale, fill-level and tooltip hints.
+The same editors appear under All. Values, defaults and limits come from
+TweakerMore; saving uses its own configuration API. Discarded edits do not change
+it. The category is hidden when TweakerMore is absent. No extra required dependency
+is added to either loader.
+
 [Implementation and limits](docs/SCHEMATIC_SHADER_COMPAT.md) ·
 [Test evidence](docs/COMPATIBILITY_MATRIX.md) · [Test commands](docs/TESTING.md)
 

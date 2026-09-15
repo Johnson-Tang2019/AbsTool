@@ -1,5 +1,9 @@
 # Development status
 
+Version 0.2.3 adds conditional TweakerMore shulker-box Quick Settings on Fabric.
+The original mod owns values, validation limits and persistence; absent-mod
+installations keep the original three categories. See docs/TWEAKERMORE_QUICK_SETTINGS.md.
+
 Version 0.2.2 expands the audited version policy to 51 valid dependency combinations.
 Five Litematica releases and five MaLiLib releases are accepted subject to upstream
 minimums, paired with Iris/Sodium 1.11.1/0.9.0, 1.11.2/0.9.1 or 1.11.4/0.9.2.

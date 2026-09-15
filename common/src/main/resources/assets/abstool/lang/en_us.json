@@ -65,5 +65,19 @@
   "text.abstool.schematic.state.active": "Compatibility path active (experimental)",
   "text.abstool.schematic.state.error": "Compatibility path failed",
   "text.abstool.schematic.mode.auto": "Auto",
-  "text.abstool.schematic.mode.off": "Off"
+  "text.abstool.schematic.mode.off": "Off",
+  "text.abstool.category.quick": "Quick Settings",
+  "text.abstool.quick.tweakermore": "TweakerMore · Shulker boxes",
+  "text.abstool.quick.finite": "Enter a finite number",
+  "text.abstool.quick.option.autoCollectMaterialListItemShulkerBoxFillThreshold": "Collection fill threshold",
+  "text.abstool.quick.option.autoCollectMaterialListItemTakeShulkerBoxes": "Collect whole shulker boxes",
+  "text.abstool.quick.option.shulkerBoxItemContentHint": "Show content icons",
+  "text.abstool.quick.option.shulkerBoxItemContentHintScale": "Content icon scale",
+  "text.abstool.quick.option.shulkerBoxItemContentHintShowBarOnMixed": "Fill bar for mixed contents",
+  "text.abstool.quick.option.shulkerBoxItemContentHintCustomNamesOverrideItem": "Custom names override icons",
+  "text.abstool.quick.option.shulkerBoxTooltipEnchantmentHint": "Show enchantments in tooltips",
+  "text.abstool.quick.option.shulkerBoxTooltipFillLevelHint": "Show fill level in tooltips",
+  "text.abstool.quick.option.shulkerBoxTooltipHintLengthLimit": "Tooltip hint length limit",
+  "text.abstool.quick.option.shulkerBoxTooltipPotionInfoHint": "Show potion info in tooltips",
+  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "Preview ender chest contents"
 }

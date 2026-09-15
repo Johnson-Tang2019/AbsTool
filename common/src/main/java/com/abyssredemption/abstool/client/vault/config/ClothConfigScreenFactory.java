@@ -118,6 +118,13 @@ public final class ClothConfigScreenFactory {
         // Share the same editor instances: switching tabs cannot resurrect stale values on save.
         all.getEntries().addAll(tracking.getEntries());
         all.getEntries().addAll(optimization.getEntries());
+        QuickSettings.Session quick = QuickSettings.provider.apply(entries);
+        if (!quick.entries().isEmpty()) {
+            ConfigCategory shortcuts = builder.getOrCreateCategory(Component.translatable("text.abstool.category.quick"));
+            shortcuts.getEntries().addAll(quick.entries());
+            all.getEntries().addAll(quick.entries());
+        }
+        builder.setSavingRunnable(() -> { ConfigManager.save(); quick.save().run(); });
         builder.setFallbackCategory(all);
         return builder.build();
     }

@@ -39,7 +39,9 @@ public final class SettingsSmoke {
             var config = (me.shedaniel.clothconfig2.gui.AbstractConfigScreen) settings;
             var categories = config.getCategorizedEntries();
             var keys = java.util.List.copyOf(categories.keySet());
-            var expected = java.util.List.of("all", "tracking", "optimization").stream()
+            var expected = (Boolean.getBoolean("abstool.quickSettingsTest")
+                    ? java.util.List.of("all", "tracking", "optimization", "quick")
+                    : java.util.List.of("all", "tracking", "optimization")).stream()
                     .map(key -> net.minecraft.network.chat.Component.translatable("text.abstool.category." + key)).toList();
             if (!keys.equals(expected)) throw new AssertionError("Expected All / Tracking / Optimization tabs: " + keys);
             if (!categories.get(keys.get(0)).containsAll(categories.get(keys.get(1)))
@@ -58,7 +60,15 @@ public final class SettingsSmoke {
                     }
                 }
             }));
+            if (Boolean.getBoolean("abstool.quickSettingsTest")) {
+                settings = QuickSettingsSmoke.check(client, factory, parent, config);
+            }
             Screenshot.grab(client.gameDirectory, "abstool-settings-smoke.png",
+                    client.gameRenderer.mainRenderTarget(), 1,
+                    message -> LoggerFactory.getLogger("abstool-smoke").info(message.getString()));
+        }
+        if (ticks == 50 && Boolean.getBoolean("abstool.quickSettingsTest")) {
+            Screenshot.grab(client.gameDirectory, "abstool-quick-settings.png",
                     client.gameRenderer.mainRenderTarget(), 1,
                     message -> LoggerFactory.getLogger("abstool-smoke").info(message.getString()));
         }
