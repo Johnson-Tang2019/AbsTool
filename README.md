@@ -37,6 +37,14 @@ TweakerMore; saving uses its own configuration API. Discarded edits do not chang
 it. The category is hidden when TweakerMore is absent. No extra required dependency
 is added to either loader.
 
+Quick Settings also provides **Show most common item** (on by default): mixed
+shulker boxes show the item with the largest total count instead of dots.
+Counts combine slots and component variants of the same item; ties use the first
+occupied slot. TweakerMore content hints must be enabled. Its explicit custom-name
+override and mixed-box fill-bar setting keep their original behavior. Turn this
+option off to restore dots. This renderer extension requires the audited
+TweakerMore 3.33.2 renderer bytecode; regular quick settings remain independent.
+
 [Implementation and limits](docs/SCHEMATIC_SHADER_COMPAT.md) ·
 [Test evidence](docs/COMPATIBILITY_MATRIX.md) · [Test commands](docs/TESTING.md)
 

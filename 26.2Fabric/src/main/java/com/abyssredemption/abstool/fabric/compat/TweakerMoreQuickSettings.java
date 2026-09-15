@@ -55,6 +55,12 @@ public final class TweakerMoreQuickSettings {
                             }}).build());
                 }
             }
+            if (com.abyssredemption.abstool.fabric.compat.shulker.ShulkerMixinPlugin.supported) {
+                var config = com.abyssredemption.abstool.client.vault.config.ConfigManager.get();
+                entries.addFirst(builder.startBooleanToggle(Component.translatable("text.abstool.quick.dominant"), config.shulkerMostCommonItem)
+                        .setDefaultValue(true).setTooltip(Component.translatable("text.abstool.quick.dominant.tooltip"))
+                        .setSaveConsumer(value -> config.shulkerMostCommonItem = value).build());
+            }
             if (entries.isEmpty()) return QuickSettings.EMPTY;
             entries.addFirst(builder.startTextDescription(Component.translatable("text.abstool.quick.tweakermore")).build());
             return new QuickSettings.Session(java.util.List.copyOf(entries), () -> {

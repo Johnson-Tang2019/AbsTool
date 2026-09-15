@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.4 — 2026-09-15
+
+- Add an optional most-common-item icon for mixed shulker boxes in TweakerMore.
+  Aggregate quantities across slots, keep deterministic ties, preserve upstream
+  name overrides and mixed-box fill-bar behavior. Default on; configurable under
+  Quick Settings while the audited renderer is present.
+- 用总数量最多的物品图标替换混合潜影盒省略号，可在快捷设置关闭。
+
+
 ## 0.2.3 — 2026-09-15
 
 - Add a conditional Quick Settings category for applicable TweakerMore shulker-box

@@ -2,6 +2,7 @@
 package com.abyssredemption.abstool.client.vault.config;
 
 public class ModConfig {
+    public boolean shulkerMostCommonItem = true;
     public com.abyssredemption.abstool.client.schematic.SchematicShaderConfig schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();
     public com.abyssredemption.abstool.client.furnace.FurnaceConfig furnace = new com.abyssredemption.abstool.client.furnace.FurnaceConfig();
     public boolean enabled = false;

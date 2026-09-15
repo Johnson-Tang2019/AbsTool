@@ -79,5 +79,7 @@
   "text.abstool.quick.option.shulkerBoxTooltipFillLevelHint": "提示中显示装填量",
   "text.abstool.quick.option.shulkerBoxTooltipHintLengthLimit": "物品提示长度上限",
   "text.abstool.quick.option.shulkerBoxTooltipPotionInfoHint": "提示中显示药水信息",
-  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "预览末影箱内容"
+  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "预览末影箱内容",
+  "text.abstool.quick.dominant": "混合潜影盒显示最多物品",
+  "text.abstool.quick.dominant.tooltip": "用同类物品总数量最多的图标替代省略号；并列时取槽位靠前的物品。需要开启 TweakerMore 内容图标。"
 }

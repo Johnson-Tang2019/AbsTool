@@ -18,6 +18,7 @@ dependencies {
     compileOnly 'maven.modrinth:litematica:CuniXtbo'
     compileOnly 'maven.modrinth:malilib:KvjmGjAV'
     compileOnly 'maven.modrinth:iris:gxZWWnKH'
+    compileOnly 'maven.modrinth:tweakermore:KIBGE0Vv'
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
@@ -111,6 +112,7 @@ if (providers.gradleProperty('worldTests').isPresent()) {
     }
     tasks.named('processGametestResources') {
         inputs.property('schematicOnly', providers.gradleProperty('schematicTests').isPresent())
+        inputs.property('shulkerOnly', providers.gradleProperty('shulkerHintTest').isPresent())
     }
     if (providers.gradleProperty('schematicTests').isPresent()) {
         dependencies {
@@ -163,4 +165,17 @@ if (providers.gradleProperty('withTweakerMoreTest').isPresent()) {
     dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/tweakermore.jar'), rootProject.file('build/reference/testmods/malilib.jar')) }
     loom.runs.client { runDir 'build/run/tweakerMoreQuick' }
     tasks.named('runClient', JavaExec) { systemProperty 'abstool.quickSettingsTest', 'true' }
+}
+
+if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProperty('shulkerHintTest').isPresent()) {
+    sourceSets.gametest.java.srcDir 'src/shulkerTest/java'
+    tasks.named('processGametestResources') {
+        doLast {
+            def manifest = new File(destinationDir, 'fabric.mod.json')
+            def json = new groovy.json.JsonSlurper().parse(manifest)
+            json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ShulkerHintWorldTest']]
+            manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+        }
+        outputs.upToDateWhen { false }
+    }
 }

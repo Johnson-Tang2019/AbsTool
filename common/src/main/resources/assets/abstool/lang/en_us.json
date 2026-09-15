@@ -79,5 +79,7 @@
   "text.abstool.quick.option.shulkerBoxTooltipFillLevelHint": "Show fill level in tooltips",
   "text.abstool.quick.option.shulkerBoxTooltipHintLengthLimit": "Tooltip hint length limit",
   "text.abstool.quick.option.shulkerBoxTooltipPotionInfoHint": "Show potion info in tooltips",
-  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "Preview ender chest contents"
+  "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "Preview ender chest contents",
+  "text.abstool.quick.dominant": "Show most common item",
+  "text.abstool.quick.dominant.tooltip": "Replace mixed-box dots with the item having the largest total count. Ties use the first slot. Requires TweakerMore content hints."
 }

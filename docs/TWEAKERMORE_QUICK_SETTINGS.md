@@ -54,3 +54,45 @@ normal play. Logs: `build/quick-present.log`, `build/quick-present-zh.log`,
 
 The final Chinese screen was visually inspected with the Quick Settings tab
 selected. Final logs include ABSTOOL_QUICK_SETTINGS_PASS and ABSTOOL_SETTINGS_SMOKE_PASS.
+
+## 0.2.4 most-common-item icon
+
+A separate, default-on AbsTool option replaces the mixed-box ellipsis with the
+item type having the greatest total count. Slots and component variants of an
+item are combined; equal totals use the first occupied slot. The displayed
+representative is a copy of that first stack with count one. Contents are never
+mutated. Empty boxes, non-box items and single-type hints retain upstream behavior.
+TweakerMore's content-hint toggle and recognized custom-name overrides retain
+precedence. Disable the AbsTool option to restore the ellipsis.
+
+The optional renderer Mixins are separate from networking and schematic Mixins.
+A discovery plugin checks the original SHA-256 fingerprints of TweakerMore's
+`ShulkerBoxItemContentHintCommon` and `ShulkerBoxItemContentHintRenderer` before
+activating them. The audited binary is TweakerMore 3.33.2 for Minecraft 26.2;
+unknown renderer binaries keep upstream rendering and hide this extra switch,
+while ordinary quick settings remain available through their existing API.
+
+Only the first two reads of `Info.allItemSame` in the renderer are intercepted:
+one decides whether to draw the icon, the other whether to draw the text. The
+third read and the underlying flags remain unchanged so the mixed-box fill bar
+still obeys its own TweakerMore setting. The selected icon is computed after the
+original information preparation; existing scale and fill ratio are retained.
+Work is bounded by the shulker box contents and no persistent contents cache is
+introduced.
+
+A real client game test creates an isolated world, builds actual container item
+components and renders a comparison screen via the normal GUI item renderer.
+Assertions cover total quantity across stacks, deterministic ties, component
+variants, unchanged contents/fill ratio/mixed flags, empty/non-box items, upstream
+disable and custom-name precedence. The screenshot visually confirms dots versus
+stone for 32 diamonds + 20 stone + 20 stone, diamond on a 40/40 tie, unchanged apple
+and empty-box behavior. Evidence: `build/shulker-hint-world.log` and
+`build/shulker-evidence/majority-comparison.png`.
+
+```powershell
+./gradlew.bat --offline -PworldTests -PwithTweakerMoreTest -PshulkerHintTest :fabric:runClientGameTest
+```
+
+This profile replaces the game-test entrypoint list and does not execute the
+existing tracker tests. Item construction is performed after world loading,
+when Minecraft 26.2 item components have been bound.

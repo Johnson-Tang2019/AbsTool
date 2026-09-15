@@ -1,5 +1,9 @@
 # Development status
 
+Version 0.2.4 adds a configurable most-common-item icon for mixed TweakerMore
+shulker hints. Actual GUI rendering in an isolated world confirmed the replacement,
+ties, single-type and empty cases; source fingerprints gate the optional hooks.
+
 Version 0.2.3 adds conditional TweakerMore shulker-box Quick Settings on Fabric.
 The original mod owns values, validation limits and persistence; absent-mod
 installations keep the original three categories. See docs/TWEAKERMORE_QUICK_SETTINGS.md.
