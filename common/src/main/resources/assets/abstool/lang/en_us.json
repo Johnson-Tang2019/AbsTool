@@ -81,5 +81,20 @@
   "text.abstool.quick.option.shulkerBoxTooltipPotionInfoHint": "Show potion info in tooltips",
   "text.abstool.quick.option.mlShulkerBoxPreviewSupportEnderChest": "Preview ender chest contents",
   "text.abstool.quick.dominant": "Show most common item",
-  "text.abstool.quick.dominant.tooltip": "Replace mixed-box dots with the item having the largest total count. Ties use the first slot. Requires TweakerMore content hints."
+  "text.abstool.quick.dominant.tooltip": "Replace mixed-box dots with the item having the largest total count. Ties use the first slot. Requires TweakerMore content hints.",
+  "text.abstool.elytra.category": "Elytra Assist",
+  "text.abstool.elytra.enabled": "Low ceiling quick launch",
+  "text.abstool.elytra.trigger": "Launch trigger",
+  "text.abstool.elytra.trigger.sneak_jump": "Sneak + Jump",
+  "text.abstool.elytra.trigger.key": "Dedicated key",
+  "text.abstool.elytra.key": "Quick launch key",
+  "text.abstool.elytra.auto_equip": "Allow AbsTool equipment fallback",
+  "text.abstool.elytra.swap_ticks": "Equipment wait (ticks)",
+  "text.abstool.elytra.request_ticks": "Airborne request window (ticks)",
+  "text.abstool.elytra.failure.missing": "No usable elytra in your inventory.",
+  "text.abstool.elytra.failure.equipment": "Equipment changed or cannot be swapped safely. Launch cancelled.",
+  "text.abstool.elytra.failure.disabled": "Automatic equipment is disabled. Equip your elytra first.",
+  "text.abstool.elytra.failure.external": "Unsupported Tweakeroo equipment interface. Launch cancelled.",
+  "text.abstool.elytra.failure.swap_timeout": "Timed out waiting for an elytra. Launch cancelled.",
+  "text.abstool.elytra.failure.timeout": "No confirmed glide. Launch attempt ended."
 }

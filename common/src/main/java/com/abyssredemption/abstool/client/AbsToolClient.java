@@ -23,6 +23,7 @@ public final class AbsToolClient {
 
     public static void tickShortcut(Minecraft client) {
         com.abyssredemption.abstool.client.furnace.FurnaceTracker.INSTANCE.tick(client);
+        com.abyssredemption.abstool.client.elytra.ElytraLaunch.guard(client);
         boolean focused = client.isWindowActive();
         boolean r = focused && InputConstants.isKeyDown(client.getWindow(), GLFW.GLFW_KEY_R);
         boolean b = focused && InputConstants.isKeyDown(client.getWindow(), GLFW.GLFW_KEY_B);

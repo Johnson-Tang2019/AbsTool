@@ -21,7 +21,11 @@ public class ModConfig {
     public long refreshCooldownMinutes = 1440;
     public int dailyResetHour = 0;
 
+    public com.abyssredemption.abstool.client.elytra.ElytraConfig elytraAssist = new com.abyssredemption.abstool.client.elytra.ElytraConfig();
+
     public void validate() {
+        if (elytraAssist == null) elytraAssist = new com.abyssredemption.abstool.client.elytra.ElytraConfig();
+        elytraAssist.validate();
         if (schematicShaderCompat == null) schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();
         schematicShaderCompat.validate();
         if (furnace == null) furnace = new com.abyssredemption.abstool.client.furnace.FurnaceConfig();

@@ -26,6 +26,7 @@ public final class AbsToolFabricClient implements ClientModInitializer {
             com.abyssredemption.abstool.client.vault.config.QuickSettings.provider =
                     com.abyssredemption.abstool.fabric.compat.TweakerMoreQuickSettings::create;
         }
+        com.abyssredemption.abstool.fabric.compat.TweakerooElytraBridge.init();
         VaultTrackerController controller = new VaultTrackerController();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             AbsToolClient.tickShortcut(client);

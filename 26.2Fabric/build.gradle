@@ -112,6 +112,7 @@ if (providers.gradleProperty('worldTests').isPresent()) {
     }
     tasks.named('processGametestResources') {
         inputs.property('schematicOnly', providers.gradleProperty('schematicTests').isPresent())
+        inputs.property('elytraOnly', providers.gradleProperty('elytraTests').isPresent())
         inputs.property('shulkerOnly', providers.gradleProperty('shulkerHintTest').isPresent())
     }
     if (providers.gradleProperty('schematicTests').isPresent()) {
@@ -177,5 +178,24 @@ if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProper
             manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
         }
         outputs.upToDateWhen { false }
+    }
+}
+
+if (providers.gradleProperty('withTweakerooTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/tweakeroo.jar'), rootProject.file('build/reference/testmods/malilib.jar')) }
+}
+if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProperty('elytraTests').isPresent()) {
+    sourceSets.gametest.java.srcDir 'src/elytraTest/java'
+    tasks.named('runClientGameTest', JavaExec) {
+        systemProperty 'abstool.elytraExitOnly', providers.gradleProperty('elytraExitOnly').isPresent()
+        systemProperty 'abstool.acceptMinecraftEula', providers.gradleProperty('acceptMinecraftEula').isPresent()
+    }
+    tasks.named('processGametestResources') {
+        doLast {
+            def metadata = destinationDir.toPath().resolve('fabric.mod.json').toFile()
+            def json = new groovy.json.JsonSlurper().parse(metadata)
+            json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ElytraWorldTest']]
+            metadata.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+        }
     }
 }

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 — 2026-09-15
+
+- Add optional low-ceiling elytra launch on both loaders: equip from normal
+  inventory, inject one normal jump edge and request glide once after vanilla
+  airborne movement synchronization. Default off; Sneak + Jump or configurable key.
+- Delegate equipment to Fabric Tweakeroo 0.29.5 when its auto-switch is enabled;
+  otherwise use one bounded inventory swap. Preserve equipment and release
+  control for upstream landing behavior. Cancel conflicting or timed-out actions.
+- Add Elytra Assist to All / Optimization. No propulsion or automatic item use.
+- 新增低顶空鞘翅快速起飞：支持物品栏换装、Tweakeroo 可选共存与独立快捷键。
+
 ## 0.2.4 — 2026-09-15
 
 - Add an optional most-common-item icon for mixed shulker boxes in TweakerMore.

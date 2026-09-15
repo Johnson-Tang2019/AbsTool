@@ -115,6 +115,7 @@ public final class ClothConfigScreenFactory {
         optimization.addEntry(entries.startTextDescription(schematic.getCategoryKey()).build());
         optimization.getEntries().addAll(schematic.getEntries());
         builder.removeCategory(schematic.getCategoryKey());
+        com.abyssredemption.abstool.client.elytra.ElytraSettings.add(builder, optimization);
         // Share the same editor instances: switching tabs cannot resurrect stale values on save.
         all.getEntries().addAll(tracking.getEntries());
         all.getEntries().addAll(optimization.getEntries());

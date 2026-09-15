@@ -7,6 +7,22 @@
 Minecraft 26.2 utility mod for Fabric and NeoForge, following AbsMod's layout.
 Mod ID: `abstool`. Base package: `com.abyssredemption.abstool`.
 
+## Low ceiling elytra launch
+
+Under R+B > Optimization > Elytra Assist, enable **Low ceiling quick launch**.
+The default trigger is Sneak + Jump; a dedicated configurable key (default G) is
+also available. The feature equips a usable glider from the normal inventory,
+jumps, then sends one glide request after vanilla synchronizes the airborne
+movement. The server decides whether flight starts. It provides no propulsion.
+Fabric optionally delegates equipment to Tweakeroo 0.29.5 when its automatic
+elytra switch is enabled; otherwise the shared Fabric/NeoForge fallback performs
+one normal inventory swap. No additional dependency is required. Unknown enabled
+Tweakeroo versions cancel safely. AbsTool does not restore armor after landing.
+See [implementation and test notes](docs/ELYTRA_LAUNCH.md).
+
+Experimental and off by default. Server-confirmed launch is tested; the separate
+steered-exit test timed out, so reliably flying out of the space is not certified.
+
 ## Settings and schematic shaders
 
 R+B opens the shared settings with **All / Tracking / Optimization** tabs.

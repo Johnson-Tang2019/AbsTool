@@ -6,6 +6,7 @@ $testMods = Join-Path $projectRoot 'build/reference/testmods'
 $versions = [ordered]@{
     'servux.jar' = 'cjAxEbhD'
     'tweakermore.jar' = 'KIBGE0Vv'
+    'tweakeroo.jar' = 'tzGdG1Ri'
     'jade.jar' = 'ue8CO97w'
     'iris.jar' = 'gxZWWnKH'
     'iris-1.11.2.jar' = 'oaD6KQls'
