@@ -3,6 +3,8 @@
 Scope: Minecraft 26.2 Fabric **stable releases currently listed by Modrinth**.
 AbsTool HEAD: 443d9c5; clean tree at audit start. No compatibility gates changed.
 This is source and release-bytecode evidence, not new game-test certification.
+The subsequent 0.2.2 implementation and boundary runs are recorded separately in
+COMPATIBILITY_MATRIX.md; the conclusions below describe the audit-time state.
 The existing 0.2.1 runtime coverage remains unchanged.
 
 ## Method and source anchors

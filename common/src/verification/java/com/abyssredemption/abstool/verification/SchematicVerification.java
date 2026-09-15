@@ -8,6 +8,7 @@ import java.nio.file.Path;
 public final class SchematicVerification {
     public static void main(String[] args) throws Exception {
         legacyConfiguration();
+        dependencyMatrix();
         var versions = com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.PINNED;
         require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, true).isEmpty(), "Pinned combination must pass");
         require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, false).isEmpty(), "Physical server must not load rendering hooks");
@@ -26,6 +27,32 @@ public final class SchematicVerification {
             require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(changed, true).startsWith("Unsupported"), "Unknown version must not activate: " + id);
         }
         System.out.println("Schematic configuration verification passed.");
+    }
+    private static void dependencyMatrix() {
+        String[] litematica = {"0.28.3", "0.28.4", "0.28.5", "0.28.6", "0.28.8"};
+        int[] minimum = {2, 2, 4, 5, 5};
+        String[] iris = {"1.11.0+mc26.2", "1.11.1+mc26.2", "1.11.2+mc26.2", "1.11.4+mc26.2"};
+        int accepted = 0;
+        for (int l = 0; l < litematica.length; l++) {
+            for (int m = 0; m <= 6; m++) {
+                for (int i = 0; i < iris.length; i++) {
+                    for (int sodium = 0; sodium <= 2; sodium++) {
+                        var versions = java.util.Map.of("minecraft", "26.2", "litematica", litematica[l],
+                                "malilib", "0.29." + m, "iris", iris[i], "sodium", "0.9." + sodium + "+mc26.2");
+                        boolean expected = m >= minimum[l] && i > 0 && sodium == i - 1;
+                        boolean actual = com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, true).isEmpty();
+                        require(expected == actual, "Dependency matrix mismatch: " + versions);
+                        if (actual) accepted++;
+                    }
+                }
+            }
+        }
+        require(accepted == 51, "Expected 51 audited combinations");
+        var unknown = new java.util.HashMap<>(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.PINNED);
+        for (String version : new String[]{"0.28.7", "0.28.9", "0.28.8-custom"}) {
+            unknown.put("litematica", version);
+            require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(unknown, true).isEmpty(), "Unaudited release must remain gated");
+        }
     }
     private static void require(boolean condition, String message) {
         if (!condition) throw new AssertionError(message);

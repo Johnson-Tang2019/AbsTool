@@ -7,7 +7,7 @@ The audit started from `9df10623c73013d03352b8c5ffab5a8db0b8230e` with a clean t
 `7c77246` is historical context, not a reset target. Existing network Mixins and
 tracking render pipelines are independent of the optional compatibility Mixins.
 
-## Fixed research and test combination
+## Original research and test combinations (0.2.0 / 0.2.1)
 
 | Component | Version | Reference |
 | --- | --- | --- |
@@ -97,3 +97,21 @@ breaks Iris <=1.11.2 in its Fabric metadata. The original Iris 1.11.4 / Sodium
 0.9.2 pair remains supported. Litematica and MaLiLib pins are unchanged.
 Iris 1.11.2 has separate hashes for IrisRenderingPipeline and MixinRenderPipeline;
 ImmediateState is byte-identical. Unknown binaries and cross-pairs remain gated.
+
+## 0.2.2 audited release families
+
+The accepted combinations now follow the tables in the README: five Litematica
+releases, MaLiLib 0.29.2–0.29.6 subject to each upstream minimum, and three paired
+Iris/Sodium releases. This yields 51 combinations, not arbitrary cross-version
+support. MaLiLib 0.29.0/1 cannot satisfy any of the supported Litematica releases.
+Iris 1.11.0 is excluded by MaLiLib. Litematica 0.28.7 is not in the audited release
+set and remains gated.
+
+The existing rendering implementation is shared. Iris 1.11.1 uses the same target
+class fingerprints as 1.11.2. Litematica 0.28.3 has its own WorldRendererSchematic
+fingerprint for the earlier sampler ownership logic. Versions 0.28.4/5/6/8 share
+all three existing Litematica target hashes; supported MaLiLib releases share the
+pipeline hash. Dynamic diagnostics show the installed versions of all four mods.
+
+See SCHEMATIC_VERSION_AUDIT.md for source differences and COMPATIBILITY_MATRIX.md
+for the distinction between boundary game tests and source-equivalent combinations.

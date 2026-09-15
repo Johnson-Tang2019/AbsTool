@@ -12,6 +12,16 @@ $versions = [ordered]@{
     'sodium-0.9.1.jar' = '2Yom1N68'
     'litematica.jar' = 'CuniXtbo'
     'malilib.jar' = 'KvjmGjAV'
+    'iris-1.11.1.jar' = '3uIIps8q'
+    'malilib-0.29.5.jar' = '74gmDXEM'
+    'malilib-0.29.4.jar' = 'ZCq1iE1J'
+    'malilib-0.29.3.jar' = 'xKxhjDJ2'
+    'malilib-0.29.2.jar' = '52cWF5Da'
+    'litematica-0.28.6.jar' = 'awNX9q5c'
+    'litematica-0.28.5.jar' = 'Fhq3KCI8'
+    'litematica-0.28.4.jar' = 'jzraAo7b'
+    'litematica-0.28.3.jar' = 'Yxyi6tlv'
+    'sodium-0.9.0.jar' = '3QgJXuSK'
     'ComplementaryReimagined.zip' = 'ErCjThzb'
 }
 foreach ($entry in $versions.GetEnumerator()) {

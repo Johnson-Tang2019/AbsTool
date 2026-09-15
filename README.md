@@ -14,9 +14,17 @@ ModMenu and the NeoForge settings button use the same screen. Existing settings,
 unknown JSON fields, and vault records are retained.
 
 The experimental **Fabric** Litematica/Iris adapter is under Optimization.
-AUTO supports only Minecraft 26.2, Litematica 0.28.8, MaLiLib 0.29.6,
-either Iris 1.11.4+mc26.2 with Sodium 0.9.2+mc26.2 or Iris 1.11.2+mc26.2
-with Sodium 0.9.1+mc26.2 on OpenGL. Install these separately.
+AUTO supports Minecraft 26.2 on OpenGL with these audited release combinations:
+
+| Litematica | Supported MaLiLib |
+| --- | --- |
+| 0.28.3 / 0.28.4 | 0.29.2 through 0.29.6 |
+| 0.28.5 | 0.29.4 through 0.29.6 |
+| 0.28.6 / 0.28.8 | 0.29.5 / 0.29.6 |
+
+Use one matching Iris/Sodium pair: **1.11.1 / 0.9.0**, **1.11.2 / 0.9.1**,
+or **1.11.4 / 0.9.2**, all for Minecraft 26.2. Install dependencies separately.
+Unknown releases and modified target bytecode remain disabled.
 OFF restores upstream drawing. NeoForge does not enable this new adapter.
 Textured and translucent projections were checked in game with Complementary
 Reimagined r5.9.1; this is not a guarantee for other packs or versions.

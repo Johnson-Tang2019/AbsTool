@@ -1,7 +1,7 @@
-# Compatibility evidence — 0.2.1
+# Compatibility evidence — 0.2.2
 
 The user confirmed the displayed in-game result. Support remains experimental
-and limited to the pinned Fabric/OpenGL combination in SCHEMATIC_SHADER_COMPAT.md.
+and limited to the audited Fabric/OpenGL combinations in SCHEMATIC_SHADER_COMPAT.md.
 
 | Check | Result |
 | --- | --- |
@@ -90,3 +90,53 @@ Sodium 0.9.2 rejects Iris <=1.11.2 at Fabric resolution time; the supported old
 pair therefore uses Sodium 0.9.1. Version-policy verification covers rejection
 of that mismatched pair and an untested Iris version. The original pair remains
 accepted. Both release loaders are assembled for 0.2.1.
+
+## 0.2.2 version-family expansion
+
+The policy enumerates 51 accepted combinations from five audited Litematica
+releases, five MaLiLib releases with upstream minimums, and three fixed
+Iris/Sodium pairs. The isolated policy check enumerates 420 combinations and
+asserts both valid cases and rejected mismatches. Missing dependencies, physical
+server, unknown versions, and unlisted Litematica 0.28.7 remain rejected.
+
+Only boundary combinations receive new game sessions; byte-identical patched
+classes and upstream metadata support the remaining combinations. **51 accepted
+combinations does not mean 51 individually game-tested installations.**
+
+The oldest boundary (Litematica 0.28.3 / MaLiLib 0.29.2 / Iris 1.11.1 / Sodium
+0.9.0) passed the isolated real-world projection fixture. Actual textured
+translucent projection, post-reload rendering and the large schematic were
+visually inspected. Its earlier sampler implementation did not require a new
+draw path. Evidence: `build/schematic-oldest-world.log` and
+`build/schematic-evidence/oldest/`.
+
+The hardware, OpenGL backend and Complementary Reimagined r5.9.1 shader pack
+remain as recorded above. Existing vault/furnace feature tests were not rerun.
+No claim is made for other Minecraft versions, Vulkan or every shader pack.
+
+The early boundary (Litematica 0.28.4 / MaLiLib 0.29.3 / Iris 1.11.2 / Sodium
+0.9.1) also passed. Textured translucent projection and the model scene after
+resource reload were visually inspected. Evidence:
+`build/schematic-early-world.log`, `build/schematic-evidence/early/`.
+
+The middle boundary (Litematica 0.28.5 / MaLiLib 0.29.4 / Iris 1.11.4 / Sodium
+0.9.2) passed with actual textured projection and post-reload model rendering
+visually inspected. Evidence: `build/schematic-middle-world.log`,
+`build/schematic-evidence/middle/`.
+
+The recent boundary (Litematica 0.28.6 / MaLiLib 0.29.5 / Iris 1.11.4 / Sodium
+0.9.2) passed; textured translucent projection and post-reload model rendering
+were visually inspected. Evidence: `build/schematic-recent-world.log`,
+`build/schematic-evidence/recent/`.
+
+All four new boundary runs captured 14 screenshots each and completed their
+shader/adapter switching, model grid, opacity, occlusion, transforms, layer,
+third-person, resource reload, resize and large-schematic sequence. Final ACTIVE
+state and submitted-index assertions passed. This coverage is specific to the
+recorded shader pack and does not certify every model state or animation.
+The original 0.28.8/0.29.6 combinations retain their previous release evidence.
+
+Final 0.2.2 packaging: `assemble :fabric:verifySchematic` passed. JAR inspection
+confirmed version metadata, matching translation keys, and no test classes or
+bundled optional mod classes. The NeoForge JAR differs from 0.2.1 only in its
+version metadata. SHA256SUMS-0.2.2.txt accompanies the release artifacts.

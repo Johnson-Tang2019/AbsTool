@@ -37,12 +37,16 @@ public final class SchematicMixinPlugin implements IMixinConfigPlugin {
                 var path = loader.getModContainer(target.mod()).orElseThrow().findPath(target.resource()).orElseThrow();
                 String actual = java.util.HexFormat.of().formatHex(digest.digest(java.nio.file.Files.readAllBytes(path)));
                 String expected = target.sha256();
-                if (target.mod().equals("iris") && installed.get("iris").equals("1.11.2+mc26.2")) {
+                if (target.mod().equals("iris") && Set.of("1.11.1+mc26.2", "1.11.2+mc26.2").contains(installed.get("iris"))) {
                     expected = switch (target.resource()) {
                         case "net/irisshaders/iris/pipeline/IrisRenderingPipeline.class" -> "92442d66f2750e2e45e751f005dd53bb99867e04ec6bfb6ea22a41bf144c7097";
                         case "net/irisshaders/iris/mixin/MixinRenderPipeline.class" -> "eb1f13bfbf0d626b0d8984111120ef4c18cfa66e7ec9c7ac5e63d1abe4026d7d";
                         default -> expected;
                     };
+                }
+                if (target.mod().equals("litematica") && installed.get("litematica").equals("0.28.3")
+                        && target.resource().endsWith("/WorldRendererSchematic.class")) {
+                    expected = "bd953e93bdb137540917657efa947c4de043d298992857c7ef2c0f388c0c631f";
                 }
                 if (!actual.equals(expected)) { reason = "Unsupported bytecode: " + target.resource(); return; }
             }

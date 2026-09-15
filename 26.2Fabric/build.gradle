@@ -2,6 +2,18 @@ plugins { id 'net.fabricmc.fabric-loom' }
 
 repositories { maven { url = 'https://api.modrinth.com/maven' } }
 
+def schematicProfiles = [
+    oldest: ['litematica-0.28.3.jar', 'malilib-0.29.2.jar', 'iris-1.11.1.jar', 'sodium-0.9.0.jar'],
+    early: ['litematica-0.28.4.jar', 'malilib-0.29.3.jar', 'iris-1.11.2.jar', 'sodium-0.9.1.jar'],
+    middle: ['litematica-0.28.5.jar', 'malilib-0.29.4.jar', 'iris.jar', 'sodium.jar'],
+    recent: ['litematica-0.28.6.jar', 'malilib-0.29.5.jar', 'iris.jar', 'sodium.jar']
+]
+def schematicProfileName = providers.gradleProperty('schematicProfile').getOrElse('')
+if (schematicProfileName && !schematicProfiles.containsKey(schematicProfileName)) {
+    throw new GradleException("Unknown schematicProfile: ${schematicProfileName}")
+}
+def schematicProfile = schematicProfiles[schematicProfileName]
+
 dependencies {
     compileOnly 'maven.modrinth:litematica:CuniXtbo'
     compileOnly 'maven.modrinth:malilib:KvjmGjAV'
@@ -102,7 +114,7 @@ if (providers.gradleProperty('worldTests').isPresent()) {
     }
     if (providers.gradleProperty('schematicTests').isPresent()) {
         dependencies {
-            runtimeOnly files(rootProject.file('build/reference/testmods/litematica.jar'), rootProject.file('build/reference/testmods/malilib.jar'))
+            runtimeOnly files(rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[0] : 'litematica.jar')), rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[1] : 'malilib.jar')))
             gametestCompileOnly files(rootProject.file('build/reference/testmods/litematica.jar'), rootProject.file('build/reference/testmods/malilib.jar'))
         }
         sourceSets.gametest.java.srcDir 'src/schematicTest/java'
@@ -133,7 +145,7 @@ if (providers.gradleProperty('worldTests').isPresent()) {
         dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/jade.jar')) }
     }
     if (providers.gradleProperty('withIrisTest').isPresent()) {
-        dependencies { runtimeOnly files(rootProject.file(providers.gradleProperty('iris112Test').isPresent() ? 'build/reference/testmods/iris-1.11.2.jar' : 'build/reference/testmods/iris.jar'), rootProject.file(providers.gradleProperty('iris112Test').isPresent() ? 'build/reference/testmods/sodium-0.9.1.jar' : 'build/reference/testmods/sodium.jar')) }
+        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[2] : providers.gradleProperty('iris112Test').isPresent() ? 'iris-1.11.2.jar' : 'iris.jar')), rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[3] : providers.gradleProperty('iris112Test').isPresent() ? 'sodium-0.9.1.jar' : 'sodium.jar'))) }
         tasks.named('runClientGameTest', JavaExec) {
             doFirst {
                 def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.2 — 2026-09-15
+
+- Expand Fabric schematic shader support to audited Litematica 0.28.3/4/5/6/8
+  and MaLiLib 0.29.2–0.29.6, respecting each upstream minimum dependency.
+- Add Iris 1.11.1 with Sodium 0.9.0; retain 1.11.2/0.9.1 and 1.11.4/0.9.2.
+- Preserve release-class fingerprint checks, including the older Litematica
+  sampler implementation; show the actual versions of all four dependencies.
+- 新增多个投影／前置版本兼容，按依赖规则开放 51 个组合；不允许任意混搭。
+  Iris 1.11.0、未核查版本和被修改的适配目标类仍不启用适配。
+
+
 ## 0.2.1 — 2026-09-14
 
 - Add Fabric projection shader compatibility for Iris 1.11.2+mc26.2 paired with
