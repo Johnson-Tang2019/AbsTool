@@ -19,6 +19,8 @@ import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import com.abyssredemption.abstool.client.serverstats.ServerStatsClient;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 @Mod(value = AbsTool.MOD_ID, dist = Dist.CLIENT)
 public final class AbsToolNeoForgeClient {
@@ -40,6 +42,9 @@ public final class AbsToolNeoForgeClient {
         NeoForge.EVENT_BUS.addListener(this::extract);
         NeoForge.EVENT_BUS.addListener(this::submit);
         NeoForge.EVENT_BUS.addListener(this::useBlock);
+        NeoForge.EVENT_BUS.addListener(ServerStatsClient::tick);
+        container.getEventBus().addListener(ServerStatsClient::register);
+        container.getEventBus().addListener(ServerStatsClient::registerKey);
     }
 
     private void tick(ClientTickEvent.Post event) {
