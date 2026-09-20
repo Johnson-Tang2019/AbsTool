@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.4 — 2026-09-20
+
+- Add a dedicated top-level Server Stats settings page while preserving the existing navigation categories.
+- 在顶部导航中新增独立的“服务器统计”页面，保留原有导航分类不变。
+
 ## 0.4.3 — 2026-09-20
 
 - Open the server statistics screen on the client tick after saving the settings action, so the settings screen cannot override it during close.

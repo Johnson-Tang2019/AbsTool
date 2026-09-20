@@ -25,6 +25,7 @@ public final class ClothConfigScreenFactory {
         ConfigCategory all = builder.getOrCreateCategory(Component.translatable("text.abstool.category.all"));
         ConfigCategory tracking = builder.getOrCreateCategory(Component.translatable("text.abstool.category.tracking"));
         ConfigCategory optimization = builder.getOrCreateCategory(Component.translatable("text.abstool.category.optimization"));
+        ConfigCategory serverStats = builder.getOrCreateCategory(Component.translatable("text.abstool.serverstats.category"));
 
         ConfigCategory general = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.general"));
         general.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.enabled"), config.enabled)
@@ -53,7 +54,7 @@ public final class ClothConfigScreenFactory {
 
         ConfigCategory keybinds = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.keybinds"));
         keybinds.addEntry(entries.startTextDescription(Component.translatable("text.abstool.vault.hotkey_hint")).build());
-        keybinds.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.serverstats.open"), false)
+        serverStats.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.serverstats.open"), false)
                 .setDefaultValue(false)
                 .setSaveConsumer(value -> {
                     if (value) openServerStatsNextTick();
