@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 — 2026-09-20
+
+- Remove the standalone server statistics keybind; keep `R+B` for the Ab's Tool settings menu.
+- Add an "Open Server Stats" action to the mod settings menu.
+- 移除服务器统计独立快捷键，保留 `R+B` 打开 Ab's Tool 设置菜单；新增设置菜单中的服务器统计入口。
+
 ## 0.4.0 — 2026-09-20
 
 - Add a NeoForge client dashboard for compatible Ab's Server Tool protocol v2
