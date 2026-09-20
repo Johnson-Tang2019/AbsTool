@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 — 2026-09-20
+
+- Add a NeoForge client dashboard for compatible Ab's Server Tool protocol v2
+  servers, including overview statistics, play-time, placement and death
+  leaderboards, trends, pagination, refresh handling, and availability states.
+- Keep the dashboard unavailable when the server component is missing or uses an
+  incompatible protocol instead of presenting stale or unsupported data.
+- 新增 NeoForge 服务器统计面板，支持总览、在线时间、方块放置、死亡排行与趋势；
+  未安装兼容服务端或协议不匹配时会明确提示，不展示无效数据。
+
 ## 0.3.0 — 2026-09-15
 
 - Add optional low-ceiling elytra launch on both loaders: equip from normal
