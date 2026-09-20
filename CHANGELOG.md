@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.5 — 2026-09-20
+
+- Replace the server statistics toggle with a direct clickable action in the top-level settings page.
+- 将服务器统计开关改为顶部独立页面中的直接点击入口。
+
 ## 0.4.4 — 2026-09-20
 
 - Add a dedicated top-level Server Stats settings page while preserving the existing navigation categories.

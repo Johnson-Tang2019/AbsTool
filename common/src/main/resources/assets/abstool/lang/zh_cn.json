@@ -2,6 +2,7 @@
   "abstool.serverstats.title": "服务器统计",
   "text.abstool.serverstats.open": "打开服务器统计",
   "text.abstool.serverstats.category": "服务器统计",
+  "text.abstool.serverstats.click": "点击打开统计页面",
   "text.abstool.vault.title": "Ab's Tool 设置",
   "text.abstool.vault.category.general": "高亮",
   "text.abstool.vault.category.tracer": "追踪线",

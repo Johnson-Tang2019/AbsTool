@@ -54,12 +54,9 @@ public final class ClothConfigScreenFactory {
 
         ConfigCategory keybinds = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.keybinds"));
         keybinds.addEntry(entries.startTextDescription(Component.translatable("text.abstool.vault.hotkey_hint")).build());
-        serverStats.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.serverstats.open"), false)
-                .setDefaultValue(false)
-                .setSaveConsumer(value -> {
-                    if (value) openServerStatsNextTick();
-                })
-                .build());
+        serverStats.addEntry(new OpenServerStatsEntry(
+                Component.translatable("text.abstool.serverstats.open"),
+                Component.translatable("text.abstool.serverstats.click")));
 
         ConfigCategory tracer = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.tracer"));
         tracer.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.render_tracers"), config.renderTracers)
@@ -137,14 +134,4 @@ public final class ClothConfigScreenFactory {
         return builder.build();
     }
 
-    private static void openServerStatsNextTick() {
-        net.minecraft.client.Minecraft.getInstance().execute(() -> {
-            try {
-                Class.forName("com.abyssredemption.abstool.client.serverstats.ServerStatsClient")
-                        .getMethod("open").invoke(null);
-            } catch (ReflectiveOperationException ignored) {
-                // The server statistics client exists only on the NeoForge client distribution.
-            }
-        });
-    }
 }
