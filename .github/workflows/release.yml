@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing v-prefixed tag to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+      MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+      CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID || '1700814' }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Validate release configuration
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          mod_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
+          minecraft_version="$(sed -n 's/^minecraft_version=//p' gradle.properties)"
+          expected_tag="v${mod_version}"
+
+          if [[ "${RELEASE_TAG}" != "${expected_tag}" ]]; then
+            echo "Release tag ${RELEASE_TAG} does not match mod_version=${mod_version}." >&2
+            exit 1
+          fi
+          if [[ -z "${MODRINTH_PROJECT_ID}" ]]; then
+            echo "Repository variable MODRINTH_PROJECT_ID is not configured." >&2
+            exit 1
+          fi
+          if [[ -z "${MODRINTH_TOKEN}" || -z "${CURSEFORGE_TOKEN}" ]]; then
+            echo "MODRINTH_TOKEN and CURSEFORGE_TOKEN repository secrets are required." >&2
+            exit 1
+          fi
+
+          echo "mod_version=${mod_version}" >> "$GITHUB_OUTPUT"
+          echo "minecraft_version=${minecraft_version}" >> "$GITHUB_OUTPUT"
+          echo "artifact_version=${mod_version}+${minecraft_version}" >> "$GITHUB_OUTPUT"
+
+      - name: Build release JARs
+        run: bash gradlew clean assemble --no-daemon
+
+      - name: Verify release JARs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar"
+          test -f "26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar"
+
+      - name: Publish Fabric to Modrinth and CurseForge
+        uses: Kir-Antipov/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
+        with:
+          modrinth-id: ${{ env.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: 26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
+          name: Ab's Tool ${{ steps.release.outputs.mod_version }} (Fabric)
+          version: ${{ steps.release.outputs.artifact_version }}-fabric
+          version-type: release
+          changelog-file: CHANGELOG.md
+          loaders: fabric
+          game-versions: ${{ steps.release.outputs.minecraft_version }}
+          game-version-filter: none
+          java: Java 25
+          retry-attempts: 2
+          fail-mode: fail
+
+      - name: Publish NeoForge to Modrinth and CurseForge
+        uses: Kir-Antipov/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
+        with:
+          modrinth-id: ${{ env.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: 26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
+          name: Ab's Tool ${{ steps.release.outputs.mod_version }} (NeoForge)
+          version: ${{ steps.release.outputs.artifact_version }}-neoforge
+          version-type: release
+          changelog-file: CHANGELOG.md
+          loaders: neoforge
+          game-versions: ${{ steps.release.outputs.minecraft_version }}
+          game-version-filter: none
+          java: Java 25
+          retry-attempts: 2
+          fail-mode: fail
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Ab's Tool ${{ steps.release.outputs.mod_version }} - Minecraft ${{ steps.release.outputs.minecraft_version }}
+          generate_release_notes: true
+          files: |
+            26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
+            26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
+          fail_on_unmatched_files: true

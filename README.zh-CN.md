@@ -105,6 +105,10 @@ macOS／Linux 使用 `bash ./gradlew` 替换 `.\gradlew.bat`。
 NeoForge 客户端还需 NeoForge 版 Cloth Config。
 以 `-sources.jar` 结尾的文件供开发使用。
 
+带版本号的 Git 标签会触发自动发布，将 Fabric 与 NeoForge JAR 上传到
+Modrinth、CurseForge 和 GitHub Releases。维护者请按
+[发布指南](docs/PUBLISHING.md)配置仓库密钥并创建发布版本。
+
 ## 验证
 
 `build` 会运行 `:fabric:verifyVault`，检查共享配置、组合键、记录持久化、

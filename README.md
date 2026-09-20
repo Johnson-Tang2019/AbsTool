@@ -148,6 +148,10 @@ checked against the official Servux 0.11.5 server, and Fabric fallback against J
 Install JDK 25 and set JAVA_HOME to its installation directory. The wrapper uses
 Gradle 9.5.1. Dependency versions are pinned in `gradle.properties` and `build.gradle`.
 
+Release JARs are published from version tags to Modrinth, CurseForge, and
+GitHub Releases. Maintainers should follow the [publishing guide](docs/PUBLISHING.md)
+to configure repository secrets and create a release.
+
 ```powershell
 .\gradlew.bat build
 .\gradlew.bat :fabric:runClient
