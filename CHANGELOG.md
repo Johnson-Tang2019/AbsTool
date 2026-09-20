@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.7 — 2026-09-20
+
+- Queue the top Server Stats category action for the next client tick and hide the intermediate page entry.
+- Add automated verification that the navigation request is consumed exactly once.
+- 顶部“服务器统计”分类改为下一客户端 tick 打开，并隐藏中间页面内容；新增一次性请求自动验证。
+
 ## 0.4.6 — 2026-09-20
 
 - Open the server statistics screen automatically when the top-level Server Stats category is selected; remove the extra page action.

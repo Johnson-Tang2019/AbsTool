@@ -22,6 +22,14 @@ public final class AbsToolClient {
     }
 
     public static void tickShortcut(Minecraft client) {
+        if (ServerStatsNavigation.consumeOpenRequest()) {
+            try {
+                Class.forName("com.abyssredemption.abstool.client.serverstats.ServerStatsClient")
+                        .getMethod("open").invoke(null);
+            } catch (ReflectiveOperationException ignored) {
+                // Server statistics are only present on the NeoForge client distribution.
+            }
+        }
         com.abyssredemption.abstool.client.furnace.FurnaceTracker.INSTANCE.tick(client);
         com.abyssredemption.abstool.client.elytra.ElytraLaunch.guard(client);
         boolean focused = client.isWindowActive();

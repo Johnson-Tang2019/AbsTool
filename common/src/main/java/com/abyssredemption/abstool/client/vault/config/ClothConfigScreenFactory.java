@@ -55,8 +55,7 @@ public final class ClothConfigScreenFactory {
         ConfigCategory keybinds = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.keybinds"));
         keybinds.addEntry(entries.startTextDescription(Component.translatable("text.abstool.vault.hotkey_hint")).build());
         serverStats.addEntry(new OpenServerStatsEntry(
-                Component.translatable("text.abstool.serverstats.open"),
-                Component.translatable("text.abstool.serverstats.click")));
+                Component.empty(), Component.empty()));
 
         ConfigCategory tracer = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.tracer"));
         tracer.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.render_tracers"), config.renderTracers)

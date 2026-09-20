@@ -1,6 +1,7 @@
 package com.abyssredemption.abstool.verification;
 
 import com.abyssredemption.abstool.client.SettingsShortcut;
+import com.abyssredemption.abstool.client.ServerStatsNavigation;
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.vault.config.ModConfig;
 import com.abyssredemption.abstool.client.vault.storage.VaultKey;
@@ -14,11 +15,19 @@ import java.time.ZoneId;
 public final class VaultVerification {
     public static void main(String[] args) throws Exception {
         shortcut();
+        serverStatsNavigation();
         configuration();
         storage();
         dailyReset();
         furnaceProtocol();
         System.out.println("Vault verification passed: shortcut, config, persistence, isolation, refresh and corrupt input.");
+    }
+
+    private static void serverStatsNavigation() {
+        require(!ServerStatsNavigation.consumeOpenRequest(), "Stats navigation must start idle");
+        ServerStatsNavigation.requestOpen();
+        require(ServerStatsNavigation.consumeOpenRequest(), "Selecting the top category must request stats once");
+        require(!ServerStatsNavigation.consumeOpenRequest(), "Stats navigation request must be consumed exactly once");
     }
 
     private static void shortcut() {
