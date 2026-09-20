@@ -44,7 +44,6 @@ public final class AbsToolNeoForgeClient {
         NeoForge.EVENT_BUS.addListener(this::useBlock);
         NeoForge.EVENT_BUS.addListener(ServerStatsClient::tick);
         container.getEventBus().addListener(ServerStatsClient::register);
-        container.getEventBus().addListener(ServerStatsClient::registerKey);
     }
 
     private void tick(ClientTickEvent.Post event) {

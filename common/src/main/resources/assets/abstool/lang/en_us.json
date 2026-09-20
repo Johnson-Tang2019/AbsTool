@@ -1,5 +1,6 @@
 {
   "abstool.serverstats.title": "Server Stats",
+  "text.abstool.serverstats.open": "Open Server Stats",
   "text.abstool.vault.title": "Ab's Tool Settings",
   "text.abstool.vault.category.general": "Highlight",
   "text.abstool.vault.category.tracer": "Tracers",
