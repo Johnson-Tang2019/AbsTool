@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.6 — 2026-09-20
+
+- Open the server statistics screen automatically when the top-level Server Stats category is selected; remove the extra page action.
+- 选择顶部“服务器统计”分类后自动打开统计界面，移除页面内的二次点击入口。
+
 ## 0.4.5 — 2026-09-20
 
 - Replace the server statistics toggle with a direct clickable action in the top-level settings page.
