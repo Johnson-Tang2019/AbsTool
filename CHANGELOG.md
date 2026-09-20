@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.8 — 2026-09-20
+
+- Replace reflection with an explicitly registered NeoForge server-statistics opener.
+- Hide the server-statistics category on Fabric, where the NeoForge-only screen is unavailable.
+- Verify the full request-to-next-tick opener path and single-shot behavior before release.
+- 使用 NeoForge 显式注册的统计页面打开器替代反射；Fabric 不再显示不可用入口，并在发布前验证完整单次调用链。
+
 ## 0.4.7 — 2026-09-20
 
 - Queue the top Server Stats category action for the next client tick and hide the intermediate page entry.

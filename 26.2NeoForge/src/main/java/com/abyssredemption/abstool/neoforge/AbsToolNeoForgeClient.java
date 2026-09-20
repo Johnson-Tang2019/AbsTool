@@ -36,6 +36,7 @@ public final class AbsToolNeoForgeClient {
                         .containsKey(com.abyssredemption.abstool.client.furnace.FurnaceNetwork.SERVUX);
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id);
         AbsToolClient.init(FMLPaths.CONFIGDIR.get());
+        com.abyssredemption.abstool.client.ServerStatsNavigation.install(ServerStatsClient::open);
         container.registerExtensionPoint(IConfigScreenFactory.class,
                 (mod, parent) -> ClothConfigScreenFactory.create(parent));
         NeoForge.EVENT_BUS.addListener(this::tick);

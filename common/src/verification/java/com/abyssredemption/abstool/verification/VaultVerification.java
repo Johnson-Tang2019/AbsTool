@@ -24,10 +24,17 @@ public final class VaultVerification {
     }
 
     private static void serverStatsNavigation() {
-        require(!ServerStatsNavigation.consumeOpenRequest(), "Stats navigation must start idle");
+        ServerStatsNavigation.resetForVerification();
+        int[] opens = {0};
+        require(!ServerStatsNavigation.isAvailable(), "Stats navigation must be hidden before platform registration");
+        ServerStatsNavigation.install(() -> opens[0]++);
+        require(ServerStatsNavigation.isAvailable(), "NeoForge must expose the stats category after registration");
         ServerStatsNavigation.requestOpen();
-        require(ServerStatsNavigation.consumeOpenRequest(), "Selecting the top category must request stats once");
-        require(!ServerStatsNavigation.consumeOpenRequest(), "Stats navigation request must be consumed exactly once");
+        require(ServerStatsNavigation.tick(), "Selecting the top category must open stats on the next tick");
+        require(opens[0] == 1, "Stats opener must run exactly once");
+        require(!ServerStatsNavigation.tick(), "Stats request must not repeat on later ticks");
+        require(opens[0] == 1, "Stats opener must remain single-shot");
+        ServerStatsNavigation.resetForVerification();
     }
 
     private static void shortcut() {
