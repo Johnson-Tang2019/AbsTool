@@ -16,5 +16,8 @@ hs_err_pid*
 *.jks
 *.keystore
 
+# Contains live publishing credentials; keep local and never commit.
+/PUBLISHING_PRIVATE.md
+
 # Local third-party visual references; excluded from distribution.
 /references/slashblade/
