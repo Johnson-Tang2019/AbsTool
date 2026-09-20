@@ -56,14 +56,7 @@ public final class ClothConfigScreenFactory {
         keybinds.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.serverstats.open"), false)
                 .setDefaultValue(false)
                 .setSaveConsumer(value -> {
-                    if (value) {
-                        try {
-                            Class.forName("com.abyssredemption.abstool.client.serverstats.ServerStatsClient")
-                                    .getMethod("open").invoke(null);
-                        } catch (ReflectiveOperationException ignored) {
-                            // The server statistics client exists only on the NeoForge client distribution.
-                        }
-                    }
+                    if (value) openServerStatsNextTick();
                 })
                 .build());
 
@@ -141,5 +134,16 @@ public final class ClothConfigScreenFactory {
         builder.setSavingRunnable(() -> { ConfigManager.save(); quick.save().run(); });
         builder.setFallbackCategory(all);
         return builder.build();
+    }
+
+    private static void openServerStatsNextTick() {
+        net.minecraft.client.Minecraft.getInstance().execute(() -> {
+            try {
+                Class.forName("com.abyssredemption.abstool.client.serverstats.ServerStatsClient")
+                        .getMethod("open").invoke(null);
+            } catch (ReflectiveOperationException ignored) {
+                // The server statistics client exists only on the NeoForge client distribution.
+            }
+        });
     }
 }

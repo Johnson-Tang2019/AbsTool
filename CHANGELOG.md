@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.3 — 2026-09-20
+
+- Open the server statistics screen on the client tick after saving the settings action, so the settings screen cannot override it during close.
+- 修复从设置菜单打开服务器统计时被设置界面关闭流程覆盖的问题。
+
 ## 0.4.2 — 2026-09-20
 
 - Move the server statistics action to the top of the tracking settings page.
