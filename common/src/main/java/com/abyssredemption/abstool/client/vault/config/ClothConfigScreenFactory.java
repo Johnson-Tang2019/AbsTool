@@ -118,7 +118,7 @@ public final class ClothConfigScreenFactory {
 
         com.abyssredemption.abstool.client.furnace.FurnaceSettings.add(builder);
         com.abyssredemption.abstool.client.schematic.SchematicShaderSettings.add(builder);
-        for (ConfigCategory category : java.util.List.of(general, keybinds, tracer, refresh,
+        for (ConfigCategory category : java.util.List.of(keybinds, general, tracer, refresh,
                 builder.getOrCreateCategory(Component.translatable("text.abstool.furnace.category")))) {
             tracking.addEntry(entries.startTextDescription(category.getCategoryKey()).build());
             tracking.getEntries().addAll(category.getEntries());

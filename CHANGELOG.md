@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2 — 2026-09-20
+
+- Move the server statistics action to the top of the tracking settings page.
+- 将服务器统计入口移动到追踪设置页顶部。
+
 ## 0.4.1 — 2026-09-20
 
 - Remove the standalone server statistics keybind; keep `R+B` for the Ab's Tool settings menu.
