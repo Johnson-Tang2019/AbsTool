@@ -36,18 +36,19 @@ public final class AbsToolNeoForgeClient {
                         .containsKey(com.abyssredemption.abstool.client.furnace.FurnaceNetwork.SERVUX);
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id);
         AbsToolClient.init(FMLPaths.CONFIGDIR.get());
-        com.abyssredemption.abstool.client.ServerStatsNavigation.install(ServerStatsClient::open);
+        ServerStatsClient.install(net.neoforged.neoforge.client.network.ClientPacketDistributor::sendToServer,
+                id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id));
         container.registerExtensionPoint(IConfigScreenFactory.class,
                 (mod, parent) -> ClothConfigScreenFactory.create(parent));
         NeoForge.EVENT_BUS.addListener(this::tick);
         NeoForge.EVENT_BUS.addListener(this::extract);
         NeoForge.EVENT_BUS.addListener(this::submit);
         NeoForge.EVENT_BUS.addListener(this::useBlock);
-        NeoForge.EVENT_BUS.addListener(ServerStatsClient::tick);
-        container.getEventBus().addListener(ServerStatsClient::register);
+        container.getEventBus().addListener(ServerStatsNetworking::register);
     }
 
     private void tick(ClientTickEvent.Post event) {
+        ServerStatsClient.tick(Minecraft.getInstance());
         AbsToolClient.tickShortcut(Minecraft.getInstance());
         controller.tick(Minecraft.getInstance());
     }

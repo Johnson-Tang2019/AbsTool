@@ -39,11 +39,11 @@ public final class SettingsSmoke {
             var config = (me.shedaniel.clothconfig2.gui.AbstractConfigScreen) settings;
             var categories = config.getCategorizedEntries();
             var keys = java.util.List.copyOf(categories.keySet());
-            var expected = (Boolean.getBoolean("abstool.quickSettingsTest")
-                    ? java.util.List.of("all", "tracking", "optimization", "quick")
-                    : java.util.List.of("all", "tracking", "optimization")).stream()
-                    .map(key -> net.minecraft.network.chat.Component.translatable("text.abstool.category." + key)).toList();
-            if (!keys.equals(expected)) throw new AssertionError("Expected All / Tracking / Optimization tabs: " + keys);
+            var expected = new java.util.ArrayList<net.minecraft.network.chat.Component>();
+            for (String key : java.util.List.of("all", "tracking", "optimization")) expected.add(net.minecraft.network.chat.Component.translatable("text.abstool.category." + key));
+            expected.add(net.minecraft.network.chat.Component.translatable("text.abstool.serverstats.category"));
+            if (Boolean.getBoolean("abstool.quickSettingsTest")) expected.add(net.minecraft.network.chat.Component.translatable("text.abstool.category.quick"));
+            if (!keys.equals(expected)) throw new AssertionError("Missing settings/statistics tabs: " + keys);
             if (!categories.get(keys.get(0)).containsAll(categories.get(keys.get(1)))
                     || !categories.get(keys.get(0)).containsAll(categories.get(keys.get(2)))) {
                 throw new AssertionError("All tab must share category editors to preserve pending edits");
@@ -65,6 +65,24 @@ public final class SettingsSmoke {
             }
             Screenshot.grab(client.gameDirectory, "abstool-settings-smoke.png",
                     client.gameRenderer.mainRenderTarget(), 1,
+                    message -> LoggerFactory.getLogger("abstool-smoke").info(message.getString()));
+        }
+        if (ticks == 45 && !Boolean.getBoolean("abstool.quickSettingsTest")) {
+            var widget = settings.children().stream()
+                    .filter(child -> child instanceof net.minecraft.client.gui.components.AbstractWidget button
+                            && button.getMessage().equals(net.minecraft.network.chat.Component.translatable("text.abstool.serverstats.category")))
+                    .map(child -> (net.minecraft.client.gui.components.AbstractWidget) child).findFirst().orElseThrow();
+            var event = new net.minecraft.client.input.MouseButtonEvent(widget.getX() + widget.getWidth() / 2.0,
+                    widget.getY() + widget.getHeight() / 2.0, new net.minecraft.client.input.MouseButtonInfo(0, 0));
+            if (!settings.mouseClicked(event, false)) throw new AssertionError("Statistics tab did not accept click");
+            settings.mouseReleased(event);
+        }
+        if (ticks == 50 && !Boolean.getBoolean("abstool.quickSettingsTest")) {
+            var config = (me.shedaniel.clothconfig2.gui.ClothConfigScreen) settings;
+            if (client.gui.screen() != settings || !config.getSelectedCategory().equals(net.minecraft.network.chat.Component.translatable("text.abstool.serverstats.category"))) {
+                throw new AssertionError("Statistics must remain in the settings navigation");
+            }
+            Screenshot.grab(client.gameDirectory, "abstool-stats-smoke.png", client.gameRenderer.mainRenderTarget(), 1,
                     message -> LoggerFactory.getLogger("abstool-smoke").info(message.getString()));
         }
         if (ticks == 50 && Boolean.getBoolean("abstool.quickSettingsTest")) {

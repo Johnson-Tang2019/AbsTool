@@ -25,8 +25,7 @@ public final class ClothConfigScreenFactory {
         ConfigCategory all = builder.getOrCreateCategory(Component.translatable("text.abstool.category.all"));
         ConfigCategory tracking = builder.getOrCreateCategory(Component.translatable("text.abstool.category.tracking"));
         ConfigCategory optimization = builder.getOrCreateCategory(Component.translatable("text.abstool.category.optimization"));
-        ConfigCategory serverStats = com.abyssredemption.abstool.client.ServerStatsNavigation.isAvailable()
-                ? builder.getOrCreateCategory(Component.translatable("text.abstool.serverstats.category")) : null;
+        ConfigCategory serverStats = builder.getOrCreateCategory(Component.translatable("text.abstool.serverstats.category"));
 
         ConfigCategory general = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.general"));
         general.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.enabled"), config.enabled)
@@ -55,8 +54,7 @@ public final class ClothConfigScreenFactory {
 
         ConfigCategory keybinds = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.keybinds"));
         keybinds.addEntry(entries.startTextDescription(Component.translatable("text.abstool.vault.hotkey_hint")).build());
-        if (serverStats != null) serverStats.addEntry(new OpenServerStatsEntry(
-                Component.empty(), Component.empty()));
+        serverStats.addEntry(new com.abyssredemption.abstool.client.serverstats.gui.ServerStatsEntry());
 
         ConfigCategory tracer = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.tracer"));
         tracer.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.render_tracers"), config.renderTracers)

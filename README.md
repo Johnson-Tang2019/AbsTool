@@ -7,6 +7,14 @@
 Minecraft 26.2 utility mod for Fabric and NeoForge, following AbsMod's layout.
 Mod ID: `abstool`. Base package: `com.abyssredemption.abstool`.
 
+## Server statistics
+
+Press R+B and select **Server Stats** in the top navigation. Fabric and NeoForge
+display statistics directly inside this tab, with the same navigation bar and no
+enable switch or second opening action. Overview, playtime, placements, deaths,
+and trends require a compatible AbsServerTool protocol-v2 server. Servers without
+that interface show an explicit status instead of an empty page.
+
 ## Low ceiling elytra launch
 
 Under R+B > Optimization > Elytra Assist, enable **Low ceiling quick launch**.

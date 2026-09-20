@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.9 — 2026-09-20
+
+- Add the missing Fabric statistics transport and share statistics models, codecs and UI across both loaders.
+- Display live statistics directly in the top Server Stats category, preserving Cloth Config navigation without a switch, hidden sentinel or second click.
+- Show explicit disconnected, unsupported, protocol mismatch and timeout states; clear cached statistics when connections change.
+- 补齐 Fabric 统计通信与页面；点击顶部“服务器统计”直接展示数据，保留导航条，移除隐藏跳转项及二次点击。
+- 无接口、未连接、协议不兼容和超时均显示明确状态，切换服务器时清空缓存。
+
 ## 0.4.8 — 2026-09-20
 
 - Replace reflection with an explicitly registered NeoForge server-statistics opener.

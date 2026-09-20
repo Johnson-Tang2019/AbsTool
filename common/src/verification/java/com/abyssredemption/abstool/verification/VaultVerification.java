@@ -1,7 +1,6 @@
 package com.abyssredemption.abstool.verification;
 
 import com.abyssredemption.abstool.client.SettingsShortcut;
-import com.abyssredemption.abstool.client.ServerStatsNavigation;
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.vault.config.ModConfig;
 import com.abyssredemption.abstool.client.vault.storage.VaultKey;
@@ -15,26 +14,11 @@ import java.time.ZoneId;
 public final class VaultVerification {
     public static void main(String[] args) throws Exception {
         shortcut();
-        serverStatsNavigation();
         configuration();
         storage();
         dailyReset();
         furnaceProtocol();
         System.out.println("Vault verification passed: shortcut, config, persistence, isolation, refresh and corrupt input.");
-    }
-
-    private static void serverStatsNavigation() {
-        ServerStatsNavigation.resetForVerification();
-        int[] opens = {0};
-        require(!ServerStatsNavigation.isAvailable(), "Stats navigation must be hidden before platform registration");
-        ServerStatsNavigation.install(() -> opens[0]++);
-        require(ServerStatsNavigation.isAvailable(), "NeoForge must expose the stats category after registration");
-        ServerStatsNavigation.requestOpen();
-        require(ServerStatsNavigation.tick(), "Selecting the top category must open stats on the next tick");
-        require(opens[0] == 1, "Stats opener must run exactly once");
-        require(!ServerStatsNavigation.tick(), "Stats request must not repeat on later ticks");
-        require(opens[0] == 1, "Stats opener must remain single-shot");
-        ServerStatsNavigation.resetForVerification();
     }
 
     private static void shortcut() {

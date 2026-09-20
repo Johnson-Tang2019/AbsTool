@@ -110,6 +110,17 @@ if (providers.gradleProperty('worldTests').isPresent()) {
         enableGameTests = false
         enableClientGameTests = true
     }
+    if (providers.gradleProperty('statsTests').isPresent()) {
+        tasks.named('processGametestResources') {
+            doLast {
+                def manifest = new File(destinationDir, 'fabric.mod.json')
+                def json = new groovy.json.JsonSlurper().parse(manifest)
+                json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ServerStatsWorldTest']]
+                manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+            }
+            outputs.upToDateWhen { false }
+        }
+    }
     tasks.named('processGametestResources') {
         inputs.property('schematicOnly', providers.gradleProperty('schematicTests').isPresent())
         inputs.property('elytraOnly', providers.gradleProperty('elytraTests').isPresent())
