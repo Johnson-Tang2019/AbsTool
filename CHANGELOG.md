@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.11 — 2026-09-29
+
+- Show AbsServerTool's completed advancement leaderboard in Server Stats on Fabric and NeoForge. Each row displays the number of completed, visible advancements returned by the server.
+- Keep protocol v2; request the new leaderboard only when the server advertises its advancement capability. Older servers show an unsupported metric message.
+- 在服务器统计中增加“进度”排行，显示每位玩家已完成的可显示进度数；旧服务器会提示不支持该统计项目。
+
 ## 0.4.10 — 2026-09-29
 
 - Lower the Minecraft 26.2 Fabric Loader requirement from 0.19.5 to 0.19.3. Fabric API accepts 0.19.3, and the Mixin Extras annotations used by Ab's Tool are present in the version bundled with that loader.

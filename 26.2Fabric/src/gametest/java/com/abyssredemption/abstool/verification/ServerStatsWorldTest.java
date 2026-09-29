@@ -56,6 +56,16 @@ public final class ServerStatsWorldTest implements FabricClientGameTest {
             click(context, "abstool.stats.tab.4");
             context.waitFor(client -> !ServerStatsClient.state().trend(0).isEmpty());
             context.takeScreenshot("abstool-stats-trend");
+            click(context, "abstool.stats.tab.5");
+            context.waitFor(client -> ServerStatsClient.state().get(LeaderboardType.COMPLETED_ADVANCEMENTS, 1) != null);
+            context.runOnClient(client -> {
+                var lines = entry((ClothConfigScreen) client.gui.screen()).lines();
+                if (lines.stream().noneMatch(line -> line.getString().contains("FixturePlayer")
+                        && line.getString().contains("6789"))) {
+                    throw new AssertionError("Completed advancement count not shown");
+                }
+            });
+            context.takeScreenshot("abstool-stats-advancements");
             click(context, "text.abstool.category.tracking");
             click(context, "text.abstool.serverstats.category");
             context.runOnClient(client -> {
@@ -68,7 +78,7 @@ public final class ServerStatsWorldTest implements FabricClientGameTest {
         context.runOnClient(client -> {
             if (ServerStatsClient.state().overview() != null) throw new AssertionError("Statistics leaked after disconnect");
         });
-        org.slf4j.LoggerFactory.getLogger("abstool-tests").info("ABSTOOL_STATS_WORLD_PASS: tab clicks, unsupported server, overview, leaderboard, trends, disconnect");
+        org.slf4j.LoggerFactory.getLogger("abstool-tests").info("ABSTOOL_STATS_WORLD_PASS: tab clicks, unsupported server, overview, leaderboard, trends, advancements, disconnect");
     }
 
     private static void openStatistics(ClientGameTestContext context) {
@@ -111,7 +121,7 @@ public final class ServerStatsWorldTest implements FabricClientGameTest {
 
     private static void registerFixture() {
         ServerPlayNetworking.registerGlobalReceiver(HelloRequestPayload.TYPE, (p, c) ->
-                ServerPlayNetworking.send(c.player(), new HelloResponsePayload(2, "fixture", 127, 10, "2026-09-20", "Asia/Shanghai", false)));
+                ServerPlayNetworking.send(c.player(), new HelloResponsePayload(2, "fixture", 255, 10, "2026-09-20", "Asia/Shanghai", false)));
         ServerPlayNetworking.registerGlobalReceiver(OverviewRequestPayload.TYPE, (p, c) ->
                 ServerPlayNetworking.send(c.player(), new OverviewResponsePayload(2, p.requestId(), "2026-09-20", "2026-W38", 1, 42, 5, 12, 12000, 72000, 12345, 54321, 2, 8, false, false, System.currentTimeMillis())));
         ServerPlayNetworking.registerGlobalReceiver(LeaderboardRequestPayload.TYPE, (p, c) ->

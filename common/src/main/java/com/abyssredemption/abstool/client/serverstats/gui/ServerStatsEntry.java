@@ -25,7 +25,7 @@ public final class ServerStatsEntry extends TextListEntry {
 
     public ServerStatsEntry() {
         super(Component.translatable("text.abstool.serverstats.category"), Component.empty());
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             int index = i;
             buttons.add(Button.builder(label("tab." + i), b -> { tab = index; page = 1; request(true); }).bounds(0, 0, 65, 20).build());
         }
@@ -51,6 +51,7 @@ public final class ServerStatsEntry extends TextListEntry {
         return switch (tab) {
             case 2 -> period == 0 ? LeaderboardType.TOTAL_PLACEMENTS : period == 1 ? LeaderboardType.TODAY_PLACEMENTS : LeaderboardType.WEEK_PLACEMENTS;
             case 3 -> period == 0 ? LeaderboardType.TOTAL_DEATHS : period == 1 ? LeaderboardType.TODAY_DEATHS : LeaderboardType.WEEK_DEATHS;
+            case 5 -> LeaderboardType.COMPLETED_ADVANCEMENTS;
             default -> period == 0 ? LeaderboardType.TOTAL_PLAYTIME : period == 1 ? LeaderboardType.TODAY_PLAYTIME : LeaderboardType.WEEK_PLAYTIME;
         };
     }
@@ -90,9 +91,12 @@ public final class ServerStatsEntry extends TextListEntry {
             var data = state.get(type(), page);
             if (data == null) lines.add(label("loading"));
             else {
+                if (tab == 5) lines.add(label("advancements.note"));
                 if (data.entries().isEmpty()) lines.add(label("empty"));
                 for (var e : data.entries()) lines.add(Component.literal(e.rank() + ". " + e.playerName() + "  ")
-                        .append(tab == 1 ? label("minutes", e.value() / 1200) : Component.literal(Long.toString(e.value()))));
+                        .append(tab == 1 ? label("minutes", e.value() / 1200)
+                                : tab == 5 ? label("advancements.count", e.value())
+                                : Component.literal(Long.toString(e.value()))));
                 lines.add(label("page", page, data.totalPages()));
             }
         }
@@ -111,12 +115,15 @@ public final class ServerStatsEntry extends TextListEntry {
             button.setX(x + column * (buttonWidth + 3));
             button.setY(y + (i < 5 ? 0 : 24));
             button.setWidth(buttonWidth);
-            button.active = i < 5 ? tab != i : ServerStatsClient.state().availability() == ServerStatsAvailability.READY;
-            if (i == 5) button.setMessage(label((tab == 4 ? "trendperiod." : "period.") + period));
-            if (i == 6) button.active &= tab > 0 && tab < 4 && page > 1;
-            if (i == 7) {
+            button.active = i < 6 ? tab != i : ServerStatsClient.state().availability() == ServerStatsAvailability.READY;
+            if (i == 6) {
+                button.setMessage(label((tab == 4 ? "trendperiod." : "period.") + period));
+                button.active &= tab != 0 && tab != 5;
+            }
+            if (i == 7) button.active &= (tab > 0 && tab < 4 || tab == 5) && page > 1;
+            if (i == 8) {
                 var data = ServerStatsClient.state().get(type(), page);
-                button.active &= tab > 0 && tab < 4 && data != null && page < data.totalPages();
+                button.active &= (tab > 0 && tab < 4 || tab == 5) && data != null && page < data.totalPages();
             }
             button.extractRenderState(graphics, mouseX, mouseY, delta);
         }

@@ -12,8 +12,10 @@ Mod ID: `abstool`. Base package: `com.abyssredemption.abstool`.
 Press R+B and select **Server Stats** in the top navigation. Fabric and NeoForge
 display statistics directly inside this tab, with the same navigation bar and no
 enable switch or second opening action. Overview, playtime, placements, deaths,
-and trends require a compatible AbsServerTool protocol-v2 server. Servers without
-that interface show an explicit status instead of an empty page.
+and trends require a compatible AbsServerTool protocol-v2 server. The Advancements
+tab shows completed, visible advancements per player when AbsServerTool 0.3.2
+or newer advertises that capability. Older servers show an unsupported metric
+message. Servers without the statistics interface show an explicit status.
 
 ## Low ceiling elytra launch
 
