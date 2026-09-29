@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.10 — 2026-09-29
+
+- Lower the Minecraft 26.2 Fabric Loader requirement from 0.19.5 to 0.19.3. Fabric API accepts 0.19.3, and the Mixin Extras annotations used by Ab's Tool are present in the version bundled with that loader.
+- Build both loader variants against their declared dependencies. In-game behavior on Fabric Loader 0.19.3 has not been tested.
+- 兼容 Minecraft 26.2 的 Fabric Loader 0.19.3，修复启动时 Ab's Tool 的版本依赖冲突。
+
 ## 0.4.9 — 2026-09-20
 
 - Add the missing Fabric statistics transport and share statistics models, codecs and UI across both loaders.
