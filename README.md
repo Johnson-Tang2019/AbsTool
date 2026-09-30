@@ -234,3 +234,6 @@ then run either client smoke command in another terminal. Stop the test server a
 
 Protocol references: [Servux 26.2 entity provider](https://github.com/sakura-ryoko/servux/blob/e40a7562f87b3ac0e557439728f8208aba9b66a6/src/main/java/fi/dy/masa/servux/dataproviders/EntitiesDataProvider.java)
 and [Jade 26.2 furnace provider](https://github.com/Snownee/Jade/blob/747effeddcea3094b940772c7963c272bb2a07df/src/main/java/snownee/jade/addon/vanilla/FurnaceProvider.java).
+## Server Shared Xaero Waypoints
+
+The Fabric client includes an optional integration for Xaero's Minimap 26.5.0 on Minecraft 26.2. When a compatible AbsServerTool server advertises shared-waypoint support, administrators can publish a copy of a local Xaero waypoint, edit a server waypoint, or remove it from the Xaero waypoint list. Other players receive a read-only server collection. Xaero is optional, and this feature does not sync exploration data or map tiles. The [client protocol and compatibility notes](docs/XAERO_SHARED_WAYPOINTS.md) describe the server capability required for this feature; the companion server implementation is not part of this client change.

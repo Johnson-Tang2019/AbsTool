@@ -26,6 +26,19 @@ public final class ClothConfigScreenFactory {
         ConfigCategory tracking = builder.getOrCreateCategory(Component.translatable("text.abstool.category.tracking"));
         ConfigCategory optimization = builder.getOrCreateCategory(Component.translatable("text.abstool.category.optimization"));
         ConfigCategory serverStats = builder.getOrCreateCategory(Component.translatable("text.abstool.serverstats.category"));
+        ConfigCategory waypoints = builder.getOrCreateCategory(Component.translatable("text.abstool.waypoint.category"));
+        waypoints.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.waypoint.enabled"), config.serverWaypoints.enabled)
+                .setDefaultValue(true).setSaveConsumer(value -> config.serverWaypoints.enabled = value).build());
+        waypoints.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.waypoint.show_xaero"), config.serverWaypoints.showInXaero)
+                .setDefaultValue(true).setSaveConsumer(value -> config.serverWaypoints.showInXaero = value).build());
+        var waypointState = com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.state();
+        waypoints.addEntry(entries.startTextDescription(Component.translatable("text.abstool.waypoint.xaero_status",
+                Component.translatable("text.abstool.waypoint.xaero." + com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.xaeroStatus()))).build());
+        waypoints.addEntry(entries.startTextDescription(Component.translatable("text.abstool.waypoint.server_status",
+                Component.translatable(waypointState.supported() ? "text.abstool.waypoint.supported" : "text.abstool.waypoint.unavailable"))).build());
+        waypoints.addEntry(entries.startTextDescription(Component.translatable("text.abstool.waypoint.permission",
+                Component.translatable(waypointState.canManage() ? "text.abstool.waypoint.admin" : "text.abstool.waypoint.viewer"))).build());
+        waypoints.addEntry(entries.startTextDescription(Component.translatable("text.abstool.waypoint.count", waypointState.waypoints().size())).build());
 
         ConfigCategory general = builder.getOrCreateCategory(Component.translatable("text.abstool.vault.category.general"));
         general.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.vault.option.enabled"), config.enabled)

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.12 — 2026-09-30
+
+- Add an optional client protocol for server-owned Xaero waypoints, including authoritative snapshots, ordered deltas, revision conflict handling, and session cleanup.
+- Integrate Fabric with Xaero's Minimap 26.5.0 through a dedicated third-party waypoint collection. Administrators can publish local waypoints and submit server waypoint edits or removals from the Xaero list.
+- Add bilingual R+B settings and status information. Keep unknown Xaero versions disabled; NeoForge includes the optional protocol but has no Xaero display integration yet.
+- The companion AbsServerTool server capability is not implemented in this release. Shared waypoints remain unavailable until a matching server version is installed.
+- 新增客户端共享标点协议与 Fabric 版 Xaero 26.5.0 兼容入口；管理员可在 Xaero 列表中发布、编辑和删除服务器标点。
+- 需要后续服务端 AbsServerTool 实现对应能力，当前版本不会在旧服务端启用共享标点。
+
 ## 0.4.11 — 2026-09-29
 
 - Show AbsServerTool's completed advancement leaderboard in Server Stats on Fabric and NeoForge. Each row displays the number of completed, visible advancements returned by the server.

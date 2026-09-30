@@ -38,6 +38,9 @@ public final class AbsToolNeoForgeClient {
         AbsToolClient.init(FMLPaths.CONFIGDIR.get());
         ServerStatsClient.install(net.neoforged.neoforge.client.network.ClientPacketDistributor::sendToServer,
                 id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id));
+        com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.install(
+                net.neoforged.neoforge.client.network.ClientPacketDistributor::sendToServer,
+                id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id));
         container.registerExtensionPoint(IConfigScreenFactory.class,
                 (mod, parent) -> ClothConfigScreenFactory.create(parent));
         NeoForge.EVENT_BUS.addListener(this::tick);

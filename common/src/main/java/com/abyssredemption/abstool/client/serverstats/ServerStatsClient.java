@@ -28,10 +28,12 @@ public final class ServerStatsClient {
         if (connection != client.getConnection()) {
             connection = client.getConnection();
             STATE.clear();
+            com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.clear();
             ticks = 0;
         }
         if (connection == null || sender == null) return;
         ticks++;
+        com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.tick();
         if (STATE.availability() == ServerStatsAvailability.UNKNOWN && ticks % 20 == 0) {
             if (canSend.test(HelloRequestPayload.TYPE.id())) {
                 STATE.availability(ServerStatsAvailability.CHECKING);
@@ -46,6 +48,7 @@ public final class ServerStatsClient {
             return;
         }
         STATE.hello(p.capabilities(), p.trackingStartedDate(), p.timezone(), p.todayPartial());
+        com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.hello(p.capabilities());
         requestOverview(true);
     }
     public static void onOverview(OverviewResponsePayload p) {

@@ -196,3 +196,6 @@ Fabric 已目视验证 Iris 1.11.4、Sodium 0.9.2 和 Complementary Reimagined r
 
 协议参考：[Servux 26.2 entity provider](https://github.com/sakura-ryoko/servux/blob/e40a7562f87b3ac0e557439728f8208aba9b66a6/src/main/java/fi/dy/masa/servux/dataproviders/EntitiesDataProvider.java)、
 [Jade 26.2 furnace provider](https://github.com/Snownee/Jade/blob/747effeddcea3094b940772c7963c272bb2a07df/src/main/java/snownee/jade/addon/vanilla/FurnaceProvider.java)。
+## 服务器共享 Xaero 标点
+
+Fabric 客户端为 Minecraft 26.2 的 Xaero 小地图 26.5.0 提供可选兼容。服务端 AbsServerTool 宣告共享标点能力后，管理员可以在 Xaero 标点列表中将本地点复制发布到服务器、编辑服务器标点或删除服务器标点；普通玩家只读。Xaero 并非必装，不同步探索区域或地图瓦片。服务端需要实现与[客户端协议说明](docs/XAERO_SHARED_WAYPOINTS.md)匹配的能力；本次仅开发客户端。

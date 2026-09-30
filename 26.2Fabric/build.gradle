@@ -91,6 +91,15 @@ def verifyVault = tasks.register('verifyVault', JavaExec) {
     doFirst { workingDir.mkdirs() }
 }
 tasks.named('check') { dependsOn verifyVault }
+def verifyWaypoint = tasks.register('verifyWaypoint', JavaExec) {
+    group = 'verification'
+    description = 'Verify authoritative waypoint snapshot, delta, revision and session handling.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.WaypointVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}
+tasks.named('check') { dependsOn verifyWaypoint }
 def verifySchematic = tasks.register('verifySchematic', JavaExec) {
     group = 'verification'
     description = 'Verify incremental schematic configuration migration.'
