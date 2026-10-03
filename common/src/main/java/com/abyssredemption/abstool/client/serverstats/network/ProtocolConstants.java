@@ -11,6 +11,7 @@ public final class ProtocolConstants {
     public static final int CAP_WEEKLY_TREND = 1 << 6;
     public static final int CAP_ADVANCEMENTS = 1 << 7;
     public static final int CAP_SHARED_WAYPOINTS = 1 << 8;
+    public static final int CAP_PERFORMANCE_PROFILER = 1 << 9;
     public static final int MAX_ENTRIES = 100;
     public static final int MAX_DAILY_TREND = 90;
     public static final int MAX_WEEKLY_TREND = 26;

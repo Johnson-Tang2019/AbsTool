@@ -3,6 +3,7 @@ package com.abyssredemption.abstool.client.serverstats;
 import com.abyssredemption.abstool.client.serverstats.model.*;
 import com.abyssredemption.abstool.client.serverstats.network.*;
 import com.abyssredemption.abstool.client.serverstats.network.payload.*;
+import com.abyssredemption.abstool.client.serverstats.performance.PerformanceClient;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import net.minecraft.client.Minecraft;
@@ -28,12 +29,14 @@ public final class ServerStatsClient {
         if (connection != client.getConnection()) {
             connection = client.getConnection();
             STATE.clear();
+            PerformanceClient.clear();
             com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.clear();
             ticks = 0;
         }
         if (connection == null || sender == null) return;
         ticks++;
         com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.tick();
+        PerformanceClient.tick(client);
         if (STATE.availability() == ServerStatsAvailability.UNKNOWN && ticks % 20 == 0) {
             if (canSend.test(HelloRequestPayload.TYPE.id())) {
                 STATE.availability(ServerStatsAvailability.CHECKING);
@@ -49,6 +52,7 @@ public final class ServerStatsClient {
         }
         STATE.hello(p.capabilities(), p.trackingStartedDate(), p.timezone(), p.todayPartial());
         com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.hello(p.capabilities());
+        PerformanceClient.hello(p.capabilities());
         requestOverview(true);
     }
     public static void onOverview(OverviewResponsePayload p) {
@@ -66,7 +70,13 @@ public final class ServerStatsClient {
         var entries = p.entries().stream().map(e -> new ClientLeaderboardEntry(e.rank(), e.uuid(), e.playerName().isBlank() ? "未知玩家" : e.playerName(), Math.max(0, e.value()), e.online())).toList();
         STATE.put(new ClientLeaderboardPage(type.get(), p.page(), p.totalPages(), p.totalEntries(), p.generatedAtEpochMillis(), p.contextLabel(), entries), p.requestId());
     }
-    public static void onError(StatsErrorPayload payload) { STATE.availability(ServerStatsAvailability.ERROR); }
+    public static void onError(StatsErrorPayload payload) {
+        if (PerformanceClient.onError(payload)) return;
+        STATE.availability(ServerStatsAvailability.ERROR);
+    }
+    public static long nextRequestId() { return ++nextId; }
+    public static void send(CustomPacketPayload payload) { if (sender != null) sender.accept(payload); }
+    public static boolean canSend(Identifier id) { return sender != null && canSend != null && canSend.test(id); }
     public static void requestOverview(boolean force) {
         if (STATE.availability() == ServerStatsAvailability.READY && (force || STATE.overview() == null)) {
             long id = ++nextId;

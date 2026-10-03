@@ -3,12 +3,15 @@ package com.abyssredemption.abstool.client.serverstats.gui;
 import com.abyssredemption.abstool.client.serverstats.ServerStatsAvailability;
 import com.abyssredemption.abstool.client.serverstats.ServerStatsClient;
 import com.abyssredemption.abstool.client.serverstats.network.LeaderboardType;
+import com.abyssredemption.abstool.client.serverstats.performance.PerformanceClient;
+import com.abyssredemption.abstool.client.serverstats.performance.PerformanceProfilerScreen;
 import java.util.ArrayList;
 import java.util.List;
 import me.shedaniel.clothconfig2.gui.entries.TextListEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -41,6 +44,9 @@ public final class ServerStatsEntry extends TextListEntry {
             if (data != null && page < data.totalPages()) { page++; request(true); }
         }).bounds(0, 0, 65, 20).build());
         buttons.add(Button.builder(label("refresh"), b -> request(true)).bounds(0, 0, 65, 20).build());
+        buttons.add(Button.builder(Component.translatable("abstool.performance.title"), b ->
+                Minecraft.getInstance().gui.setScreen(new PerformanceProfilerScreen(Minecraft.getInstance().gui.screen())))
+                .bounds(0, 0, 65, 20).build());
     }
 
     private static Component label(String key, Object... args) {
@@ -111,9 +117,9 @@ public final class ServerStatsEntry extends TextListEntry {
         int buttonWidth = Math.max(30, Math.min(90, (width - 20) / 5));
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
-            int column = i < 5 ? i : i - 5;
+            int column = i < 5 ? i : i < 10 ? i - 5 : 0;
             button.setX(x + column * (buttonWidth + 3));
-            button.setY(y + (i < 5 ? 0 : 24));
+            button.setY(y + (i < 5 ? 0 : i < 10 ? 24 : 48));
             button.setWidth(buttonWidth);
             button.active = i < 6 ? tab != i : ServerStatsClient.state().availability() == ServerStatsAvailability.READY;
             if (i == 6) {
@@ -125,9 +131,13 @@ public final class ServerStatsEntry extends TextListEntry {
                 var data = ServerStatsClient.state().get(type(), page);
                 button.active &= (tab > 0 && tab < 4 || tab == 5) && data != null && page < data.totalPages();
             }
+            if (i == 10) {
+                button.active = PerformanceClient.supported();
+                button.setTooltip(button.active ? null : Tooltip.create(Component.translatable("abstool.performance.unsupported")));
+            }
             button.extractRenderState(graphics, mouseX, mouseY, delta);
         }
-        int textY = y + 54;
+        int textY = y + 78;
         for (Component line : lines()) {
             for (var wrapped : Minecraft.getInstance().font.split(line, Math.max(40, width - 12))) {
                 graphics.textRenderer().accept(x + 2, textY, wrapped);
