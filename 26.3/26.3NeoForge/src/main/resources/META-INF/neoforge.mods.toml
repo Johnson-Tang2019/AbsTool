@@ -26,7 +26,7 @@ side="BOTH"
 [[dependencies.abstool]]
 modId="cloth_config"
 type="required"
-versionRange="[26.3.159,)"
+versionRange="[26.3.158,)"
 ordering="NONE"
 side="CLIENT"
 

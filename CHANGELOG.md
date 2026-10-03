@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0-beta.2 — 2026-10-03 — Minecraft 26.3
+
+- Accept Fabric API 0.160.6+26.3 and Cloth Config 26.3.158, matching installed Minecraft 26.3 client versions. Compile both loaders against these minimum dependencies.
+- 兼容 Fabric API 0.160.6+26.3 与 Cloth Config 26.3.158，修复已有客户端因依赖版本门槛过高而无法启动的问题。
+
 ## 0.5.0-beta.1 — 2026-10-03 — Minecraft 26.3
 
 - Add a separate Minecraft 26.3 Gradle project for Fabric and NeoForge. Keep the Minecraft 26.2 source tree, dependencies, wrapper, release tags, and build tasks intact.
