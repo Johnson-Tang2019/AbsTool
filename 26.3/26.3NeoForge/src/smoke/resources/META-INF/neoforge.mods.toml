@@ -1,0 +1,8 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="abstool_smoke"
+version="1.0.0"
+displayName="Ab's Tool development smoke test"

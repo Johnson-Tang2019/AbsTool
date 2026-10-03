@@ -1,0 +1,218 @@
+plugins { id 'net.fabricmc.fabric-loom' }
+
+repositories { maven { url = 'https://api.modrinth.com/maven' } }
+
+def schematicProfiles = [
+    pinned: ['litematica.jar', 'malilib.jar', 'iris.jar', 'sodium.jar']
+]
+def schematicProfileName = providers.gradleProperty('schematicProfile').getOrElse('')
+if (schematicProfileName && !schematicProfiles.containsKey(schematicProfileName)) {
+    throw new GradleException("Unknown schematicProfile: ${schematicProfileName}")
+}
+def schematicProfile = schematicProfiles[schematicProfileName]
+
+dependencies {
+    compileOnly 'maven.modrinth:bEpr0Arc:fEqsesPK'
+    compileOnly 'maven.modrinth:GcWjdA9I:DPcJACN6'
+    compileOnly 'maven.modrinth:YL57xq9U:vTN4NRGW'
+    compileOnly 'maven.modrinth:tweakermore:ZcRpvVXe'
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    implementation "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+    compileOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+    if (providers.gradleProperty('withModMenu').isPresent()) {
+        runtimeOnly "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+    }
+}
+
+loom { accessWidenerPath = file('src/main/resources/abstool.accesswidener') }
+if (providers.gradleProperty('schematicStartup').isPresent()) {
+    def profile = providers.gradleProperty('schematicStartup').get()
+    def profiles = [none: [], sodium: ['sodium'], litematica: ['litematica', 'malilib'],
+                    iris: ['iris', 'sodium'], full: ['litematica', 'malilib', 'iris', 'sodium']]
+    if (!profiles.containsKey(profile)) throw new GradleException("Unknown schematic startup profile: ${profile}")
+    dependencies { runtimeOnly files(profiles[profile].collect { rootProject.file("build/reference/testmods/${it}.jar") }) }
+    loom.runs.client { runDir "build/run/schematicStartup/${profile}" }
+    tasks.named('runClient', JavaExec) {
+        systemProperty 'abstool.expectedSchematicState', profile == 'full' ? 'SHADERS_OFF' : 'MISSING_DEPENDENCY'
+    }
+}
+if (providers.gradleProperty('externalServuxTests').isPresent()) {
+    loom.runs.client { programArgs '--username', 'Dev' }
+}
+
+if (providers.gradleProperty('withRealServuxTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/servux.jar')) }
+    loom.runs {
+        servuxTestServer {
+            server()
+            runDir 'build/run/servuxServer'
+        }
+    }
+}
+
+if (providers.gradleProperty('clientSmoke').isPresent()) {
+    loom.mods {
+        abstool { sourceSet sourceSets.main }
+        abstool_smoke { sourceSet sourceSets.smoke }
+    }
+    tasks.named('runClient', JavaExec) {
+        dependsOn tasks.named('smokeClasses')
+        classpath += sourceSets.smoke.output
+    }
+    tasks.named('generateDLIConfig') { dependsOn tasks.named('smokeClasses') }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+sourceSets {
+    verification {
+        java.srcDir rootProject.file('common/src/verification/java')
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+
+def verifyVault = tasks.register('verifyVault', JavaExec) {
+    group = 'verification'
+    description = 'Verify vault persistence, refresh scope, configuration and shortcut behavior.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.VaultVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('vault-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
+}
+tasks.named('check') { dependsOn verifyVault }
+def verifyWaypoint = tasks.register('verifyWaypoint', JavaExec) {
+    group = 'verification'
+    description = 'Verify authoritative waypoint snapshot, delta, revision and session handling.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.WaypointVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}
+tasks.named('check') { dependsOn verifyWaypoint }
+def verifySchematic = tasks.register('verifySchematic', JavaExec) {
+    group = 'verification'
+    description = 'Verify incremental schematic configuration migration.'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.SchematicVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('schematic-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
+}
+tasks.named('check') { dependsOn verifySchematic }
+
+if (providers.gradleProperty('worldTests').isPresent()) {
+    fabricApi.configureTests {
+        createSourceSet = true
+        modId = 'abstool_world_test'
+        enableGameTests = false
+        enableClientGameTests = true
+    }
+    if (providers.gradleProperty('statsTests').isPresent()) {
+        tasks.named('processGametestResources') {
+            doLast {
+                def manifest = new File(destinationDir, 'fabric.mod.json')
+                def json = new groovy.json.JsonSlurper().parse(manifest)
+                json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ServerStatsWorldTest']]
+                manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+            }
+            outputs.upToDateWhen { false }
+        }
+    }
+    tasks.named('processGametestResources') {
+        inputs.property('schematicOnly', providers.gradleProperty('schematicTests').isPresent())
+        inputs.property('elytraOnly', providers.gradleProperty('elytraTests').isPresent())
+        inputs.property('shulkerOnly', providers.gradleProperty('shulkerHintTest').isPresent())
+    }
+    if (providers.gradleProperty('schematicTests').isPresent()) {
+        dependencies {
+            runtimeOnly files(rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[0] : 'litematica.jar')), rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[1] : 'malilib.jar')))
+            gametestCompileOnly files(rootProject.file('build/reference/testmods/litematica.jar'), rootProject.file('build/reference/testmods/malilib.jar'))
+        }
+        sourceSets.gametest.java.srcDir 'src/schematicTest/java'
+        tasks.named('processGametestResources') {
+            doLast {
+                def manifest = new File(destinationDir, 'fabric.mod.json')
+                def json = new groovy.json.JsonSlurper().parse(manifest)
+                json.entrypoints['fabric-client-gametest'] = ['com.abyssredemption.abstool.verification.SchematicTestEntry']
+                manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+            }
+            outputs.upToDateWhen { false }
+        }
+        tasks.named('runClientGameTest', JavaExec) { systemProperty 'abstool.schematicTests', 'true' }
+    }
+    if (providers.gradleProperty('furnaceTests').isPresent()) {
+        tasks.named('runClientGameTest', JavaExec) {
+            systemProperty 'abstool.furnaceTests', 'true'
+            if (providers.gradleProperty('acceptMinecraftEula').isPresent()) {
+                doFirst {
+                    def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile
+                    testRun.mkdirs()
+                    new File(testRun, 'eula.txt').text = 'eula=true\n'
+                }
+            }
+        }
+    }
+    if (providers.gradleProperty('withJadeTest').isPresent()) {
+        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/jade.jar')) }
+    }
+    if (providers.gradleProperty('withIrisTest').isPresent()) {
+        dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[2] : providers.gradleProperty('iris112Test').isPresent() ? 'iris-1.11.2.jar' : 'iris.jar')), rootProject.file('build/reference/testmods/' + (schematicProfile ? schematicProfile[3] : providers.gradleProperty('iris112Test').isPresent() ? 'sodium-0.9.1.jar' : 'sodium.jar'))) }
+        tasks.named('runClientGameTest', JavaExec) {
+            doFirst {
+                def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile
+                new File(testRun, 'config').mkdirs()
+                new File(testRun, 'shaderpacks').mkdirs()
+                new File(testRun, 'config/iris.properties').text = 'enableShaders=true\nshaderPack=ComplementaryReimagined.zip\n'
+                java.nio.file.Files.copy(rootProject.file('build/reference/testmods/ComplementaryReimagined.zip').toPath(),
+                        new File(testRun, 'shaderpacks/ComplementaryReimagined.zip').toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
+    }
+}
+
+if (providers.gradleProperty('withTweakerMoreTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/tweakermore.jar'), rootProject.file('build/reference/testmods/malilib.jar')) }
+    loom.runs.client { runDir 'build/run/tweakerMoreQuick' }
+    tasks.named('runClient', JavaExec) { systemProperty 'abstool.quickSettingsTest', 'true' }
+}
+
+if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProperty('shulkerHintTest').isPresent()) {
+    sourceSets.gametest.java.srcDir 'src/shulkerTest/java'
+    tasks.named('processGametestResources') {
+        doLast {
+            def manifest = new File(destinationDir, 'fabric.mod.json')
+            def json = new groovy.json.JsonSlurper().parse(manifest)
+            json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ShulkerHintWorldTest']]
+            manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+        }
+        outputs.upToDateWhen { false }
+    }
+}
+
+if (providers.gradleProperty('withTweakerooTest').isPresent()) {
+    dependencies { runtimeOnly files(rootProject.file('build/reference/testmods/tweakeroo.jar'), rootProject.file('build/reference/testmods/malilib.jar')) }
+}
+if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProperty('elytraTests').isPresent()) {
+    sourceSets.gametest.java.srcDir 'src/elytraTest/java'
+    tasks.named('runClientGameTest', JavaExec) {
+        systemProperty 'abstool.elytraExitOnly', providers.gradleProperty('elytraExitOnly').isPresent()
+        systemProperty 'abstool.acceptMinecraftEula', providers.gradleProperty('acceptMinecraftEula').isPresent()
+    }
+    tasks.named('processGametestResources') {
+        doLast {
+            def metadata = destinationDir.toPath().resolve('fabric.mod.json').toFile()
+            def json = new groovy.json.JsonSlurper().parse(metadata)
+            json.entrypoints = ['fabric-client-gametest': ['com.abyssredemption.abstool.verification.ElytraWorldTest']]
+            metadata.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+        }
+    }
+}

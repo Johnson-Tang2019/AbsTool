@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0-beta.1 — 2026-10-03 — Minecraft 26.3
+
+- Add a separate Minecraft 26.3 Gradle project for Fabric and NeoForge. Keep the Minecraft 26.2 source tree, dependencies, wrapper, release tags, and build tasks intact.
+- Include the client performance profiler and its server statistics display in both 26.3 loader builds.
+- Update the 26.3 client to the new input and rendering APIs, and pin optional Litematica, MaLiLib, Iris, Sodium, TweakerMore, and Tweakeroo integrations to their 26.3 builds.
+- Store 26.3 settings and vault data in version-specific files so neither game version overwrites the other's local configuration.
+- 发布 Minecraft 26.3 的独立测试版构建；26.2 源码、构建环境与原有发布标签继续保留。
+
 ## 0.4.12 — 2026-09-30
 
 - Add an optional client protocol for server-owned Xaero waypoints, including authoritative snapshots, ordered deltas, revision conflict handling, and session cleanup.

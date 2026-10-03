@@ -1,10 +1,9 @@
-name: Release
+name: Release Minecraft 26.3
 
 on:
   push:
     tags:
-      - "v*"
-      - "!v*-mc26.3*"
+      - "v*-mc26.3*"
   workflow_dispatch:
     inputs:
       tag:
@@ -16,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  group: release-26.3-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -50,9 +49,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mod_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-          minecraft_version="$(sed -n 's/^minecraft_version=//p' gradle.properties)"
-          expected_tag="v${mod_version}"
+          mod_version="$(sed -n 's/^mod_version=//p' 26.3/gradle.properties)"
+          minecraft_version="$(sed -n 's/^minecraft_version=//p' 26.3/gradle.properties)"
+          expected_tag="v${mod_version}-mc26.3"
 
           if [[ "${RELEASE_TAG}" != "${expected_tag}" ]]; then
             echo "Release tag ${RELEASE_TAG} does not match mod_version=${mod_version}." >&2
@@ -72,14 +71,14 @@ jobs:
           echo "artifact_version=${mod_version}+${minecraft_version}" >> "$GITHUB_OUTPUT"
 
       - name: Build release JARs
-        run: bash gradlew clean assemble --no-daemon
+        run: bash 26.3/gradlew -p 26.3 clean assemble --no-daemon
 
       - name: Verify release JARs
         shell: bash
         run: |
           set -euo pipefail
-          test -f "26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar"
-          test -f "26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar"
+          test -f "26.3/26.3Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar"
+          test -f "26.3/26.3NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar"
 
       - name: Publish Fabric to Modrinth and CurseForge
         uses: Kir-Antipov/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
@@ -88,10 +87,10 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files: 26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
+          files: 26.3/26.3Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
           name: Ab's Tool ${{ steps.release.outputs.mod_version }} (Fabric)
           version: ${{ steps.release.outputs.artifact_version }}-fabric
-          version-type: release
+          version-type: beta
           changelog-file: CHANGELOG.md
           loaders: fabric
           game-versions: ${{ steps.release.outputs.minecraft_version }}
@@ -107,10 +106,10 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files: 26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
+          files: 26.3/26.3NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
           name: Ab's Tool ${{ steps.release.outputs.mod_version }} (NeoForge)
           version: ${{ steps.release.outputs.artifact_version }}-neoforge
-          version-type: release
+          version-type: beta
           changelog-file: CHANGELOG.md
           loaders: neoforge
           game-versions: ${{ steps.release.outputs.minecraft_version }}
@@ -125,7 +124,8 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           name: Ab's Tool ${{ steps.release.outputs.mod_version }} - Minecraft ${{ steps.release.outputs.minecraft_version }}
           generate_release_notes: true
+          prerelease: true
           files: |
-            26.2Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
-            26.2NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
+            26.3/26.3Fabric/build/libs/abstool-fabric-${{ steps.release.outputs.artifact_version }}.jar
+            26.3/26.3NeoForge/build/libs/abstool-neoforge-${{ steps.release.outputs.artifact_version }}.jar
           fail_on_unmatched_files: true

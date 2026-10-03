@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "mixins": ["abstool.mixins.json", "abstool.schematic_compat.mixins.json", "abstool.shulker_compat.mixins.json"],
+  "id": "abstool",
+  "version": "${version}",
+  "name": "Ab's Tool",
+  "description": "Client utilities for Minecraft 26.3: ominous vault tracking and furnace input blockage tracking.",
+  "contact": { "sources": "https://github.com/Johnson-Tang2019/AbsTool" },
+  "authors": [
+    "AbyssRedemption"
+  ],
+  "license": "All Rights Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.abyssredemption.abstool.fabric.AbsToolFabric"
+    ],
+    "client": [
+      "com.abyssredemption.abstool.fabric.AbsToolFabricClient"
+    ],
+    "modmenu": [
+      "com.abyssredemption.abstool.fabric.ModMenuIntegration"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "26.3",
+    "java": ">=25",
+    "fabric-api": ">=0.161.0+26.3",
+    "cloth-config": ">=26.3.159"
+  },
+  "suggests": { "modmenu": ">=21.0.0" },
+  "accessWidener": "abstool.accesswidener"
+}

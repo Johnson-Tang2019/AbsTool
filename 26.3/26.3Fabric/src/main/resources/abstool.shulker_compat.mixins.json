@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.abyssredemption.abstool.fabric.compat.shulker.mixin",
+  "plugin": "com.abyssredemption.abstool.fabric.compat.shulker.ShulkerMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "ShulkerInfoMixin",
+    "ShulkerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "abstool_smoke",
+  "version": "1.0.0",
+  "name": "Ab's Tool development smoke test",
+  "environment": "client",
+  "entrypoints": { "client": ["com.abyssredemption.abstool.smoke.FabricSettingsSmoke"] },
+  "depends": { "abstool": "*" }
+}
