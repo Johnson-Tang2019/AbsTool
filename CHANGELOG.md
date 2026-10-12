@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0-beta.3 — 2026-10-12 — Minecraft 26.3
+
+- Detect the Xaero waypoint interface at runtime instead of requiring one Minimap version. Verified the contract against Fabric releases 26.5.1, 26.5.2, 26.5.3, and 26.6.0 for Minecraft 26.3; disable the bridge if a later release changes the required interface.
+- Fix the Iris and Sodium version identifiers to match their actual mod metadata. Support Iris 1.11.5–1.11.7, Litematica 0.29.0–0.29.1, and MaLiLib 0.30.0–0.30.2 on Minecraft 26.3 when the required bytecode contract matches. Later Iris 26.3 releases can pass the same structural check automatically.
+- 扩展 26.3 Fabric 版 Xaero 与 Iris 兼容范围；后续版本通过接口检查时自动启用，接口不符时安全停用相关功能。
+
 ## 0.5.0-beta.2 — 2026-10-03 — Minecraft 26.3
 
 - Accept Fabric API 0.160.6+26.3 and Cloth Config 26.3.158, matching installed Minecraft 26.3 client versions. Compile both loaders against these minimum dependencies.

@@ -103,11 +103,27 @@ def verifySchematic = tasks.register('verifySchematic', JavaExec) {
     dependsOn tasks.named('verificationClasses')
     classpath = sourceSets.verification.runtimeClasspath
     mainClass = 'com.abyssredemption.abstool.verification.SchematicVerification'
+    if (providers.gradleProperty('irisReferenceDir').isPresent()) {
+        def referenceDir = file(providers.gradleProperty('irisReferenceDir').get())
+        args fileTree(referenceDir) { include 'iris-fabric-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
+    }
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
     workingDir = layout.buildDirectory.dir('schematic-verification').get().asFile
     doFirst { workingDir.mkdirs() }
 }
 tasks.named('check') { dependsOn verifySchematic }
+if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
+    def referenceDir = file(providers.gradleProperty('xaeroReferenceDir').get())
+    tasks.register('verifyXaero', JavaExec) {
+        group = 'verification'
+        description = 'Inspect waypoint contracts in actual Xaero 26.3 release JARs.'
+        dependsOn tasks.named('verificationClasses')
+        classpath = sourceSets.verification.runtimeClasspath
+        mainClass = 'com.abyssredemption.abstool.verification.XaeroCompatibilityVerification'
+        javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+        args fileTree(referenceDir) { include 'xaerominimap-fabric-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
+    }
+}
 
 if (providers.gradleProperty('worldTests').isPresent()) {
     fabricApi.configureTests {

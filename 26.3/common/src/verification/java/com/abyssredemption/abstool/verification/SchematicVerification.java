@@ -8,15 +8,30 @@ import java.nio.file.Path;
 public final class SchematicVerification {
     public static void main(String[] args) throws Exception {
         legacyConfiguration();
-        var versions = com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.PINNED;
-        require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, true).isEmpty(), "Pinned combination must pass");
+        var versions = com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.BASELINE;
+        require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, true).isEmpty(), "Baseline combination must pass");
         require(!com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(versions, false).isEmpty(), "Physical server must not load rendering hooks");
         for (String id : versions.keySet()) {
             var changed = new java.util.HashMap<>(versions);
             changed.remove(id);
             require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(changed, true).startsWith("Missing"), "Missing dependency must not activate: " + id);
-            changed.put(id, "unrecognized-build");
-            require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(changed, true).startsWith("Unsupported"), "Unknown version must not activate: " + id);
+        }
+        var newer = new java.util.HashMap<>(versions);
+        newer.put("iris", "1.12.0+mc26.3");
+        newer.put("litematica", "0.29.1");
+        newer.put("malilib", "0.30.2");
+        require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(newer, true).isEmpty(), "Newer versions must reach bytecode inspection");
+        newer.put("iris", "1.12.0+mc26.2");
+        require(com.abyssredemption.abstool.fabric.compat.schematic.SchematicVersions.rejection(newer, true).startsWith("Unsupported iris"), "Other Minecraft versions must be rejected");
+        for (String filename : args) {
+            try (var jar = new java.util.zip.ZipFile(filename)) {
+                String rejected = com.abyssredemption.abstool.fabric.compat.schematic.IrisBytecodeContract.rejection(resource -> {
+                    var entry = jar.getEntry(resource);
+                    if (entry == null) throw new java.io.IOException("Missing " + resource);
+                    try (var input = jar.getInputStream(entry)) { return input.readAllBytes(); }
+                });
+                require(rejected.isEmpty(), filename + ": " + rejected);
+            }
         }
         System.out.println("Schematic configuration verification passed.");
     }

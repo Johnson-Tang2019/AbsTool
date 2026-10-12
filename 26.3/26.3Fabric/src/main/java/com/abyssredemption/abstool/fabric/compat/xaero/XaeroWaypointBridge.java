@@ -8,6 +8,7 @@ import com.abyssredemption.abstool.client.waypoint.WaypointDraft;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
-/** The only code that inspects Xaero internals. Enabled solely for verified 26.5.0. */
+/** The only code that inspects Xaero internals; integration requires a matching runtime contract. */
 public final class XaeroWaypointBridge {
     private static final Identifier ORIGIN = Identifier.fromNamespaceAndPath("abstool", "server_waypoints");
     private static final String SCREEN = "xaero.common.gui.GuiWaypoints";
@@ -28,15 +29,73 @@ public final class XaeroWaypointBridge {
     private static long lastRevision = -1;
     private static long ticks;
     private static final Map<UUID,String> slots = new HashMap<>();
+    private static Boolean contractSupported;
     private XaeroWaypointBridge() {}
     public static boolean installed() { return FabricLoader.getInstance().isModLoaded("xaerominimap"); }
-    public static boolean compatible() {
-        return FabricLoader.getInstance().getModContainer("xaerominimap")
-                .map(m -> "26.5.0".equals(m.getMetadata().getVersion().getFriendlyString())).orElse(false);
+    public static synchronized boolean compatible() {
+        if (!installed()) return false;
+        if (contractSupported == null) contractSupported = inspectContract();
+        return contractSupported;
+    }
+    private static boolean inspectContract() {
+        return verifyContract(XaeroWaypointBridge.class.getClassLoader());
+    }
+    public static boolean verifyContract(ClassLoader loader) {
+        try {
+            Class<?> hudMod = inspectClass("xaero.common.HudMod", loader);
+            Field instance = hudMod.getField("INSTANCE");
+            if (!Modifier.isStatic(instance.getModifiers()) || instance.getType() != hudMod) return false;
+            Class<?> hud = hudMod.getMethod("getHud").getReturnType();
+            Class<?> moduleManager = hud.getMethod("getModuleManager").getReturnType();
+            if (!Iterable.class.isAssignableFrom(moduleManager.getMethod("getModules").getReturnType())) return false;
+            inspectClass("xaero.hud.module.HudModule", loader).getMethod("getCurrentSession");
+
+            Class<?> session = inspectClass("xaero.hud.minimap.module.MinimapSession", loader);
+            Class<?> worldManager = session.getMethod("getWorldManager").getReturnType();
+            Class<?> world = worldManager.getMethod("getCurrentWorld").getReturnType();
+            if (world != inspectClass("xaero.hud.minimap.world.MinimapWorld", loader)) return false;
+            world.getMethod("getDimId");
+            Class<?> container = world.getMethod("getContainer").getReturnType();
+            Class<?> thirdParty = container.getMethod("getThirdPartyWaypointManager").getReturnType();
+            Class<?> storage = thirdParty.getMethod("get", Identifier.class).getReturnType();
+            if (!Map.class.isAssignableFrom(storage.getMethod("getWaypoints").getReturnType())) return false;
+            storage.getMethod("add", String.class, inspectClass(WAYPOINT, loader));
+            storage.getMethod("clear");
+            if (!Map.class.isAssignableFrom(storage.getDeclaredField("renderInfoOverrides").getType())) return false;
+
+            Class<?> waypoint = inspectClass(WAYPOINT, loader);
+            waypoint.getConstructor(int.class, int.class, int.class, String.class, String.class, int.class);
+            for (String name : List.of("getName", "getX", "getY", "getZ", "getColor", "getSymbol", "isDisabled", "isThirdParty")) {
+                waypoint.getMethod(name);
+            }
+            Class<?> screen = inspectClass(SCREEN, loader);
+            if (!List.class.isAssignableFrom(screen.getDeclaredMethod("getSelectedWaypointsList").getReturnType())) return false;
+            if (screen.getDeclaredField("displayedWorld").getType() != world) return false;
+            return true;
+        } catch (ReflectiveOperationException | LinkageError | SecurityException failure) {
+            com.abyssredemption.abstool.AbsTool.LOGGER.warn("Xaero waypoint contract is unavailable", failure);
+            return false;
+        }
+    }
+    private static Class<?> inspectClass(String name) throws ClassNotFoundException {
+        return inspectClass(name, XaeroWaypointBridge.class.getClassLoader());
+    }
+    private static Class<?> inspectClass(String name, ClassLoader loader) throws ClassNotFoundException {
+        return Class.forName(name, false, loader);
+    }
+    private static void disableBridge(Exception failure) {
+        com.abyssredemption.abstool.AbsTool.LOGGER.warn("Xaero waypoint integration disabled after a contract failure", failure);
+        contractSupported = false;
+        clear();
+        SharedWaypointClient.xaeroStatus("unsupported");
     }
     public static String status() { return !installed()?"missing":compatible()?"installed":"unsupported"; }
     public static void init() { SharedWaypointClient.xaeroStatus(status()); if (compatible()) SharedWaypointClient.display(XaeroWaypointBridge::reconcile); }
-    public static boolean isWaypointScreen(Object screen) { return compatible() && screen.getClass().getName().equals(SCREEN); }
+    public static boolean isWaypointScreen(Object screen) {
+        if (!compatible() || screen == null) return false;
+        try { return inspectClass(SCREEN).isInstance(screen); }
+        catch (ClassNotFoundException e) { return false; }
+    }
     public static void clear() {
         if(lastStorage!=null) try { resetStorage(lastStorage); } catch(ReflectiveOperationException ignored) { }
         lastStorage=null; lastSession=null; lastDimension=null; lastRevision=-1; slots.clear();
@@ -77,7 +136,7 @@ public final class XaeroWaypointBridge {
             }
             lastStorage=storage; lastSession=session; lastDimension=dimension; lastRevision=state.datasetRevision();
         } catch(ReflectiveOperationException | IllegalArgumentException e) {
-            clear();
+            disableBridge(e);
         }
     }
     private static Object currentSession() throws ReflectiveOperationException {
@@ -89,7 +148,7 @@ public final class XaeroWaypointBridge {
         if(!(modules instanceof Iterable<?> iterable)) return null;
         for(Object module:iterable) {
             Object candidate=call(module,"getCurrentSession");
-            if(candidate!=null && candidate.getClass().getName().equals("xaero.hud.minimap.module.MinimapSession")) return candidate;
+            if(candidate!=null && inspectClass("xaero.hud.minimap.module.MinimapSession").isInstance(candidate)) return candidate;
         }
         return null;
     }
