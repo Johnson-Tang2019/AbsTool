@@ -1,20 +1,20 @@
-package com.abyssredemption.abstool.fabric.compat.xaero;
+package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
 import java.util.List;
 import java.util.UUID;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.client.screen.v1.Screens;
+import java.util.function.Consumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 /** Adds server actions to the verified Xaero waypoint list without a Xaero mixin. */
 public final class XaeroWaypointScreen {
     private XaeroWaypointScreen() {}
-    public static void init() {
-        if(!XaeroWaypointBridge.compatible()) return;
-        ScreenEvents.AFTER_INIT.register((client,screen,width,height) -> {
-            if(!XaeroWaypointBridge.isWaypointScreen(screen)) return;
+    public static Runnable attach(Minecraft client, Screen screen, Consumer<Button> addWidget) {
+            if(!XaeroWaypointBridge.isWaypointScreen(screen)) return null;
+            int height = screen.height;
             Button publish=Button.builder(Component.translatable("text.abstool.waypoint.publish"),b -> XaeroWaypointBridge.publish(screen))
                     .bounds(8,height-82,112,20).build();
             Button update=Button.builder(Component.translatable("text.abstool.waypoint.update"),b -> {
@@ -38,11 +38,13 @@ public final class XaeroWaypointScreen {
             Button readonly=Button.builder(Component.translatable("text.abstool.waypoint.managed"),b -> {})
                     .bounds(8,height-36,112,20).build();
             readonly.active=false;
-            Screens.getWidgets(screen).add(publish); Screens.getWidgets(screen).add(update);
-            Screens.getWidgets(screen).add(remove); Screens.getWidgets(screen).add(readonly);
-            ScreenEvents.afterTick(screen).register(s -> {
-                boolean manage=SharedWaypointClient.state().supported() && SharedWaypointClient.state().canManage();
-                List<Object> selected=XaeroWaypointBridge.selection(s);
+            addWidget.accept(publish); addWidget.accept(update);
+            addWidget.accept(remove); addWidget.accept(readonly);
+            Runnable refresh = () -> {
+                var state = SharedWaypointClient.state();
+                boolean manage=com.abyssredemption.abstool.client.vault.config.ConfigManager.get().serverWaypoints.enabled
+                        && XaeroWaypointBridge.compatible() && state.supported() && state.synced() && state.canManage();
+                List<Object> selected=XaeroWaypointBridge.selection(screen);
                 boolean one=selected.size()==1;
                 boolean shared=one && XaeroWaypointBridge.serverWaypoint(selected.getFirst())!=null;
                 UUID selectedId=shared?XaeroWaypointBridge.serverWaypoint(selected.getFirst()).id():null;
@@ -53,7 +55,8 @@ public final class XaeroWaypointScreen {
                 remove.active=manage && shared;
                 publish.visible=manage; update.visible=manage; remove.visible=manage;
                 readonly.visible=!manage && shared;
-            });
-        });
+            };
+            refresh.run();
+            return refresh;
     }
 }

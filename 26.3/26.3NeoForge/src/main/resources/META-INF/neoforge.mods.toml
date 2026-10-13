@@ -8,6 +8,9 @@ config="abstool.mixins.json"
 [[mixins]]
 config="abstool.neoforge.mixins.json"
 
+[[mixins]]
+config="abstool.xaero_compat.mixins.json"
+
 [[mods]]
 modId="abstool"
 version="${version}"

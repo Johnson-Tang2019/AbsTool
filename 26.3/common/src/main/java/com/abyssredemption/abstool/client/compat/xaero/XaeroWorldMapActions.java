@@ -1,4 +1,4 @@
-package com.abyssredemption.abstool.fabric.compat.xaero;
+package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;

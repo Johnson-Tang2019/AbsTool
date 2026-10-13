@@ -1,7 +1,8 @@
 package com.abyssredemption.abstool.verification;
 
-import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWaypointBridge;
-import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWorldMapContract;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroWaypointBridge;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroWorldMapContract;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroMapMixinSupport;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +12,9 @@ import java.util.zip.ZipFile;
 public final class XaeroCompatibilityVerification {
     public static void main(String[] args) throws Exception {
         if (args.length == 0) throw new IllegalArgumentException("Pass at least one Xaero JAR");
+        if (plugin(null).shouldApplyMixin("xaero.map.mods.gui.WaypointReader", "WaypointReaderMixin")) {
+            throw new AssertionError("Optional map mixin must stay disabled without dependencies");
+        }
         int minimaps = 0, maps = 0;
         for (String filename : args) {
             if (Path.of(filename).getFileName().toString().startsWith("xaeroworldmap-")) {
@@ -22,6 +26,9 @@ public final class XaeroCompatibilityVerification {
                     };
                     String rejection = XaeroWorldMapContract.rejection(resources);
                     if (!rejection.isEmpty()) throw new AssertionError(filename + ": " + rejection);
+                    if (!plugin(resources).shouldApplyMixin("xaero.map.mods.gui.WaypointReader", "WaypointReaderMixin")) {
+                        throw new AssertionError("Compatible map must enable its shared mixin: " + filename);
+                    }
                     String menu = "xaero/map/mods/gui/WaypointReader.class";
                     var changed = new org.objectweb.asm.tree.ClassNode();
                     new org.objectweb.asm.ClassReader(resources.read(menu)).accept(changed, 0);
@@ -30,6 +37,10 @@ public final class XaeroCompatibilityVerification {
                     changed.accept(writer);
                     if (XaeroWorldMapContract.rejection(path -> path.equals(menu) ? writer.toByteArray() : resources.read(path)).isEmpty()) {
                         throw new AssertionError("Changed menu interface must be rejected");
+                    }
+                    if (plugin(path -> path.equals(menu) ? writer.toByteArray() : resources.read(path))
+                            .shouldApplyMixin("xaero.map.mods.gui.WaypointReader", "WaypointReaderMixin")) {
+                        throw new AssertionError("Changed map must leave the shared mixin disabled");
                     }
                 }
                 maps++;
@@ -63,5 +74,14 @@ public final class XaeroCompatibilityVerification {
             }
         }
         System.out.println("Xaero contracts passed: " + minimaps + " Minimap and " + maps + " World Map JARs; changed menu interfaces rejected.");
+    }
+    private static XaeroMapMixinSupport plugin(XaeroWorldMapContract.ResourceReader resources) {
+        var plugin = new XaeroMapMixinSupport() {
+            protected java.util.Optional<XaeroWorldMapContract.ResourceReader> mapResources() {
+                return java.util.Optional.ofNullable(resources);
+            }
+        };
+        plugin.onLoad("com.abyssredemption.abstool.client.compat.xaero.mixin");
+        return plugin;
     }
 }

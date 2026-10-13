@@ -49,4 +49,36 @@ subprojects {
     }
 }
 
-tasks.named('build') { dependsOn ':fabric:build', ':neoforge:build' }
+def verifyXaeroParity = tasks.register('verifyXaeroParity') {
+    group = 'verification'
+    description = 'Verify both loader JARs ship identical shared Xaero code and the correct loader adapters.'
+    dependsOn ':fabric:jar', ':neoforge:jar'
+    doLast {
+        def shared = []
+        ['fabric', 'neoforge'].each { loader ->
+            def jar = project(":${loader}").tasks.named('jar').get().archiveFile.get().asFile
+            new java.util.zip.ZipFile(jar).withCloseable { zip ->
+                def classes = [:]
+                zip.entries().each { entry ->
+                    if (entry.name.startsWith('com/abyssredemption/abstool/client/compat/xaero/') && entry.name.endsWith('.class')) {
+                        classes[entry.name] = zip.getInputStream(entry).withCloseable { it.readAllBytes() }
+                    }
+                }
+                if (classes.isEmpty()) throw new GradleException("Missing shared Xaero classes in ${loader}")
+                def config = zip.getEntry('abstool.xaero_compat.mixins.json')
+                if (config == null) throw new GradleException("Missing Xaero mixin configuration in ${loader}")
+                def json = zip.getInputStream(config).withCloseable { new groovy.json.JsonSlurper().parse(it) }
+                if (json.plugin != "com.abyssredemption.abstool.${loader}.compat.xaero.XaeroMapMixinPlugin"
+                        || json.package != 'com.abyssredemption.abstool.client.compat.xaero.mixin'
+                        || json.client != ['WaypointReaderMixin']) throw new GradleException("Wrong Xaero adapter in ${loader}")
+                shared.add(classes)
+            }
+        }
+        if (shared[0].keySet() != shared[1].keySet()
+                || shared[0].any { name, bytes -> !java.util.Arrays.equals(bytes, shared[1][name]) }) {
+            throw new GradleException('Shared Xaero code differs between Fabric and NeoForge')
+        }
+        logger.lifecycle("Xaero parity verified: ${shared[0].size()} identical shared classes and both loader adapters")
+    }
+}
+tasks.named('build') { dependsOn ':fabric:build', ':neoforge:build', verifyXaeroParity }

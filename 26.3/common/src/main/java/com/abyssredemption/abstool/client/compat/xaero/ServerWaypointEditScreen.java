@@ -1,4 +1,4 @@
-package com.abyssredemption.abstool.fabric.compat.xaero;
+package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.waypoint.SharedWaypoint;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
@@ -27,7 +27,7 @@ public final class ServerWaypointEditScreen extends Screen {
         addField(x,y+24,"X",Integer.toString(original.x()),12);
         addField(x,y+48,"Y",Integer.toString(original.y()),12);
         addField(x,y+72,"Z",Integer.toString(original.z()),12);
-        addField(x,y+96,"Symbol",original.symbol(),16);
+        addField(x,y+96,"Symbol",original.symbol(),8);
         addField(x,y+120,"Color (0-15)",Integer.toString(original.color()),2);
         addRenderableWidget(Button.builder(Component.translatable(enabled?"text.abstool.waypoint.enabled_yes":"text.abstool.waypoint.enabled_no"),b -> {
             enabled=!enabled; b.setMessage(Component.translatable(enabled?"text.abstool.waypoint.enabled_yes":"text.abstool.waypoint.enabled_no"));

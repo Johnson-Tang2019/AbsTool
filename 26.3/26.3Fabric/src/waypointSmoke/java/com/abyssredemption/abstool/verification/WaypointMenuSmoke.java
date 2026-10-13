@@ -2,7 +2,7 @@ package com.abyssredemption.abstool.verification;
 
 import com.abyssredemption.abstool.client.waypoint.SharedWaypoint;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
-import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWaypointBridge;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroWaypointBridge;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

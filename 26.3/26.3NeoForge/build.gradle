@@ -1,7 +1,40 @@
 plugins { id 'net.neoforged.moddev' }
 
+repositories { maven { url = 'https://api.modrinth.com/maven' } }
+
 dependencies {
+    compileOnly 'maven.modrinth:xaeros-world-map:p5t2Xn8F'
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
+}
+
+sourceSets {
+    verification {
+        java.srcDir rootProject.file('common/src/verification/java')
+        java.exclude '**/SchematicVerification.java'
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+def verifyWaypoint = tasks.register('verifyWaypoint', JavaExec) {
+    group = 'verification'
+    dependsOn tasks.named('verificationClasses')
+    classpath = sourceSets.verification.runtimeClasspath
+    mainClass = 'com.abyssredemption.abstool.verification.WaypointVerification'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('waypoint-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
+}
+tasks.named('check') { dependsOn verifyWaypoint }
+if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
+    def referenceDir = file(providers.gradleProperty('xaeroReferenceDir').get())
+    tasks.register('verifyXaero', JavaExec) {
+        group = 'verification'
+        dependsOn tasks.named('verificationClasses')
+        classpath = sourceSets.verification.runtimeClasspath
+        mainClass = 'com.abyssredemption.abstool.verification.XaeroCompatibilityVerification'
+        javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+        args fileTree(referenceDir) { include 'xaerominimap-neoforge-*.jar', 'xaeroworldmap-neoforge-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
+    }
 }
 
 neoForge {

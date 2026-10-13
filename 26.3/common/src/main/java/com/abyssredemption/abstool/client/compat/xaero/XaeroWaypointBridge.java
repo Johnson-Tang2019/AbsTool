@@ -1,4 +1,4 @@
-package com.abyssredemption.abstool.fabric.compat.xaero;
+package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypoint;
@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -30,8 +29,9 @@ public final class XaeroWaypointBridge {
     private static long ticks;
     private static final Map<UUID,String> slots = new HashMap<>();
     private static Boolean contractSupported;
+    private static boolean minimapInstalled;
     private XaeroWaypointBridge() {}
-    public static boolean installed() { return FabricLoader.getInstance().isModLoaded("xaerominimap"); }
+    public static boolean installed() { return minimapInstalled; }
     public static synchronized boolean compatible() {
         if (!installed()) return false;
         if (contractSupported == null) contractSupported = inspectContract();
@@ -90,7 +90,12 @@ public final class XaeroWaypointBridge {
         SharedWaypointClient.xaeroStatus("unsupported");
     }
     public static String status() { return !installed()?"missing":compatible()?"installed":"unsupported"; }
-    public static void init() { SharedWaypointClient.xaeroStatus(status()); if (compatible()) SharedWaypointClient.display(XaeroWaypointBridge::reconcile); }
+    public static void init(boolean installed) {
+        minimapInstalled = installed;
+        contractSupported = null;
+        SharedWaypointClient.xaeroStatus(status());
+        if (compatible()) SharedWaypointClient.display(XaeroWaypointBridge::reconcile);
+    }
     public static boolean isWaypointScreen(Object screen) {
         if (!compatible() || screen == null) return false;
         try { return inspectClass(SCREEN).isInstance(screen); }

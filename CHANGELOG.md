@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0-beta.6 — 2026-10-13 — Minecraft 26.3
+
+- Add NeoForge Xaero shared waypoint display, waypoint-list management buttons, edit screen, and World Map right-click publish/update/delete actions with the same server permission and synchronization gates as Fabric.
+- Move the Xaero bridge, screens, menu actions, mixin, and interface checks to shared 26.3 code. Keep only loader resource discovery and screen event registration in the platform adapters; there is no Xaero version ceiling on either loader.
+- Verify current Fabric (4 Minimap / 4 World Map) and NeoForge (3 Minimap / 3 World Map) release JAR interfaces. Add NeoForge server-format packet checks and a build gate comparing shared Xaero bytecode and mixin configuration across both release JARs.
+- 补齐 NeoForge 的 Xaero 共享标点及右键菜单功能；两端共用核心实现，构建和发布时检查公共代码一致性。
+
 ## 0.5.0-beta.5 — 2026-10-13 — Minecraft 26.3
 
 - Replace the Xaero World Map 1.46.4 whitelist with bytecode interface checks. Verify Minecraft 26.3 Minimap 26.5.1–26.6.0 and World Map 1.46.2–1.47.0 release JARs; later compatible interfaces are accepted without a version ceiling.

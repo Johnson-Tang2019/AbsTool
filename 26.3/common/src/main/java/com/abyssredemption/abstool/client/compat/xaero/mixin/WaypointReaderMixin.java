@@ -1,7 +1,7 @@
-package com.abyssredemption.abstool.fabric.compat.xaero.mixin;
+package com.abyssredemption.abstool.client.compat.xaero.mixin;
 
-import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWorldMapActions;
-import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWorldMapContract;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroWorldMapActions;
+import com.abyssredemption.abstool.client.compat.xaero.XaeroWorldMapContract;
 import java.util.ArrayList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

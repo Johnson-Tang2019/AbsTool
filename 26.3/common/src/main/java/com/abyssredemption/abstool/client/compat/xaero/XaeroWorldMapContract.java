@@ -1,4 +1,4 @@
-package com.abyssredemption.abstool.fabric.compat.xaero;
+package com.abyssredemption.abstool.client.compat.xaero;
 
 import java.io.IOException;
 import org.objectweb.asm.ClassReader;

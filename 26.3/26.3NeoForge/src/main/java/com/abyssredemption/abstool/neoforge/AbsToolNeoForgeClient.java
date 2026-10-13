@@ -36,6 +36,7 @@ public final class AbsToolNeoForgeClient {
                         .containsKey(com.abyssredemption.abstool.client.furnace.FurnaceNetwork.SERVUX);
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id);
         AbsToolClient.init(FMLPaths.CONFIGDIR.get());
+        com.abyssredemption.abstool.neoforge.compat.xaero.XaeroNeoForgeClient.init();
         ServerStatsClient.install(net.neoforged.neoforge.client.network.ClientPacketDistributor::sendToServer,
                 id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id));
         com.abyssredemption.abstool.client.waypoint.SharedWaypointClient.install(

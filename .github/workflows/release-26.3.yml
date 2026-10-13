@@ -71,7 +71,7 @@ jobs:
           echo "artifact_version=${mod_version}+${minecraft_version}" >> "$GITHUB_OUTPUT"
 
       - name: Build release JARs
-        run: bash 26.3/gradlew -p 26.3 clean assemble --no-daemon
+        run: bash 26.3/gradlew -p 26.3 clean build --no-daemon
 
       - name: Verify release JARs
         shell: bash
