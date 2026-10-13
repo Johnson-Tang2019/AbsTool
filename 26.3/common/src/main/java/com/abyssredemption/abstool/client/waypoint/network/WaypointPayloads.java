@@ -23,25 +23,16 @@ public final class WaypointPayloads {
                 b -> new SyncRequest(b.readVarInt(), b.readVarLong()));
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
-    public record CreateRequest(int version, long requestId, WaypointDraft draft) implements CustomPacketPayload {
-        public static final Type<CreateRequest> TYPE = payloadType("shared_waypoint_create_request");
-        public static final StreamCodec<RegistryFriendlyByteBuf, CreateRequest> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); WaypointDraft.write(b,p.draft); },
-                b -> new CreateRequest(b.readVarInt(),b.readVarLong(),WaypointDraft.read(b)));
-        public Type<? extends CustomPacketPayload> type() { return TYPE; }
-    }
-    public record UpdateRequest(int version, long requestId, UUID id, long expectedRevision, WaypointDraft draft) implements CustomPacketPayload {
-        public static final Type<UpdateRequest> TYPE = payloadType("shared_waypoint_update_request");
-        public static final StreamCodec<RegistryFriendlyByteBuf, UpdateRequest> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeUUID(p.id); b.writeVarLong(p.expectedRevision); WaypointDraft.write(b,p.draft); },
-                b -> new UpdateRequest(b.readVarInt(),b.readVarLong(),b.readUUID(),b.readVarLong(),WaypointDraft.read(b)));
-        public Type<? extends CustomPacketPayload> type() { return TYPE; }
-    }
-    public record DeleteRequest(int version, long requestId, UUID id, long expectedRevision) implements CustomPacketPayload {
-        public static final Type<DeleteRequest> TYPE = payloadType("shared_waypoint_delete_request");
-        public static final StreamCodec<RegistryFriendlyByteBuf, DeleteRequest> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeUUID(p.id); b.writeVarLong(p.expectedRevision); },
-                b -> new DeleteRequest(b.readVarInt(),b.readVarLong(),b.readUUID(),b.readVarLong()));
+    /** Server operations: 1 create, 2 update, 3 delete. Delete still carries an empty draft. */
+    public record MutationRequest(int version, long requestId, int operation, UUID id, long expectedRevision, WaypointDraft draft) implements CustomPacketPayload {
+        public static final Type<MutationRequest> TYPE = payloadType("shared_waypoint_mutation_request");
+        public static final StreamCodec<RegistryFriendlyByteBuf, MutationRequest> CODEC = StreamCodec.of(
+                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeVarInt(p.operation);
+                    b.writeBoolean(p.id != null); if (p.id != null) b.writeUUID(p.id);
+                    b.writeVarLong(p.expectedRevision); WaypointDraft.write(b,p.draft); },
+                b -> { int v=b.readVarInt(); long request=b.readVarLong(); int op=b.readVarInt();
+                    UUID id=b.readBoolean()?b.readUUID():null;
+                    return new MutationRequest(v,request,op,id,b.readVarLong(),WaypointDraft.read(b)); });
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
     public record Snapshot(int version, long requestId, long datasetRevision, List<SharedWaypoint> waypoints) implements CustomPacketPayload {
@@ -58,10 +49,11 @@ public final class WaypointPayloads {
     public record Delta(int version, long datasetRevision, int operation, UUID id, long revision, SharedWaypoint waypoint) implements CustomPacketPayload {
         public static final Type<Delta> TYPE = payloadType("shared_waypoint_delta");
         public static final StreamCodec<RegistryFriendlyByteBuf, Delta> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.datasetRevision); b.writeByte(p.operation); b.writeUUID(p.id); b.writeVarLong(p.revision); if(p.operation != 2) SharedWaypoint.write(b,p.waypoint); },
-                b -> { int v=b.readVarInt(); long d=b.readVarLong(); int op=b.readUnsignedByte(); UUID id=b.readUUID(); long r=b.readVarLong();
-                    if(op>2) throw new IllegalArgumentException("Invalid delta operation: "+op);
-                    return new Delta(v,d,op,id,r,op==2?null:SharedWaypoint.read(b)); });
+                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.datasetRevision); b.writeVarInt(p.operation+1); b.writeUUID(p.id); b.writeVarLong(p.revision);
+                    b.writeBoolean(p.waypoint!=null); if(p.waypoint!=null) SharedWaypoint.write(b,p.waypoint); },
+                b -> { int v=b.readVarInt(); long d=b.readVarLong(); int op=b.readVarInt()-1; UUID id=b.readUUID(); long r=b.readVarLong();
+                    if(op<0||op>2) throw new IllegalArgumentException("Invalid delta operation: "+op);
+                    return new Delta(v,d,op,id,r,b.readBoolean()?SharedWaypoint.read(b):null); });
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
     public record Permissions(int version, boolean canRead, boolean canManage) implements CustomPacketPayload {
@@ -72,18 +64,18 @@ public final class WaypointPayloads {
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
     /** status: 0 success, 1 permission denied, 2 not found, 3 revision conflict, 4 invalid, 5 limit, 6 rate limit. */
-    public record MutationResult(int version, long requestId, int status, UUID waypointId, long revision) implements CustomPacketPayload {
+    public record MutationResult(int version, long requestId, int status, UUID waypointId, long revision, long datasetRevision) implements CustomPacketPayload {
         public static final Type<MutationResult> TYPE = payloadType("shared_waypoint_mutation_result");
         public static final StreamCodec<RegistryFriendlyByteBuf, MutationResult> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeVarInt(p.status); b.writeBoolean(p.waypointId!=null); if(p.waypointId!=null)b.writeUUID(p.waypointId); b.writeVarLong(p.revision); },
-                b -> { int v=b.readVarInt(); long r=b.readVarLong(); int s=b.readVarInt(); UUID id=b.readBoolean()?b.readUUID():null; return new MutationResult(v,r,s,id,b.readVarLong()); });
+                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeVarInt(p.status); b.writeBoolean(p.waypointId!=null); if(p.waypointId!=null)b.writeUUID(p.waypointId); b.writeVarLong(p.revision); b.writeVarLong(p.datasetRevision); },
+                b -> { int v=b.readVarInt(); long r=b.readVarLong(); int s=b.readVarInt(); UUID id=b.readBoolean()?b.readUUID():null; return new MutationResult(v,r,s,id,b.readVarLong(),b.readVarLong()); });
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
-    public record Error(int version, long requestId, int code) implements CustomPacketPayload {
+    public record Error(int version, long requestId, int code, String message) implements CustomPacketPayload {
         public static final Type<Error> TYPE = payloadType("shared_waypoint_error");
         public static final StreamCodec<RegistryFriendlyByteBuf, Error> CODEC = StreamCodec.of(
-                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeVarInt(p.code); },
-                b -> new Error(b.readVarInt(),b.readVarLong(),b.readVarInt()));
+                (b,p) -> { b.writeVarInt(p.version); b.writeVarLong(p.requestId); b.writeVarInt(p.code); b.writeUtf(p.message,128); },
+                b -> new Error(b.readVarInt(),b.readVarLong(),b.readVarInt(),b.readUtf(128)));
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
 }

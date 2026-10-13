@@ -8,6 +8,7 @@ import java.util.UUID;
 public final class WaypointVerification {
     private WaypointVerification() {}
     public static void main(String[] args) {
+        WaypointWireVerification.run();
         var state=new SharedWaypointClientState();
         state.hello(true);
         var author=UUID.randomUUID();

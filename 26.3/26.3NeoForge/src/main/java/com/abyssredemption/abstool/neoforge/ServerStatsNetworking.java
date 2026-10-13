@@ -25,9 +25,7 @@ public final class ServerStatsNetworking {
         r.playToServer(PerformancePayloads.SlowTickPageRequest.TYPE, PerformancePayloads.SlowTickPageRequest.CODEC, (p,c) -> {});
         r.playToServer(PerformancePayloads.ChunkDetailRequest.TYPE, PerformancePayloads.ChunkDetailRequest.CODEC, (p,c) -> {});
         r.playToServer(WaypointPayloads.SyncRequest.TYPE, WaypointPayloads.SyncRequest.CODEC, (p,c) -> {});
-        r.playToServer(WaypointPayloads.CreateRequest.TYPE, WaypointPayloads.CreateRequest.CODEC, (p,c) -> {});
-        r.playToServer(WaypointPayloads.UpdateRequest.TYPE, WaypointPayloads.UpdateRequest.CODEC, (p,c) -> {});
-        r.playToServer(WaypointPayloads.DeleteRequest.TYPE, WaypointPayloads.DeleteRequest.CODEC, (p,c) -> {});
+        r.playToServer(WaypointPayloads.MutationRequest.TYPE, WaypointPayloads.MutationRequest.CODEC, (p,c) -> {});
         r.playToClient(HelloResponsePayload.TYPE, HelloResponsePayload.CODEC, (p, c) -> ServerStatsClient.onHello(p));
         r.playToClient(OverviewResponsePayload.TYPE, OverviewResponsePayload.CODEC, (p, c) -> ServerStatsClient.onOverview(p));
         r.playToClient(TrendResponsePayload.TYPE, TrendResponsePayload.CODEC, (p, c) -> ServerStatsClient.onTrend(p));

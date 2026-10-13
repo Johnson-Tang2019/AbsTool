@@ -167,6 +167,8 @@
   "text.abstool.waypoint.error.4": "标点数据无效。",
   "text.abstool.waypoint.error.5": "服务器标点数量已达上限。",
   "text.abstool.waypoint.error.6": "请求过于频繁，请稍后再试。",
+  "text.abstool.waypoint.error.7": "服务器已关闭共享标点功能。",
+  "text.abstool.waypoint.error.8": "服务器无法保存标点，请联系管理员。",
   "abstool.performance.title": "性能分析",
   "abstool.performance.tab.0": "总览",
   "abstool.performance.tab.1": "区块",

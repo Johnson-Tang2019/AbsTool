@@ -12,6 +12,11 @@ if (schematicProfileName && !schematicProfiles.containsKey(schematicProfileName)
 def schematicProfile = schematicProfiles[schematicProfileName]
 
 dependencies {
+    if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
+        compileOnly fileTree(providers.gradleProperty('xaeroReferenceDir').get()) { include 'xaeroworldmap-fabric-*.jar' }
+    } else {
+        compileOnly 'maven.modrinth:xaeros-world-map:UleMm8za'
+    }
     compileOnly 'maven.modrinth:bEpr0Arc:fEqsesPK'
     compileOnly 'maven.modrinth:GcWjdA9I:DPcJACN6'
     compileOnly 'maven.modrinth:YL57xq9U:vTN4NRGW'
@@ -95,6 +100,8 @@ def verifyWaypoint = tasks.register('verifyWaypoint', JavaExec) {
     classpath = sourceSets.verification.runtimeClasspath
     mainClass = 'com.abyssredemption.abstool.verification.WaypointVerification'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    workingDir = layout.buildDirectory.dir('waypoint-verification').get().asFile
+    doFirst { workingDir.mkdirs() }
 }
 tasks.named('check') { dependsOn verifyWaypoint }
 def verifySchematic = tasks.register('verifySchematic', JavaExec) {
@@ -123,6 +130,31 @@ if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
         javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
         args fileTree(referenceDir) { include 'xaerominimap-fabric-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
     }
+}
+
+if (providers.gradleProperty('waypointMenuSmoke').isPresent()) {
+    if (!providers.gradleProperty('xaeroReferenceDir').isPresent()) throw new GradleException('xaeroReferenceDir is required for waypointMenuSmoke')
+    dependencies { runtimeOnly fileTree(providers.gradleProperty('xaeroReferenceDir').get()) { include 'xaerominimap-fabric-*.jar', 'xaeroworldmap-fabric-*.jar' } }
+    sourceSets {
+        waypointSmoke {
+            compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+            runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+        }
+    }
+    loom.mods {
+        abstool { sourceSet sourceSets.main }
+        abstool_waypoint_smoke { sourceSet sourceSets.waypointSmoke }
+    }
+    loom.runs.client { runDir 'build/run/waypointMenuSmoke' }
+    tasks.named('runClient', JavaExec) {
+        dependsOn tasks.named('waypointSmokeClasses')
+        classpath += sourceSets.waypointSmoke.output
+        doLast {
+            def log = project.file('build/run/waypointMenuSmoke/logs/latest.log')
+            if (!log.exists() || !log.text.contains('ABSTOOL_WAYPOINT_MENU_SMOKE_PASSED')) throw new GradleException('Waypoint menu smoke did not pass')
+        }
+    }
+    tasks.named('generateDLIConfig') { dependsOn tasks.named('waypointSmokeClasses') }
 }
 
 if (providers.gradleProperty('worldTests').isPresent()) {

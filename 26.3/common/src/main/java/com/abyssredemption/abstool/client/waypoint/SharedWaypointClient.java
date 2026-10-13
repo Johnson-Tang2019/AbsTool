@@ -71,16 +71,17 @@ public final class SharedWaypointClient {
         if (client.player!=null) client.player.sendSystemMessage(Component.translatable("text.abstool.waypoint.server_error",p.code()));
     }
     public static boolean create(WaypointDraft draft) {
-        if (!mayWrite() || !draft.valid() || !canSend.test(WaypointPayloads.CreateRequest.TYPE.id())) return false;
-        sender.accept(new WaypointPayloads.CreateRequest(ProtocolConstants.VERSION,++nextRequestId,draft)); return true;
+        if (!mayWrite() || !draft.valid() || !canSend.test(WaypointPayloads.MutationRequest.TYPE.id())) return false;
+        sender.accept(new WaypointPayloads.MutationRequest(ProtocolConstants.VERSION,++nextRequestId,1,null,0,draft)); return true;
     }
     public static boolean update(SharedWaypoint old, WaypointDraft draft) {
-        if (!mayWrite() || old==null || !draft.valid() || !canSend.test(WaypointPayloads.UpdateRequest.TYPE.id())) return false;
-        sender.accept(new WaypointPayloads.UpdateRequest(ProtocolConstants.VERSION,++nextRequestId,old.id(),old.revision(),draft)); return true;
+        if (!mayWrite() || old==null || !draft.valid() || !canSend.test(WaypointPayloads.MutationRequest.TYPE.id())) return false;
+        sender.accept(new WaypointPayloads.MutationRequest(ProtocolConstants.VERSION,++nextRequestId,2,old.id(),old.revision(),draft)); return true;
     }
     public static boolean delete(SharedWaypoint old) {
-        if (!mayWrite() || old==null || !canSend.test(WaypointPayloads.DeleteRequest.TYPE.id())) return false;
-        sender.accept(new WaypointPayloads.DeleteRequest(ProtocolConstants.VERSION,++nextRequestId,old.id(),old.revision())); return true;
+        if (!mayWrite() || old==null || !canSend.test(WaypointPayloads.MutationRequest.TYPE.id())) return false;
+        sender.accept(new WaypointPayloads.MutationRequest(ProtocolConstants.VERSION,++nextRequestId,3,old.id(),old.revision(),
+                new WaypointDraft("","",0,0,0,0,"",false))); return true;
     }
     private static boolean mayWrite() { return sender!=null && canSend!=null && STATE.supported() && STATE.synced()
             && STATE.canManage() && ConfigManager.get().serverWaypoints.enabled; }

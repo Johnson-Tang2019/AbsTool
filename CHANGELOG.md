@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0-beta.4 — 2026-10-13 — Minecraft 26.3
+
+- Add optional Fabric Xaero World Map right-click actions to publish local waypoints and update or delete server-shared waypoints. Enable writes only after server capability, permission, and snapshot checks.
+- Align both loader clients with AbsServerTool 0.3.6 shared waypoint packets, including combined mutation requests, fixed-width colors, nullable delta bodies, dataset revisions, and error messages.
+- Verify independent server-format packet fixtures and keep the optional Xaero menu smoke fixtures out of production JARs. NeoForge receives the packet changes; the Xaero GUI bridge is Fabric-only.
+- 新增 Fabric 版 Xaero 世界地图右键共享标点操作，并同步双加载器客户端的服务器共享标点协议。
+
 ## 0.5.0-beta.3 — 2026-10-12 — Minecraft 26.3
 
 - Detect the Xaero waypoint interface at runtime instead of requiring one Minimap version. Verified the contract against Fabric releases 26.5.1, 26.5.2, 26.5.3, and 26.6.0 for Minecraft 26.3; disable the bridge if a later release changes the required interface.

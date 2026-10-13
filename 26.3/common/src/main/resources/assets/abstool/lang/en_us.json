@@ -167,6 +167,8 @@
   "text.abstool.waypoint.error.4": "Invalid waypoint data.",
   "text.abstool.waypoint.error.5": "Server waypoint limit reached.",
   "text.abstool.waypoint.error.6": "Too many waypoint requests. Try again later.",
+  "text.abstool.waypoint.error.7": "Server-shared waypoints are disabled.",
+  "text.abstool.waypoint.error.8": "The server could not save the waypoint. Contact an administrator.",
   "abstool.performance.title": "Performance",
   "abstool.performance.tab.0": "Overview",
   "abstool.performance.tab.1": "Chunks",

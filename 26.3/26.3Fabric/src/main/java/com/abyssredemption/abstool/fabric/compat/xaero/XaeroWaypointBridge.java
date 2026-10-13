@@ -187,6 +187,12 @@ public final class XaeroWaypointBridge {
         if(!isWaypointScreen(screen) || waypoint==null) return null;
         try {
             Object world=field(screen,"displayedWorld");
+            return draftInWorld(world, waypoint);
+        } catch(ReflectiveOperationException e) { return null; }
+    }
+    public static WaypointDraft draftInWorld(Object world, Object waypoint) {
+        if (!compatible() || waypoint == null) return null;
+        try {
             if(world==null) return null;
             Object dim=call(world,"getDimId");
             if(dim==null) return null;

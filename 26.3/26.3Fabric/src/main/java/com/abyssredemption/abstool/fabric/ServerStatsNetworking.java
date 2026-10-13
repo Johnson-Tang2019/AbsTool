@@ -27,9 +27,7 @@ public final class ServerStatsNetworking {
         PayloadTypeRegistry.serverboundPlay().register(PerformancePayloads.SlowTickPageRequest.TYPE, PerformancePayloads.SlowTickPageRequest.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(PerformancePayloads.ChunkDetailRequest.TYPE, PerformancePayloads.ChunkDetailRequest.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.SyncRequest.TYPE, WaypointPayloads.SyncRequest.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.CreateRequest.TYPE, WaypointPayloads.CreateRequest.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.UpdateRequest.TYPE, WaypointPayloads.UpdateRequest.CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.DeleteRequest.TYPE, WaypointPayloads.DeleteRequest.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.MutationRequest.TYPE, WaypointPayloads.MutationRequest.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(HelloResponsePayload.TYPE, HelloResponsePayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(OverviewResponsePayload.TYPE, OverviewResponsePayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(TrendResponsePayload.TYPE, TrendResponsePayload.CODEC);

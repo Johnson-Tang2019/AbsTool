@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "package": "com.abyssredemption.abstool.fabric.compat.xaero.mixin",
+  "plugin": "com.abyssredemption.abstool.fabric.compat.xaero.XaeroMapMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["WaypointReaderMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
