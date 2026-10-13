@@ -1,7 +1,6 @@
 package com.abyssredemption.abstool.client.elytra;
 
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -101,7 +100,7 @@ public final class ElytraLaunch {
         var config = ConfigManager.get().elytraAssist;
         boolean down = client.isWindowActive() && (config.trigger == ElytraConfig.Trigger.SNEAK_JUMP
                 ? player.input.keyPresses.shift() && player.input.keyPresses.jump()
-                : config.keyCode >= 0 && InputConstants.isKeyDown(config.keyCode));
+                : com.abyssredemption.abstool.client.ClientKeyMappings.ELYTRA_LAUNCH.isDown());
         boolean edge = down && !held; held = down;
         if (edge) begin(client);
         if (state == State.IDLE) return;

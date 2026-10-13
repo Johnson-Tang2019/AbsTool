@@ -8,14 +8,23 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-/** Only load classes referencing the optional map on the verified client version. */
+/** Apply optional map mixins when their required interfaces are present. */
 public final class XaeroMapMixinPlugin implements IMixinConfigPlugin {
     private boolean supported;
     public void onLoad(String mixinPackage) {
         var loader = FabricLoader.getInstance();
-        supported = loader.getEnvironmentType() == EnvType.CLIENT && loader.isModLoaded("xaerominimap")
-                && loader.getModContainer("xaeroworldmap").map(mod ->
-                    mod.getMetadata().getVersion().getFriendlyString().equals("1.46.4")).orElse(false);
+        supported = false;
+        if (loader.getEnvironmentType() != EnvType.CLIENT || !loader.isModLoaded("xaerominimap")) return;
+        var map = loader.getModContainer("xaeroworldmap");
+        if (map.isEmpty()) return;
+        try {
+            String reason = XaeroWorldMapContract.rejection(resource -> java.nio.file.Files.readAllBytes(
+                    map.get().findPath(resource).orElseThrow(() -> new java.io.IOException("Missing " + resource))));
+            supported = reason.isEmpty();
+            if (!supported) org.slf4j.LoggerFactory.getLogger("abstool").warn("Xaero map integration unavailable: {}", reason);
+        } catch (java.io.IOException | RuntimeException failure) {
+            org.slf4j.LoggerFactory.getLogger("abstool").warn("Cannot inspect optional Xaero map interfaces", failure);
+        }
     }
     public boolean shouldApplyMixin(String target, String mixin) { return supported; }
     public String getRefMapperConfig() { return null; }

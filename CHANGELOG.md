@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0-beta.5 — 2026-10-13 — Minecraft 26.3
+
+- Replace the Xaero World Map 1.46.4 whitelist with bytecode interface checks. Verify Minecraft 26.3 Minimap 26.5.1–26.6.0 and World Map 1.46.2–1.47.0 release JARs; later compatible interfaces are accepted without a version ceiling.
+- Register Ab's Tool keys in vanilla Controls on Fabric and NeoForge. Settings default to R+B with two rebindable keys; unbinding either key enables a single-key shortcut, and unbinding both disables it.
+- Make the dedicated low-ceiling elytra launch key unbound by default and configure it through vanilla Controls. The configured trigger mode still controls whether the dedicated key or sneak+jump activates the feature.
+- 取消 Xaero 世界地图的固定版本限制，新增原版按键绑定设置：默认 R+B 打开设置，起飞快捷键默认不绑定。
+
 ## 0.5.0-beta.4 — 2026-10-13 — Minecraft 26.3
 
 - Add optional Fabric Xaero World Map right-click actions to publish local waypoints and update or delete server-shared waypoints. Enable writes only after server capability, permission, and snapshot checks.

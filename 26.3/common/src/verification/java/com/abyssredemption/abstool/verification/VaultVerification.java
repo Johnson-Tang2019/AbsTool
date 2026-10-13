@@ -14,11 +14,12 @@ import java.time.ZoneId;
 public final class VaultVerification {
     public static void main(String[] args) throws Exception {
         shortcut();
+        keyMappings();
         configuration();
         storage();
         dailyReset();
         furnaceProtocol();
-        System.out.println("Vault verification passed: shortcut, config, persistence, isolation, refresh and corrupt input.");
+        System.out.println("Vault verification passed: vanilla key mappings, shortcut, config, persistence, isolation, refresh and corrupt input.");
     }
 
     private static void shortcut() {
@@ -34,6 +35,34 @@ public final class VaultVerification {
         require(!chord.update(true, true, true), "Closing a screen while held must not reopen it");
         chord.update(false, false, true);
         require(chord.update(true, true, true), "Releasing and pressing must rearm the shortcut");
+    }
+
+    private static void keyMappings() {
+        var bindings = new java.util.ArrayList<net.minecraft.client.KeyMapping>();
+        com.abyssredemption.abstool.client.ClientKeyMappings.register(bindings::add);
+        require(bindings.size() == 3 && bindings.stream().map(net.minecraft.client.KeyMapping::getName).distinct().count() == 3,
+                "Register each settings/launch key exactly once");
+        var first = bindings.get(0);
+        var second = bindings.get(1);
+        var launch = bindings.get(2);
+        require(first.saveString().equals("key.keyboard.r") && second.saveString().equals("key.keyboard.b") && launch.isUnbound(),
+                "Default settings chord is R+B and launch is unbound");
+        first.setDown(true);
+        require(!com.abyssredemption.abstool.client.ClientKeyMappings.settingsSecondDown(), "First key alone cannot trigger the default chord");
+        second.setDown(true);
+        require(com.abyssredemption.abstool.client.ClientKeyMappings.settingsFirstDown()
+                && com.abyssredemption.abstool.client.ClientKeyMappings.settingsSecondDown(), "Both default keys trigger the chord");
+        second.setDown(false);
+        second.setKey(com.mojang.blaze3d.platform.InputConstants.UNKNOWN);
+        require(com.abyssredemption.abstool.client.ClientKeyMappings.settingsFirstDown()
+                && com.abyssredemption.abstool.client.ClientKeyMappings.settingsSecondDown(), "Unbinding one chord key enables the other as a single key");
+        first.setKey(com.mojang.blaze3d.platform.InputConstants.UNKNOWN);
+        require(!com.abyssredemption.abstool.client.ClientKeyMappings.settingsFirstDown()
+                && !com.abyssredemption.abstool.client.ClientKeyMappings.settingsSecondDown(), "Unbinding both keys disables the shortcut");
+        first.setDown(false);
+        first.setKey(first.getDefaultKey());
+        second.setKey(second.getDefaultKey());
+        net.minecraft.client.KeyMapping.resetMapping();
     }
 
     private static void configuration() throws Exception {

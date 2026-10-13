@@ -21,6 +21,8 @@ public final class AbsToolFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking::canSend;
         AbsToolClient.init(FabricLoader.getInstance().getConfigDir());
+        com.abyssredemption.abstool.client.ClientKeyMappings.register(
+                net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper::registerKeyMapping);
         ServerStatsNetworking.init();
         com.abyssredemption.abstool.fabric.compat.xaero.XaeroWaypointBridge.init();
         com.abyssredemption.abstool.fabric.compat.xaero.XaeroWaypointScreen.init();

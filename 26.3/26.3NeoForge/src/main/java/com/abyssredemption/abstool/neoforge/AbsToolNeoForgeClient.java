@@ -48,6 +48,11 @@ public final class AbsToolNeoForgeClient {
         NeoForge.EVENT_BUS.addListener(this::submit);
         NeoForge.EVENT_BUS.addListener(this::useBlock);
         container.getEventBus().addListener(ServerStatsNetworking::register);
+        container.getEventBus().addListener(this::registerKeys);
+    }
+
+    private void registerKeys(RegisterKeyMappingsEvent event) {
+        com.abyssredemption.abstool.client.ClientKeyMappings.register(event::register);
     }
 
     private void tick(ClientTickEvent.Post event) {

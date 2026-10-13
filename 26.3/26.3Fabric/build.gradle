@@ -15,7 +15,7 @@ dependencies {
     if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
         compileOnly fileTree(providers.gradleProperty('xaeroReferenceDir').get()) { include 'xaeroworldmap-fabric-*.jar' }
     } else {
-        compileOnly 'maven.modrinth:xaeros-world-map:UleMm8za'
+        compileOnly 'maven.modrinth:xaeros-world-map:nz9xjzWi'
     }
     compileOnly 'maven.modrinth:bEpr0Arc:fEqsesPK'
     compileOnly 'maven.modrinth:GcWjdA9I:DPcJACN6'
@@ -128,7 +128,7 @@ if (providers.gradleProperty('xaeroReferenceDir').isPresent()) {
         classpath = sourceSets.verification.runtimeClasspath
         mainClass = 'com.abyssredemption.abstool.verification.XaeroCompatibilityVerification'
         javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
-        args fileTree(referenceDir) { include 'xaerominimap-fabric-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
+        args fileTree(referenceDir) { include 'xaerominimap-fabric-*.jar', 'xaeroworldmap-fabric-*.jar' }.files.sort { it.name }.collect { it.absolutePath }
     }
 }
 

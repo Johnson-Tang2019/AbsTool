@@ -5,7 +5,6 @@ import com.abyssredemption.abstool.client.vault.config.ClothConfigScreenFactory;
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.vault.storage.VaultStorage;
 import java.nio.file.Path;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 
 /** Client initialization; invoke only from a physical client entrypoint. */
@@ -24,8 +23,8 @@ public final class AbsToolClient {
         com.abyssredemption.abstool.client.furnace.FurnaceTracker.INSTANCE.tick(client);
         com.abyssredemption.abstool.client.elytra.ElytraLaunch.guard(client);
         boolean focused = client.isWindowActive();
-        boolean r = focused && InputConstants.isKeyDown(InputConstants.KEY_R);
-        boolean b = focused && InputConstants.isKeyDown(InputConstants.KEY_B);
+        boolean r = focused && ClientKeyMappings.settingsFirstDown();
+        boolean b = focused && ClientKeyMappings.settingsSecondDown();
         if (SHORTCUT.update(r, b, client.player != null && client.level != null && client.gui.screen() == null)) {
             client.gui.setScreen(ClothConfigScreenFactory.create(null));
         }

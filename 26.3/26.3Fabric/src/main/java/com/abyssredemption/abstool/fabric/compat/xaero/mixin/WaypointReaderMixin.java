@@ -1,6 +1,7 @@
 package com.abyssredemption.abstool.fabric.compat.xaero.mixin;
 
 import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWorldMapActions;
+import com.abyssredemption.abstool.fabric.compat.xaero.XaeroWorldMapContract;
 import java.util.ArrayList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,7 +13,7 @@ import xaero.map.mods.gui.Waypoint;
 
 @Mixin(targets = "xaero.map.mods.gui.WaypointReader", remap = false)
 public abstract class WaypointReaderMixin {
-    @Inject(method = "getRightClickOptions(Lxaero/map/mods/gui/Waypoint;Lxaero/map/gui/IRightClickableElement;)Ljava/util/ArrayList;", at = @At("RETURN"), remap = false)
+    @Inject(method = XaeroWorldMapContract.MENU_METHOD, at = @At("RETURN"), remap = false)
     private void abstool$sharedActions(Waypoint waypoint, IRightClickableElement target,
             CallbackInfoReturnable<ArrayList<RightClickOption>> callback) {
         XaeroWorldMapActions.append(waypoint, target, callback.getReturnValue());

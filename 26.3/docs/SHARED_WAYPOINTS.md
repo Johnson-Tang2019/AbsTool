@@ -1,6 +1,10 @@
 # Server-shared waypoints (26.3)
 
-Fabric: with Xaero's Minimap 26.5.3 and World Map 1.46.4, right-click a local waypoint on the world map and choose **Publish to server**. A shared waypoint offers **Update server waypoint** and **Delete from server** (with confirmation). The existing Minimap waypoint list also retains these actions. Find that list through Minecraft Controls -> Xaero's Minimap -> Waypoints; bindings may be customized.
+Fabric: with compatible Xaero Minimap and World Map interfaces, right-click a local waypoint on the world map and choose **Publish to server**. A shared waypoint offers **Update server waypoint** and **Delete from server** (with confirmation). The existing Minimap waypoint list also retains these actions. Find that list through Minecraft Controls -> Xaero's Minimap -> Waypoints; bindings may be customized.
+
+There is no Xaero version whitelist or upper limit. The current Minecraft 26.3 Minimap releases 26.5.1–26.6.0 and World Map releases 1.46.2–1.47.0 pass the required interface checks. Future releases are inspected before applying the optional integration; changed required interfaces disable it with a log message.
+
+Ab's Tool bindings are listed under Controls -> Key Binds -> Ab's Tool on both loaders. Hold the two settings keys together (R+B by default). Unbind either one to use the other as a single key; unbind both to disable the settings shortcut. The dedicated elytra launch key defaults to unbound and takes effect when the feature is enabled with the key trigger selected. Vanilla persists all of these bindings in `options.txt`.
 
 Enable server-shared waypoints in AbsTool settings. The server must advertise the capability and grant management permission (default OP level 2); a full snapshot must have arrived before writes are enabled. The right-click entries stay disabled for unsupported servers and read-only players. No minimap/map dependency is required on dedicated servers.
 
