@@ -31,6 +31,10 @@ Fabric and NeoForge support:
 
 The integration no longer has a hard Xaero version ceiling. It checks the required interfaces before enabling itself.
 
+Starting with 0.5.0-beta.7, the Shared Waypoints settings page lists all synchronized points directly below its status, with names, dimensions, and coordinates. Color groups can be folded individually or expanded/collapsed together, and the list has a refresh action. Confirmed color edits move into their new groups automatically.
+
+Open Details or Edit to inspect the name, dimension ID, X/Y/Z, symbol, color, and visibility. Ordinary players receive read-only fields; administrators may save changes. Losing permission, disconnecting, or another server-side revision disables saving. Browsing this list does not require Xaero; displaying points on the map still uses the optional Xaero integration.
+
 Verified interface sets at the time of the latest code:
 
 ### Fabric

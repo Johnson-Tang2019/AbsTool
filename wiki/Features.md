@@ -1,5 +1,7 @@
 # Features
 
+Minecraft 26.3 beta.7 adds automatic screenshot image copying to the system clipboard on both loaders, plus a color-grouped, collapsible shared waypoint browser in settings. Viewers can inspect every point; administrators can edit coordinates, colors, and other fields. See [configuration](Configuration.md) and [shared waypoints](Shared-Waypoints.md).
+
 [简体中文](Features.zh-CN.md) · [Home](Home.md)
 
 ## Ominous vault tracker
