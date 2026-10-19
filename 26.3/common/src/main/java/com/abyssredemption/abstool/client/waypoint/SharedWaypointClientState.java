@@ -14,7 +14,20 @@ public final class SharedWaypointClientState {
     private boolean synced;
     private long datasetRevision;
     private long viewVersion;
-
+    private long connectionId;
+    public long connectionId() { return connectionId; }
+    private boolean categoriesSynced;
+    private long categoryRevision;
+    private Map<Integer, String> categoryNames = Map.of();
+    public boolean categoriesSynced() { return categoriesSynced; }
+    public long categoryRevision() { return categoryRevision; }
+    public String categoryName(int color) { return categoryNames.getOrDefault(color, ""); }
+    public boolean categories(long revision, Map<Integer, String> names) {
+        if (!supported || revision < 0 || (categoriesSynced && revision < categoryRevision) || names.size() > 16
+                || names.entrySet().stream().anyMatch(e -> e.getKey() < 0 || e.getKey() > 15
+                    || !com.abyssredemption.abstool.client.waypoint.network.WaypointCategories.validName(e.getValue()))) return false;
+        categoriesSynced = true; categoryRevision = revision; categoryNames = Map.copyOf(names); viewVersion++; return true;
+    }
     public boolean supported() { return supported; }
     public boolean canManage() { return canManage; }
     public boolean synced() { return synced; }
@@ -22,7 +35,7 @@ public final class SharedWaypointClientState {
     public long viewVersion() { return viewVersion; }
     public int waypointCount() { return waypoints.size(); }
     public Map<UUID, SharedWaypoint> waypoints() { return Map.copyOf(waypoints); }
-    public void clear() { waypoints.clear(); supported = false; canManage = false; synced = false; datasetRevision = 0; viewVersion++; }
+    public void clear() { connectionId++; categoryNames = Map.of(); categoryRevision = 0; categoriesSynced = false; waypoints.clear(); supported = false; canManage = false; synced = false; datasetRevision = 0; viewVersion++; }
     public void hello(boolean available) { clear(); supported = available; }
     public void permissions(boolean allowed) { if (supported && canManage != allowed) { canManage = allowed; viewVersion++; } }
 

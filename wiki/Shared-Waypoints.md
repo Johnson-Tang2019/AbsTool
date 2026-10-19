@@ -19,6 +19,8 @@ A matching AbsServerTool server capability is required before the client enables
 
 ## Minecraft 26.3 beta line
 
+Beta.8 adds shared names to color categories. Administrators can use **Rename** beside a header; viewers can read the names. Names support up to 32 characters, with blank restoring the default. AbsServerTool 0.3.8 validates changes, persists them across restarts and synchronizes them to connected players. Older servers retain waypoint support with naming disabled. Category surfaces and the in-game settings backdrop are lighter and translucent. Shared Xaero display names receive a small server-rack icon; local waypoints and original server names remain unchanged.
+
 Ab's Tool 0.5.0-beta.6 moves the Xaero implementation into shared dual-loader code.
 
 Fabric and NeoForge support:

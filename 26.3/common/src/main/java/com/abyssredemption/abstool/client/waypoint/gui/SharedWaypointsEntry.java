@@ -21,6 +21,7 @@ public final class SharedWaypointsEntry extends TextListEntry {
     private final WaypointBrowserModel model = new WaypointBrowserModel();
     private final List<Button> visible = new ArrayList<>();
     private final Map<Integer, Button> headers = new HashMap<>();
+    private final Map<Integer, Button> categoryActions = new HashMap<>();
     private final Map<UUID, Button> actions = new HashMap<>();
     private final List<Button> toolbar;
     public SharedWaypointsEntry() {
@@ -33,7 +34,7 @@ public final class SharedWaypointsEntry extends TextListEntry {
         return Button.builder(text(key), ignored -> action.run()).bounds(0, 0, 80, 20).build();
     }
     private void refresh() {
-        if (model.refresh(SharedWaypointClient.state())) { headers.clear(); actions.clear(); }
+        if (model.refresh(SharedWaypointClient.state())) { headers.clear(); categoryActions.clear(); actions.clear(); }
     }
     @Override public int getItemHeight() {
         refresh();
@@ -66,13 +67,24 @@ public final class SharedWaypointsEntry extends TextListEntry {
             int rowHeight = row.header() ? 26 : 38;
             if (rowY + rowHeight >= 0 && rowY < client.gui.screen().height) {
                 if (row.header()) {
-                    var header = headers.computeIfAbsent(row.color(), color -> Button.builder(Component.empty(), b -> model.toggle(color)).bounds(0, 0, 120, 20).build());
+                    var header = headers.computeIfAbsent(row.color(), color -> new CategoryButton(() -> model.toggle(color)));
                     header.setMessage(Component.literal(model.collapsed(row.color()) ? "▶ " : "▼ ")
-                            .append(WaypointPalette.name(row.color())).append(" (" + row.count() + ")"));
-                    header.setX(x + 16); header.setY(rowY); header.setWidth(Math.max(80, width - 20));
+                            .append(state.categoryName(row.color()).isEmpty() ? text("category_default") : Component.literal(state.categoryName(row.color())))
+                            .append(" · ").append(WaypointPalette.name(row.color())).append(" (" + row.count() + ")"));
+                    header.setX(x + 16); header.setY(rowY); header.setWidth(Math.max(50, width - (canEdit ? 88 : 20)));
                     graphics.fill(x + 2, rowY + 5, x + 13, rowY + 16, 0xFF000000 | WaypointPalette.rgb(row.color()));
                     graphics.outline(x + 1, rowY + 4, 13, 13, 0xFFAAAAAA);
                     draw(header, graphics, client, mouseX, mouseY, delta);
+                    if (canEdit) {
+                        var rename = categoryActions.computeIfAbsent(row.color(), color -> {
+                            var b = new CategoryButton(() -> client.gui.setScreen(new WaypointCategoryScreen(client.gui.screen(),color)));
+                            b.setMessage(text("category_rename")); return b;
+                        });
+                        rename.setX(x+width-67); rename.setY(rowY); rename.setWidth(64);
+                        rename.active = SharedWaypointClient.canRenameCategories();
+                        rename.setTooltip(Tooltip.create(text(rename.active ? "category_hint" : "category_upgrade")));
+                        draw(rename,graphics,client,mouseX,mouseY,delta);
+                    }
                 } else {
                     var waypoint = row.waypoint();
                     var action = actions.computeIfAbsent(waypoint.id(), id -> button("details", () -> {

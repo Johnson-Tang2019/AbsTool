@@ -268,5 +268,10 @@
   "abstool.performance.error.27": "That report is no longer available.",
   "abstool.performance.error.28": "Invalid report page.",
   "abstool.performance.error.29": "That chunk is unavailable.",
-  "abstool.performance.error.30": "The server could not complete this request."
+  "abstool.performance.error.30": "The server could not complete this request.",
+  "text.abstool.waypoint.category_name": "Category name",
+  "text.abstool.waypoint.category_default": "Unnamed category",
+  "text.abstool.waypoint.category_rename": "Rename",
+  "text.abstool.waypoint.category_hint": "Up to 32 characters; blank restores default",
+  "text.abstool.waypoint.category_upgrade": "Update AbsServerTool to enable shared category names"
 }

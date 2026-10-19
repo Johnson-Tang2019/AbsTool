@@ -20,7 +20,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 /** Independent image decoding, real screenshot bytecode, live groups, and permission loss. */
 public final class ClientUtilitiesVerification {
     public static void main(String[] args) throws Exception {
-        imageFormats(); screenshotHook(); groups(); permissions();
+        imageFormats(); screenshotHook(); groups(); permissions(); CategoryVerification.run();
         System.out.println("Client utilities passed: image pixels/orientation, screenshot hook, color grouping/folding, live refresh and viewer/admin write gates.");
     }
     private static SharedWaypoint waypoint(UUID id, String name, int color, long revision) {

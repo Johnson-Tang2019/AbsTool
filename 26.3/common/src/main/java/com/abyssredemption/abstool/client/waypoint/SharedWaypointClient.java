@@ -3,6 +3,7 @@ package com.abyssredemption.abstool.client.waypoint;
 import com.abyssredemption.abstool.client.serverstats.network.ProtocolConstants;
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.waypoint.network.WaypointPayloads;
+import com.abyssredemption.abstool.client.waypoint.network.WaypointCategories;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import net.minecraft.client.Minecraft;
@@ -42,6 +43,7 @@ public final class SharedWaypointClient {
         if (!STATE.supported() || sender==null || canSend==null || !canSend.test(WaypointPayloads.SyncRequest.TYPE.id())) return;
         pendingSync=++nextRequestId; lastSyncTick=ticks;
         sender.accept(new WaypointPayloads.SyncRequest(ProtocolConstants.VERSION,pendingSync));
+        if (canSend.test(WaypointCategories.Request.TYPE.id())) sender.accept(new WaypointCategories.Request(ProtocolConstants.VERSION,++nextRequestId,false,0,0,""));
     }
     public static void snapshot(WaypointPayloads.Snapshot p) {
         if (p.version()!=ProtocolConstants.VERSION || !STATE.supported() || p.requestId()!=pendingSync) return;
@@ -69,6 +71,17 @@ public final class SharedWaypointClient {
         if (p.version()!=ProtocolConstants.VERSION || !STATE.supported()) return;
         Minecraft client=Minecraft.getInstance();
         if (client.player!=null) client.player.sendSystemMessage(Component.translatable("text.abstool.waypoint.server_error",p.code()));
+    }
+    public static void categories(WaypointCategories.Snapshot p) {
+        if (p.version()!=ProtocolConstants.VERSION || !STATE.supported()) return;
+        if (p.status()==0 || p.status()==3) STATE.categories(p.revision(),p.names());
+        if (p.status()!=0 && Minecraft.getInstance().player!=null)
+            Minecraft.getInstance().player.sendSystemMessage(Component.translatable("text.abstool.waypoint.error."+p.status()));
+    }
+    public static boolean canRenameCategories() { return canManage() && STATE.categoriesSynced() && canSend.test(WaypointCategories.Request.TYPE.id()); }
+    public static boolean renameCategory(int color, long revision, String name) {
+        if (!canRenameCategories() || revision!=STATE.categoryRevision() || color<0 || color>15 || !WaypointCategories.validName(name)) return false;
+        sender.accept(new WaypointCategories.Request(ProtocolConstants.VERSION,++nextRequestId,true,color,revision,name.strip())); return true;
     }
     public static boolean create(WaypointDraft draft) {
         if (!canManage() || !draft.valid() || !canSend.test(WaypointPayloads.MutationRequest.TYPE.id())) return false;

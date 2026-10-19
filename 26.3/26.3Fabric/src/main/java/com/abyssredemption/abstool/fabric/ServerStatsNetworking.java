@@ -6,6 +6,7 @@ import com.abyssredemption.abstool.client.serverstats.performance.PerformanceCli
 import com.abyssredemption.abstool.client.serverstats.performance.PerformancePayloads;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
 import com.abyssredemption.abstool.client.waypoint.network.WaypointPayloads;
+import com.abyssredemption.abstool.client.waypoint.network.WaypointCategories;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -26,6 +27,8 @@ public final class ServerStatsNetworking {
         PayloadTypeRegistry.serverboundPlay().register(PerformancePayloads.PlayerPageRequest.TYPE, PerformancePayloads.PlayerPageRequest.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(PerformancePayloads.SlowTickPageRequest.TYPE, PerformancePayloads.SlowTickPageRequest.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(PerformancePayloads.ChunkDetailRequest.TYPE, PerformancePayloads.ChunkDetailRequest.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(WaypointCategories.Request.TYPE, WaypointCategories.Request.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(WaypointCategories.Snapshot.TYPE, WaypointCategories.Snapshot.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.SyncRequest.TYPE, WaypointPayloads.SyncRequest.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(WaypointPayloads.MutationRequest.TYPE, WaypointPayloads.MutationRequest.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(HelloResponsePayload.TYPE, HelloResponsePayload.CODEC);
@@ -59,6 +62,7 @@ public final class ServerStatsNetworking {
         ClientPlayNetworking.registerGlobalReceiver(PerformancePayloads.PlayerPageResponse.TYPE, (p,c) -> c.client().execute(() -> PerformanceClient.onPlayers(p)));
         ClientPlayNetworking.registerGlobalReceiver(PerformancePayloads.SlowTickPageResponse.TYPE, (p,c) -> c.client().execute(() -> PerformanceClient.onSlowTicks(p)));
         ClientPlayNetworking.registerGlobalReceiver(PerformancePayloads.ChunkDetailResponse.TYPE, (p,c) -> c.client().execute(() -> PerformanceClient.onDetail(p)));
+        ClientPlayNetworking.registerGlobalReceiver(WaypointCategories.Snapshot.TYPE, (p,c) -> c.client().execute(() -> SharedWaypointClient.categories(p)));
         ClientPlayNetworking.registerGlobalReceiver(WaypointPayloads.Snapshot.TYPE, (p,c) -> c.client().execute(() -> SharedWaypointClient.snapshot(p)));
         ClientPlayNetworking.registerGlobalReceiver(WaypointPayloads.Delta.TYPE, (p,c) -> c.client().execute(() -> SharedWaypointClient.delta(p)));
         ClientPlayNetworking.registerGlobalReceiver(WaypointPayloads.Permissions.TYPE, (p,c) -> c.client().execute(() -> SharedWaypointClient.permissions(p)));

@@ -6,6 +6,7 @@ import com.abyssredemption.abstool.client.serverstats.performance.PerformanceCli
 import com.abyssredemption.abstool.client.serverstats.performance.PerformancePayloads;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
 import com.abyssredemption.abstool.client.waypoint.network.WaypointPayloads;
+import com.abyssredemption.abstool.client.waypoint.network.WaypointCategories;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 public final class ServerStatsNetworking {
@@ -24,6 +25,8 @@ public final class ServerStatsNetworking {
         r.playToServer(PerformancePayloads.PlayerPageRequest.TYPE, PerformancePayloads.PlayerPageRequest.CODEC, (p,c) -> {});
         r.playToServer(PerformancePayloads.SlowTickPageRequest.TYPE, PerformancePayloads.SlowTickPageRequest.CODEC, (p,c) -> {});
         r.playToServer(PerformancePayloads.ChunkDetailRequest.TYPE, PerformancePayloads.ChunkDetailRequest.CODEC, (p,c) -> {});
+        r.playToServer(WaypointCategories.Request.TYPE, WaypointCategories.Request.CODEC, (p,c) -> {});
+        r.playToClient(WaypointCategories.Snapshot.TYPE, WaypointCategories.Snapshot.CODEC, (p,c) -> c.enqueueWork(() -> SharedWaypointClient.categories(p)));
         r.playToServer(WaypointPayloads.SyncRequest.TYPE, WaypointPayloads.SyncRequest.CODEC, (p,c) -> {});
         r.playToServer(WaypointPayloads.MutationRequest.TYPE, WaypointPayloads.MutationRequest.CODEC, (p,c) -> {});
         r.playToClient(HelloResponsePayload.TYPE, HelloResponsePayload.CODEC, (p, c) -> ServerStatsClient.onHello(p));

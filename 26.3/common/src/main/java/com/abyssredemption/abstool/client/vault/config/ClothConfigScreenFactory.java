@@ -137,7 +137,7 @@ public final class ClothConfigScreenFactory {
         }
         builder.setSavingRunnable(() -> { ConfigManager.save(); quick.save().run(); });
         builder.setFallbackCategory(all);
-        return builder.build();
+        return com.abyssredemption.abstool.client.waypoint.gui.SettingsAppearance.register(builder.setTransparentBackground(true).build());
     }
 
 }

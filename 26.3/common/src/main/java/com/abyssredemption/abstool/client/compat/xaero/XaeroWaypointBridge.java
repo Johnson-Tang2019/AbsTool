@@ -131,7 +131,7 @@ public final class XaeroWaypointBridge {
                 if(!w.enabled() || !dimension.equals(w.dimensionId())) continue;
                 try {
                     Object waypoint=Class.forName(WAYPOINT).getConstructor(int.class,int.class,int.class,String.class,String.class,int.class)
-                            .newInstance(w.x(),w.y(),w.z(),w.name(),w.symbol(),w.color());
+                            .newInstance(w.x(),w.y(),w.z(),com.abyssredemption.abstool.client.waypoint.gui.ServerWaypointIcon.displayName(w.name()),w.symbol(),w.color());
                     String slot=w.id().toString();
                     call(storage,"add",new Class<?>[]{String.class,Class.forName(WAYPOINT)},slot,waypoint);
                     slots.put(w.id(),slot);
@@ -202,7 +202,8 @@ public final class XaeroWaypointBridge {
             Object dim=call(world,"getDimId");
             if(dim==null) return null;
             String dimension=call(dim,"identifier").toString();
-            return new WaypointDraft((String)call(waypoint,"getName"),dimension,
+            var shared = serverWaypoint(waypoint);
+            return new WaypointDraft(shared == null ? (String)call(waypoint,"getName") : shared.name(),dimension,
                     (int)call(waypoint,"getX"),(int)call(waypoint,"getY"),(int)call(waypoint,"getZ"),
                     (int)call(waypoint,"getColor"),(String)call(waypoint,"getSymbol"),
                     !(boolean)call(waypoint,"isDisabled"));

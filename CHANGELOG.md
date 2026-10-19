@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0-beta.8 — 2026-10-19 — Minecraft 26.3
+
+- Add administrator-editable names to waypoint color categories, synchronized through an optional AbsServerTool 0.3.8 channel. Recheck permissions and category revisions before sending changes; viewers can read names and older servers retain their existing waypoint support.
+- Replace solid category buttons with low-opacity surfaces and borders. Lighten the in-game Ab's Tool settings backdrop and remove its blur without changing other game menus.
+- Prefix server-synchronized Xaero display names with a small server-rack glyph on both loaders. Preserve original names in server records and mutation requests.
+- Verify category wire fixtures, permission loss, conflicts, disconnect isolation, glyph resources and shared Fabric/NeoForge implementation during builds.
+- 新增管理员可编辑、全服同步的颜色分类名称；分类栏与设置背景改为浅色半透明；服务器同步标点增加简约服务器图标。
+
 ## 0.5.0-beta.7 — 2026-10-19 — Minecraft 26.3
 
 - Automatically copy successfully saved screenshots as image data to the system clipboard on both loaders. Keep vanilla PNG saves, prepare PNG/BMP formats off-thread, and publish through Minecraft's SDL clipboard API on its main thread. Add an enabled-by-default toggle and localized success/failure messages.
