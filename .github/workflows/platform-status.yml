@@ -1,0 +1,54 @@
+name: Inspect platform visibility
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read platform project and version visibility
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.error
+          def get(label, url, authenticated=False):
+              headers={'User-Agent':'Johnson-Tang2019/AbsTool release-visibility-audit'}
+              if authenticated: headers['Authorization']=os.environ['MODRINTH_TOKEN']
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url,headers=headers),timeout=30) as response:
+                      data=json.load(response)
+                  print(label, 'HTTP 200')
+                  return data
+              except urllib.error.HTTPError as error:
+                  print(label, 'HTTP', error.code)
+              except Exception as error:
+                  print(label, type(error).__name__)
+          base='https://api.modrinth.com/v2/project/'+os.environ['MODRINTH_PROJECT_ID']
+          for authenticated in [False,True]:
+              label='Modrinth '+('authenticated' if authenticated else 'public')
+              project=get(label+' project',base,authenticated)
+              if isinstance(project,dict):
+                  print(json.dumps({key:project.get(key) for key in ['id','slug','title','status','requested_status','moderator_message']},ensure_ascii=False))
+              versions=get(label+' versions',base+'/version',authenticated)
+              if isinstance(versions,list):
+                  for version in versions:
+                      if 'beta.8' in version.get('version_number','') or 'beta.7' in version.get('version_number',''):
+                          print(json.dumps({key:version.get(key) for key in ['id','name','version_number','version_type','status','featured','game_versions','loaders','date_published']},ensure_ascii=False))
+          for path in ['/api/v1/mods/1700814','/api/v1/mods/1700814/files?pageIndex=0&pageSize=50&sort=dateCreated&sortDescending=true&removeAlphas=false']:
+              data=get('CurseForge public '+path,'https://www.curseforge.com'+path)
+              if isinstance(data,dict):
+                  value=data.get('data',data)
+                  if isinstance(value,dict):
+                      print(json.dumps({k:value.get(k) for k in ['id','name','slug','status','isAvailable','links']},ensure_ascii=False))
+                      value=value.get('files',value.get('data',[]))
+                  if isinstance(value,list):
+                      for item in value:
+                          if 'beta.8' in str(item):
+                              print(json.dumps({k:item.get(k) for k in ['id','displayName','fileName','fileStatus','releaseType','gameVersions','dateCreated']},ensure_ascii=False))
+          PY
