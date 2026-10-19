@@ -42,6 +42,18 @@ jobs:
                           print(json.dumps({key:version.get(key) for key in ['id','name','version_number','version_type','status','featured','game_versions','loaders','date_published']},ensure_ascii=False))
           for path in ['/api/v1/mods/1700814','/api/v1/mods/1700814/files?pageIndex=0&pageSize=50&sort=dateCreated&sortDescending=true&removeAlphas=false']:
               data=get('CurseForge public '+path,'https://www.curseforge.com'+path)
+              print('CurseForge response shape', type(data).__name__, list(data.keys()) if isinstance(data,dict) else '')
+              found=[]
+              def files(value):
+                  if isinstance(value,dict):
+                      if 'fileName' in value or 'displayName' in value: found.append(value)
+                      for child in value.values(): files(child)
+                  elif isinstance(value,list):
+                      for child in value: files(child)
+              files(data)
+              print('CurseForge file records',len(found))
+              for item in found[:8]+[item for item in found[8:] if 'beta.8' in str(item)]:
+                  print(json.dumps({k:item.get(k) for k in ['id','displayName','fileName','fileStatus','releaseType','gameVersions','dateCreated']},ensure_ascii=False))
               if isinstance(data,dict):
                   value=data.get('data',data)
                   if isinstance(value,dict):
