@@ -2,6 +2,7 @@ package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.vault.config.ConfigManager;
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
+import com.abyssredemption.abstool.client.waypoint.gui.SharedWaypointDetailsScreen;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public final class XaeroWorldMapActions {
             }).setActive(manage));
         } else if (shared != null) {
             options.add(new Action("text.abstool.waypoint.update", options.size(), target,
-                    screen -> Minecraft.getInstance().gui.setScreen(new ServerWaypointEditScreen(screen, shared))).setActive(manage));
+                    screen -> Minecraft.getInstance().gui.setScreen(new SharedWaypointDetailsScreen(screen, shared))).setActive(manage));
             options.add(new Action("text.abstool.waypoint.remove", options.size(), target, screen -> {
                 Minecraft.getInstance().gui.setScreen(new ConfirmScreen(confirmed -> {
                     if (confirmed && !SharedWaypointClient.delete(shared)) failed();

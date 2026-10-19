@@ -1,6 +1,7 @@
 package com.abyssredemption.abstool.client.compat.xaero;
 
 import com.abyssredemption.abstool.client.waypoint.SharedWaypointClient;
+import com.abyssredemption.abstool.client.waypoint.gui.SharedWaypointDetailsScreen;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -21,7 +22,7 @@ public final class XaeroWaypointScreen {
                 List<Object> chosen=XaeroWaypointBridge.selection(screen);
                 if(chosen.size()==1) {
                     var waypoint=XaeroWaypointBridge.serverWaypoint(chosen.getFirst());
-                    if(waypoint!=null) client.gui.setScreen(new ServerWaypointEditScreen(screen,waypoint));
+                    if(waypoint!=null) client.gui.setScreen(new SharedWaypointDetailsScreen(screen,waypoint));
                 }
             })
                     .bounds(8,height-59,112,20).build();

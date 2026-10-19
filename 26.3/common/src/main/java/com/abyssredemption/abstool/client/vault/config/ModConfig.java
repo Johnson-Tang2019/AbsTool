@@ -2,6 +2,7 @@
 package com.abyssredemption.abstool.client.vault.config;
 
 public class ModConfig {
+    public boolean screenshotToClipboard = true;
     public ServerWaypoints serverWaypoints = new ServerWaypoints();
     public static class ServerWaypoints { public boolean enabled = true; public boolean showInXaero = true; }
     public boolean shulkerMostCommonItem = true;

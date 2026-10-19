@@ -13,15 +13,18 @@ public final class SharedWaypointClientState {
     private boolean canManage;
     private boolean synced;
     private long datasetRevision;
+    private long viewVersion;
 
     public boolean supported() { return supported; }
     public boolean canManage() { return canManage; }
     public boolean synced() { return synced; }
     public long datasetRevision() { return datasetRevision; }
+    public long viewVersion() { return viewVersion; }
+    public int waypointCount() { return waypoints.size(); }
     public Map<UUID, SharedWaypoint> waypoints() { return Map.copyOf(waypoints); }
-    public void clear() { waypoints.clear(); supported = false; canManage = false; synced = false; datasetRevision = 0; }
+    public void clear() { waypoints.clear(); supported = false; canManage = false; synced = false; datasetRevision = 0; viewVersion++; }
     public void hello(boolean available) { clear(); supported = available; }
-    public void permissions(boolean allowed) { if (supported) canManage = allowed; }
+    public void permissions(boolean allowed) { if (supported && canManage != allowed) { canManage = allowed; viewVersion++; } }
 
     public ApplyResult snapshot(long revision, List<SharedWaypoint> values) {
         if (!supported || revision < 0 || (synced && revision < datasetRevision) || values.size() > 4096) return ApplyResult.IGNORED;
@@ -29,7 +32,7 @@ public final class SharedWaypointClientState {
         for (SharedWaypoint waypoint : values) {
             if (!waypoint.valid() || replacement.putIfAbsent(waypoint.id(), waypoint) != null) return ApplyResult.RESYNC;
         }
-        waypoints.clear(); waypoints.putAll(replacement); datasetRevision = revision; synced = true;
+        waypoints.clear(); waypoints.putAll(replacement); datasetRevision = revision; synced = true; viewVersion++;
         return ApplyResult.APPLIED;
     }
 
@@ -46,6 +49,7 @@ public final class SharedWaypointClientState {
         else if (operation == 2 && old != null && itemRevision > old.revision() && value == null) waypoints.remove(id);
         else return ApplyResult.RESYNC;
         datasetRevision = revision;
+        viewVersion++;
         return ApplyResult.APPLIED;
     }
 }

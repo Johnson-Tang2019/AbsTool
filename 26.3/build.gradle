@@ -41,6 +41,19 @@ subprojects {
     }
     tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
     tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+    afterEvaluate {
+        def utilities = tasks.register('verifyClientUtilities', JavaExec) {
+            group = 'verification'
+            dependsOn tasks.named('verificationClasses')
+            classpath = sourceSets.verification.runtimeClasspath
+            mainClass = 'com.abyssredemption.abstool.verification.ClientUtilitiesVerification'
+            javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+            systemProperty 'java.awt.headless', 'true'
+            workingDir = layout.buildDirectory.dir('client-utilities-verification').get().asFile
+            doFirst { workingDir.mkdirs() }
+        }
+        tasks.named('check') { dependsOn utilities }
+    }
     // IDEs may request wrapper relative to a loader subproject.
     tasks.register('wrapper') {
         group = 'build setup'
@@ -51,7 +64,7 @@ subprojects {
 
 def verifyXaeroParity = tasks.register('verifyXaeroParity') {
     group = 'verification'
-    description = 'Verify both loader JARs ship identical shared Xaero code and the correct loader adapters.'
+    description = 'Verify both loader JARs ship identical shared waypoint/clipboard code and their loader adapters.'
     dependsOn ':fabric:jar', ':neoforge:jar'
     doLast {
         def shared = []
@@ -60,7 +73,10 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
             new java.util.zip.ZipFile(jar).withCloseable { zip ->
                 def classes = [:]
                 zip.entries().each { entry ->
-                    if (entry.name.startsWith('com/abyssredemption/abstool/client/compat/xaero/') && entry.name.endsWith('.class')) {
+                    if ((entry.name.startsWith('com/abyssredemption/abstool/client/compat/xaero/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/waypoint/gui/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/screenshot/')
+                            || entry.name == 'com/abyssredemption/abstool/mixin/ScreenshotClipboardMixin.class') && entry.name.endsWith('.class')) {
                         classes[entry.name] = zip.getInputStream(entry).withCloseable { it.readAllBytes() }
                     }
                 }
@@ -72,13 +88,15 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
                         || json.package != 'com.abyssredemption.abstool.client.compat.xaero.mixin'
                         || json.client != ['WaypointReaderMixin']) throw new GradleException("Wrong Xaero adapter in ${loader}")
                 shared.add(classes)
+                def mainMixins = zip.getInputStream(zip.getEntry('abstool.mixins.json')).withCloseable { new groovy.json.JsonSlurper().parse(it) }
+                if (!mainMixins.client.contains('ScreenshotClipboardMixin')) throw new GradleException("Missing screenshot clipboard hook in ${loader}")
             }
         }
         if (shared[0].keySet() != shared[1].keySet()
                 || shared[0].any { name, bytes -> !java.util.Arrays.equals(bytes, shared[1][name]) }) {
-            throw new GradleException('Shared Xaero code differs between Fabric and NeoForge')
+            throw new GradleException('Shared waypoint/clipboard code differs between Fabric and NeoForge')
         }
-        logger.lifecycle("Xaero parity verified: ${shared[0].size()} identical shared classes and both loader adapters")
+        logger.lifecycle("Client feature parity verified: ${shared[0].size()} identical waypoint/clipboard classes and both loader adapters")
     }
 }
 tasks.named('build') { dependsOn ':fabric:build', ':neoforge:build', verifyXaeroParity }

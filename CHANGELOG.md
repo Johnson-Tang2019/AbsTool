@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0-beta.7 — 2026-10-19 — Minecraft 26.3
+
+- Automatically copy successfully saved screenshots as image data to the system clipboard on both loaders. Keep vanilla PNG saves, prepare PNG/BMP formats off-thread, and publish through Minecraft's SDL clipboard API on its main thread. Add an enabled-by-default toggle and localized success/failure messages.
+- Show all synchronized server waypoints directly below the shared-waypoint settings status. Group by color with individual collapse controls, expand/collapse all, live counts, and refresh.
+- Add a shared details/editor screen for names, dimension IDs, coordinates, symbols, colors, and visibility. Viewers receive read-only fields; live permission loss, changed revisions, disabled synchronization, and disconnected sessions prevent writes.
+- Extend dual-loader bytecode parity and automated checks to the clipboard hook and waypoint browser. Verify image decoding/orientation, actual screenshot save-call targets, grouping updates, and viewer/admin write gates on both loaders.
+- 双端新增截图自动复制图片到剪贴板、按颜色分组且可折叠的共享标点列表，以及管理员编辑／普通玩家只读的详情界面。
+
 ## 0.5.0-beta.6 — 2026-10-13 — Minecraft 26.3
 
 - Add NeoForge Xaero shared waypoint display, waypoint-list management buttons, edit screen, and World Map right-click publish/update/delete actions with the same server permission and synchronization gates as Fabric.
