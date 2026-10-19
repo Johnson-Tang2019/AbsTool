@@ -61,7 +61,7 @@ Ordinary players receive read-only shared waypoints.
 
 ## Server behavior
 
-AbsServerTool 0.3.6 on Minecraft 26.3:
+AbsServerTool 0.3.7 on Minecraft 26.3:
 
 - Persists the shared dataset with the world.
 - Uses server-authoritative revisions.

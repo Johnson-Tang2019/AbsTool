@@ -35,7 +35,7 @@ The profiler is server-authoritative:
 
 AbsServerTool owns the waypoint dataset, revisions, mutation permissions, snapshots, and live deltas. Xaero is not needed on the server.
 
-For Minecraft 26.3, current AbsServerTool 0.3.6 stores the dataset in the world save at:
+For Minecraft 26.3, current AbsServerTool 0.3.7 stores the dataset in the world save at:
 
 ~~~text
 data/absservertool_shared_waypoints.json

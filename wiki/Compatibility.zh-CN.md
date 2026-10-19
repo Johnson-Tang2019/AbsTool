@@ -68,4 +68,4 @@ Iris / Sodium 必须使用匹配组合：
 
 服务器必须使用与 Minecraft 版本匹配的 AbsServerTool。
 
-当前 main 最新为 Minecraft 26.3 的 AbsServerTool 0.3.6，同时构建 Fabric 与 NeoForge 服务端安装包；Minecraft 26.2 在独立维护分支继续维护。
+当前 main 最新为 Minecraft 26.3 的 AbsServerTool 0.3.7，同时构建 Fabric 与 NeoForge 服务端安装包；Minecraft 26.2 在独立维护分支继续维护。

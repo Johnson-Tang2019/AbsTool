@@ -68,4 +68,4 @@ Both are optional. Missing optional mods must not prevent Ab's Tool from startin
 
 Use the AbsServerTool JAR that matches the Minecraft version of the server.
 
-The latest main branch is AbsServerTool 0.3.6 for Minecraft 26.3 and supports Fabric and NeoForge server builds. Minecraft 26.2 is maintained separately in its maintenance branch.
+The latest main branch is AbsServerTool 0.3.7 for Minecraft 26.3 and supports Fabric and NeoForge server builds. Minecraft 26.2 is maintained separately in its maintenance branch.

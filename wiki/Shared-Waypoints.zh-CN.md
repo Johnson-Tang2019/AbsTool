@@ -61,7 +61,7 @@ Fabric 与 NeoForge 都支持：
 
 ## 服务端行为
 
-Minecraft 26.3 的 AbsServerTool 0.3.6：
+Minecraft 26.3 的 AbsServerTool 0.3.7：
 
 - 共享数据随世界存档持久化。
 - 使用服务器权威 revision。

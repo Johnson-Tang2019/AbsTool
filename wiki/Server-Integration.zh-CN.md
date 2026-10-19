@@ -2,7 +2,7 @@
 
 [English](Server-Integration.md) · [首页](Home.zh-CN.md)
 
-Ab's Tool 保持客户端定位。需要服务器权威数据的功能由独立项目 AbsServerTool 提供。
+`abstoolmod`（Ab's Tool）保持客户端定位。需要服务器权威数据的功能由独立项目 AbsServerTool 提供。
 
 ## 协议模型
 
@@ -24,6 +24,9 @@ Ab's Tool 保持客户端定位。需要服务器权威数据的功能由独立�
 
 ## 性能分析
 
+详细使用说明见[性能分析 GUI](Performance-Profiler.zh-CN.md)。
+
+
 性能分析由服务器掌控：
 
 - AbsServerTool 负责权限检查。
@@ -35,7 +38,7 @@ Ab's Tool 保持客户端定位。需要服务器权威数据的功能由独立�
 
 AbsServerTool 负责共享标点数据集、revision、写权限、全量快照和实时 delta。服务器不需要安装 Xaero。
 
-Minecraft 26.3 当前 AbsServerTool 0.3.6 将数据保存在世界存档：
+Minecraft 26.3 当前 AbsServerTool 0.3.7 将数据保存在世界存档：
 
 ~~~text
 data/absservertool_shared_waypoints.json
