@@ -1,11 +1,11 @@
 # Changelog
 
-## 0.5.0-beta.9-dev.1 — local development — Minecraft 26.3
+## 0.5.0-beta.9 — 2026-10-22 — Minecraft 26.3
 
 - Add per-server personal color visibility controls beside the shared-waypoint category headers. Viewers can hide/show colors without mutating server data; keep hidden points available in the settings list.
 - Add an opt-in nearly-overlapping mob renderer with stable representatives, strict box/appearance matching, native name/count labels and immediate separation/disable restoration. Preserve entity simulation, collision and server data.
 - Share both features and render mixins across Fabric and NeoForge. Add grouping checks and an isolated real-client screenshot fixture with optional installed Iris/Sodium and Complementary shader dependencies.
-- Local preview only; no platform upload or release tag.
+- Verify both loader builds and shared-code parity. Verify actual Fabric GPU rendering with vanilla and Iris 1.11.7 / Sodium 0.9.2 / Complementary Reimagined 5.6.1, including count labels, separation restoration, color visibility and saved preferences. NeoForge runtime and other shaderpacks are not covered by those captures.
 
 ## 0.5.0-beta.8 — 2026-10-19 — Minecraft 26.3
 

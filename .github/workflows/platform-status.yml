@@ -38,7 +38,7 @@ jobs:
               versions=get(label+' versions',base+'/version',authenticated)
               if isinstance(versions,list):
                   for version in versions:
-                      if 'beta.8' in version.get('version_number','') or 'beta.7' in version.get('version_number',''):
+                      if 'beta.9' in version.get('version_number','') or 'beta.8' in version.get('version_number',''):
                           print(json.dumps({key:version.get(key) for key in ['id','name','version_number','version_type','status','featured','game_versions','loaders','date_published']},ensure_ascii=False))
           for path in ['/api/v1/mods/1700814','/api/v1/mods/1700814/files?pageIndex=0&pageSize=50&sort=dateCreated&sortDescending=true&removeAlphas=false']:
               data=get('CurseForge public '+path,'https://www.curseforge.com'+path)
@@ -52,7 +52,7 @@ jobs:
                       for child in value: files(child)
               files(data)
               print('CurseForge file records',len(found))
-              for item in found[:8]+[item for item in found[8:] if 'beta.8' in str(item)]:
+              for item in found[:8]+[item for item in found[8:] if 'beta.9' in str(item)]:
                   print(json.dumps({k:item.get(k) for k in ['id','displayName','fileName','fileStatus','releaseType','gameVersions','dateCreated']},ensure_ascii=False))
               if isinstance(data,dict):
                   value=data.get('data',data)
@@ -61,6 +61,6 @@ jobs:
                       value=value.get('files',value.get('data',[]))
                   if isinstance(value,list):
                       for item in value:
-                          if 'beta.8' in str(item):
+                          if 'beta.9' in str(item):
                               print(json.dumps({k:item.get(k) for k in ['id','displayName','fileName','fileStatus','releaseType','gameVersions','dateCreated']},ensure_ascii=False))
           PY

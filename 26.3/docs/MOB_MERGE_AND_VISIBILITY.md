@@ -1,6 +1,6 @@
 # Local mob merging and waypoint visibility
 
-This development build is local only: 0.5.0-beta.9-dev.1 for Minecraft 26.3.
+Available in 0.5.0-beta.9 for Minecraft 26.3, on Fabric and NeoForge.
 
 ## Controls
 
