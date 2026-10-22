@@ -32,6 +32,10 @@ public final class ClothConfigScreenFactory {
         waypoints.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.waypoint.show_xaero"), config.serverWaypoints.showInXaero)
                 .setDefaultValue(true).setSaveConsumer(value -> config.serverWaypoints.showInXaero = value).build());
         waypoints.addEntry(new com.abyssredemption.abstool.client.waypoint.gui.SharedWaypointsEntry());
+        optimization.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.mobmerge.enabled"), config.mergeOverlappingMobs)
+                .setDefaultValue(false)
+                .setTooltip(Component.translatable("text.abstool.mobmerge.hint"))
+                .setSaveConsumer(value -> config.mergeOverlappingMobs = value).build());
         optimization.addEntry(entries.startBooleanToggle(Component.translatable("text.abstool.screenshot.enabled"), config.screenshotToClipboard)
                 .setDefaultValue(true).setSaveConsumer(value -> config.screenshotToClipboard = value).build());
 

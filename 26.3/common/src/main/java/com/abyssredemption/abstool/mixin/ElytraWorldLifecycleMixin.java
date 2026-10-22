@@ -10,5 +10,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class ElytraWorldLifecycleMixin {
     @Inject(method = {"setLevel", "clearClientLevel"}, at = @At("HEAD"))
-    private void abstool$clearLaunch(CallbackInfo ci) { ElytraLaunch.reset(); }
+    private void abstool$clearLaunch(CallbackInfo ci) { ElytraLaunch.reset(); com.abyssredemption.abstool.client.mobmerge.MobMerge.clear(); }
 }

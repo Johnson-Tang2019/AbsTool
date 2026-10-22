@@ -26,6 +26,7 @@ public final class XaeroWaypointBridge {
     private static Object lastSession;
     private static String lastDimension;
     private static long lastRevision = -1;
+    private static int lastHiddenColors = -1;
     private static long ticks;
     private static final Map<UUID,String> slots = new HashMap<>();
     private static Boolean contractSupported;
@@ -123,12 +124,14 @@ public final class XaeroWaypointBridge {
             Object storage=call(thirdParty,"get",new Class<?>[]{Identifier.class},ORIGIN);
             if(!(call(storage,"getWaypoints") instanceof Map display)) return;
             boolean changed=storage!=lastStorage || session!=lastSession || !dimension.equals(lastDimension)
-                    || state.datasetRevision()!=lastRevision;
+                    || state.datasetRevision()!=lastRevision
+                    || lastHiddenColors!=com.abyssredemption.abstool.client.waypoint.gui.WaypointVisibility.mask();
             if(!changed && ++ticks%100!=0) return;
             if(lastStorage!=null && lastStorage!=storage) resetStorage(lastStorage);
             resetStorage(storage); slots.clear();
             for(SharedWaypoint w:state.waypoints().values()) {
-                if(!w.enabled() || !dimension.equals(w.dimensionId())) continue;
+                if(!w.enabled() || !dimension.equals(w.dimensionId())
+                        || com.abyssredemption.abstool.client.waypoint.gui.WaypointVisibility.hidden(w.color())) continue;
                 try {
                     Object waypoint=Class.forName(WAYPOINT).getConstructor(int.class,int.class,int.class,String.class,String.class,int.class)
                             .newInstance(w.x(),w.y(),w.z(),com.abyssredemption.abstool.client.waypoint.gui.ServerWaypointIcon.displayName(w.name()),w.symbol(),w.color());
@@ -140,6 +143,7 @@ public final class XaeroWaypointBridge {
                 }
             }
             lastStorage=storage; lastSession=session; lastDimension=dimension; lastRevision=state.datasetRevision();
+            lastHiddenColors=com.abyssredemption.abstool.client.waypoint.gui.WaypointVisibility.mask();
         } catch(ReflectiveOperationException | IllegalArgumentException e) {
             disableBridge(e);
         }

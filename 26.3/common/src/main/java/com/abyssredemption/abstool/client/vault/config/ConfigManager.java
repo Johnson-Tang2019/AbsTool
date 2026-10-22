@@ -52,6 +52,8 @@ public final class ConfigManager {
         try {
             JsonObject merged = original.deepCopy();
             merge(merged, GSON.toJsonTree(config).getAsJsonObject());
+            // This is a dynamic map: removed server keys must not survive the unknown-field merge.
+            merged.getAsJsonObject("serverWaypoints").add("hiddenColors", GSON.toJsonTree(config.serverWaypoints.hiddenColors));
             JsonFiles.write(configPath, GSON.toJson(merged));
             original = merged;
         } catch (IOException e) {

@@ -273,5 +273,10 @@
   "text.abstool.waypoint.category_default": "未命名分类",
   "text.abstool.waypoint.category_rename": "命名",
   "text.abstool.waypoint.category_hint": "最多 32 字；留空恢复默认名称",
-  "text.abstool.waypoint.category_upgrade": "更新服务端 AbsServerTool 后可编辑共享分类名称"
+  "text.abstool.waypoint.category_upgrade": "更新服务端 AbsServerTool 后可编辑共享分类名称",
+  "text.abstool.waypoint.hide_color": "隐藏该色",
+  "text.abstool.waypoint.show_color": "显示该色",
+  "text.abstool.waypoint.color_visibility_hint": "仅隐藏自己地图中此颜色的共享标点，按服务器单独保存；不影响其他玩家。",
+  "text.abstool.mobmerge.enabled": "合并渲染重叠生物",
+  "text.abstool.mobmerge.hint": "碰撞箱重叠至少 98%、类型与外观一致的生物只渲染一次，显示“生物名 x 数量”。仅改变客户端画面。"
 }

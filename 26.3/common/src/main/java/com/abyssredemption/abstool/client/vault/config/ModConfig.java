@@ -3,8 +3,13 @@ package com.abyssredemption.abstool.client.vault.config;
 
 public class ModConfig {
     public boolean screenshotToClipboard = true;
+    public boolean mergeOverlappingMobs = false;
     public ServerWaypoints serverWaypoints = new ServerWaypoints();
-    public static class ServerWaypoints { public boolean enabled = true; public boolean showInXaero = true; }
+    public static class ServerWaypoints {
+        public boolean enabled = true;
+        public boolean showInXaero = true;
+        public java.util.Map<String, Integer> hiddenColors = new java.util.HashMap<>();
+    }
     public boolean shulkerMostCommonItem = true;
     public com.abyssredemption.abstool.client.schematic.SchematicShaderConfig schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();
     public com.abyssredemption.abstool.client.furnace.FurnaceConfig furnace = new com.abyssredemption.abstool.client.furnace.FurnaceConfig();
@@ -28,6 +33,9 @@ public class ModConfig {
 
     public void validate() {
         if (serverWaypoints == null) serverWaypoints = new ServerWaypoints();
+        if (serverWaypoints.hiddenColors == null) serverWaypoints.hiddenColors = new java.util.HashMap<>();
+        serverWaypoints.hiddenColors.entrySet().removeIf(e -> e.getKey() == null || e.getValue() == null || e.getValue() == 0);
+        serverWaypoints.hiddenColors.replaceAll((key, mask) -> mask & 0xFFFF);
         if (elytraAssist == null) elytraAssist = new com.abyssredemption.abstool.client.elytra.ElytraConfig();
         elytraAssist.validate();
         if (schematicShaderCompat == null) schematicShaderCompat = new com.abyssredemption.abstool.client.schematic.SchematicShaderConfig();

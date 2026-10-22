@@ -273,5 +273,10 @@
   "text.abstool.waypoint.category_default": "Unnamed category",
   "text.abstool.waypoint.category_rename": "Rename",
   "text.abstool.waypoint.category_hint": "Up to 32 characters; blank restores default",
-  "text.abstool.waypoint.category_upgrade": "Update AbsServerTool to enable shared category names"
+  "text.abstool.waypoint.category_upgrade": "Update AbsServerTool to enable shared category names",
+  "text.abstool.waypoint.hide_color": "Hide color",
+  "text.abstool.waypoint.show_color": "Show color",
+  "text.abstool.waypoint.color_visibility_hint": "Hide this color on your maps only; saved separately for this server.",
+  "text.abstool.mobmerge.enabled": "Merge nearly overlapping mobs",
+  "text.abstool.mobmerge.hint": "Render matching mobs with at least 98% box overlap once and show Name x Count. Client display only."
 }

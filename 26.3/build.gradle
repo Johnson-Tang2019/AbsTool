@@ -75,6 +75,8 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
                 zip.entries().each { entry ->
                     if ((entry.name.startsWith('com/abyssredemption/abstool/client/compat/xaero/')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/waypoint/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/mobmerge/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/mixin/MobMerge')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/screenshot/')
                             || entry.name == 'com/abyssredemption/abstool/mixin/ScreenshotClipboardMixin.class'
                             || entry.name == 'com/abyssredemption/abstool/mixin/SettingsBackgroundMixin.class') && entry.name.endsWith('.class')) {
@@ -92,6 +94,7 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
                 def mainMixins = zip.getInputStream(zip.getEntry('abstool.mixins.json')).withCloseable { new groovy.json.JsonSlurper().parse(it) }
                 if (!mainMixins.client.contains('ScreenshotClipboardMixin')) throw new GradleException("Missing screenshot clipboard hook in ${loader}")
                 if (!mainMixins.client.contains('SettingsBackgroundMixin')) throw new GradleException("Missing settings background hook in ${loader}")
+                if (!mainMixins.client.containsAll(['MobMergeFrameMixin','MobMergeDispatcherMixin','MobMergeRenderStateMixin','MobMergeNameMixin'])) throw new GradleException("Missing mob merge hooks in ${loader}")
                 ['assets/minecraft/font/default.json', 'assets/abstool/textures/font/server.png'].each { name ->
                     def resource = zip.getEntry(name)
                     if (resource == null) throw new GradleException("Missing server icon resource in ${loader}: ${name}")

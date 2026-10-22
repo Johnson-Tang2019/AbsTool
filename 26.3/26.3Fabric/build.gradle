@@ -264,3 +264,18 @@ if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProper
         }
     }
 }
+
+if (providers.gradleProperty('worldTests').isPresent() && providers.gradleProperty('mobMergeTest').isPresent()) {
+    sourceSets.gametest.java.setSrcDirs(['src/mobMergeTest/java'])
+    sourceSets.gametest.resources.setSrcDirs(['src/mobMergeTest/resources'])
+    dependencies { runtimeOnly fileTree(rootProject.file('build/reference/testmods')) { include 'xaerominimap-fabric-*.jar', 'xaeroworldmap-fabric-*.jar' } }
+    tasks.named('runClientGameTest', JavaExec) {
+        args '--width', '1600', '--height', '900'
+        doFirst {
+            def testRun = layout.buildDirectory.dir('run/clientGameTest').get().asFile
+            testRun.mkdirs()
+            new File(testRun, 'eula.txt').text = 'eula=true\n'
+            new File(testRun, 'options.txt').text = 'lang:zh_cn\nguiScale:2\nrenderDistance:8\nmaxFps:90\nenableVsync:false\n'
+        }
+    }
+}

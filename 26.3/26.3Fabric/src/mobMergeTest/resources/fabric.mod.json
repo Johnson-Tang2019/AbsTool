@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "abstool_world_test",
+  "version": "1.0.0",
+  "name": "Ab's Tool local rendering verification",
+  "environment": "client",
+  "entrypoints": {"fabric-client-gametest": ["com.abyssredemption.abstool.verification.MobMergeWorldTest"]},
+  "depends": {"abstool": "*"}
+}

@@ -22,6 +22,7 @@ public final class SharedWaypointsEntry extends TextListEntry {
     private final List<Button> visible = new ArrayList<>();
     private final Map<Integer, Button> headers = new HashMap<>();
     private final Map<Integer, Button> categoryActions = new HashMap<>();
+    private final Map<Integer, Button> visibilityActions = new HashMap<>();
     private final Map<UUID, Button> actions = new HashMap<>();
     private final List<Button> toolbar;
     public SharedWaypointsEntry() {
@@ -71,10 +72,15 @@ public final class SharedWaypointsEntry extends TextListEntry {
                     header.setMessage(Component.literal(model.collapsed(row.color()) ? "▶ " : "▼ ")
                             .append(state.categoryName(row.color()).isEmpty() ? text("category_default") : Component.literal(state.categoryName(row.color())))
                             .append(" · ").append(WaypointPalette.name(row.color())).append(" (" + row.count() + ")"));
-                    header.setX(x + 16); header.setY(rowY); header.setWidth(Math.max(50, width - (canEdit ? 88 : 20)));
+                    header.setX(x + 16); header.setY(rowY); header.setWidth(Math.max(50, width - (canEdit ? 156 : 88)));
                     graphics.fill(x + 2, rowY + 5, x + 13, rowY + 16, 0xFF000000 | WaypointPalette.rgb(row.color()));
                     graphics.outline(x + 1, rowY + 4, 13, 13, 0xFFAAAAAA);
                     draw(header, graphics, client, mouseX, mouseY, delta);
+                    var visibility = visibilityActions.computeIfAbsent(row.color(), color -> new CategoryButton(() -> WaypointVisibility.toggle(color)));
+                    visibility.setMessage(text(WaypointVisibility.hidden(row.color()) ? "show_color" : "hide_color"));
+                    visibility.setTooltip(Tooltip.create(text("color_visibility_hint")));
+                    visibility.setX(x+width-(canEdit ? 135 : 67)); visibility.setY(rowY); visibility.setWidth(64);
+                    draw(visibility, graphics, client, mouseX, mouseY, delta);
                     if (canEdit) {
                         var rename = categoryActions.computeIfAbsent(row.color(), color -> {
                             var b = new CategoryButton(() -> client.gui.setScreen(new WaypointCategoryScreen(client.gui.screen(),color)));
