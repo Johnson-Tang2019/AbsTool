@@ -1,6 +1,6 @@
 # 设置与按键
 
-[English](Configuration.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Configuration) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 ## 打开设置
 

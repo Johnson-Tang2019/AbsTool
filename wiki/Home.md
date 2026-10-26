@@ -1,6 +1,6 @@
 # Ab's Tool Wiki
 
-[简体中文](Home.zh-CN.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 This wiki follows the current GitHub main branch. Last reviewed against commit cd0131663510be7aa72776ebde475b5222aa632a (2026-10-13).
 
@@ -30,14 +30,14 @@ Server-side statistics, shared-waypoint authority, persistence, permissions, and
 
 ## Wiki navigation
 
-- [Installation and versions](Installation.md)
-- [Features](Features.md)
-- [Configuration and controls](Configuration.md)
-- [AbsServerTool integration](Server-Integration.md)
-- [Server-shared Xaero waypoints](Shared-Waypoints.md)
-- [Compatibility matrix](Compatibility.md)
-- [Development and release structure](Development.md)
-- [Troubleshooting](Troubleshooting.md)
+- [Installation and versions](https://github.com/Johnson-Tang2019/AbsTool/wiki/Installation)
+- [Features](https://github.com/Johnson-Tang2019/AbsTool/wiki/Features)
+- [Configuration and controls](https://github.com/Johnson-Tang2019/AbsTool/wiki/Configuration)
+- [AbsServerTool integration](https://github.com/Johnson-Tang2019/AbsTool/wiki/Server-Integration)
+- [Server-shared Xaero waypoints](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints)
+- [Compatibility matrix](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility)
+- [Development and release structure](https://github.com/Johnson-Tang2019/AbsTool/wiki/Development)
+- [Troubleshooting](https://github.com/Johnson-Tang2019/AbsTool/wiki/Troubleshooting)
 
 ## Project links
 

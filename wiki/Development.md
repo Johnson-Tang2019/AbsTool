@@ -1,6 +1,6 @@
 # Development and release structure
 
-[简体中文](Development.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Development.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 ## Repository layout
 

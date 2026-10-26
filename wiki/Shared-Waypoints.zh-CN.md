@@ -1,6 +1,6 @@
 # Xaero 服务器共享标点
 
-[English](Shared-Waypoints.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 共享标点由服务器持有权威数据。Ab's Tool 在客户端把同步数据接入 Xaero；AbsServerTool 负责持久化、权限、快照、revision 和增删改。
 

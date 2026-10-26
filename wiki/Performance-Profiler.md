@@ -1,6 +1,6 @@
 # Server Performance Profiler GUI
 
-[简体中文](Performance-Profiler.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Performance-Profiler.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 The client `abstoolmod` (Ab's Tool) only controls and displays profiler sessions. Sampling, permissions and report authority remain on AbsServerTool.
 

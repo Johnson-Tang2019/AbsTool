@@ -1,6 +1,6 @@
 # Ab's Tool Wiki
 
-[English](Home.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 本 Wiki 根据 GitHub main 分支的最新代码整理。最后核对提交：cd0131663510be7aa72776ebde475b5222aa632a（2026-10-13）。
 
@@ -30,14 +30,14 @@ Ab's Tool 定位为客户端工具与 QoL Mod。当前代码已经包含：
 
 ## Wiki 导航
 
-- [安装与版本](Installation.zh-CN.md)
-- [功能说明](Features.zh-CN.md)
-- [设置与按键](Configuration.zh-CN.md)
-- [AbsServerTool 联动](Server-Integration.zh-CN.md)
-- [Xaero 服务器共享标点](Shared-Waypoints.zh-CN.md)
-- [兼容性矩阵](Compatibility.zh-CN.md)
-- [开发与发布结构](Development.zh-CN.md)
-- [故障排查](Troubleshooting.zh-CN.md)
+- [安装与版本](https://github.com/Johnson-Tang2019/AbsTool/wiki/Installation.zh-CN)
+- [功能说明](https://github.com/Johnson-Tang2019/AbsTool/wiki/Features.zh-CN)
+- [设置与按键](https://github.com/Johnson-Tang2019/AbsTool/wiki/Configuration.zh-CN)
+- [AbsServerTool 联动](https://github.com/Johnson-Tang2019/AbsTool/wiki/Server-Integration.zh-CN)
+- [Xaero 服务器共享标点](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints.zh-CN)
+- [兼容性矩阵](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility.zh-CN)
+- [开发与发布结构](https://github.com/Johnson-Tang2019/AbsTool/wiki/Development.zh-CN)
+- [故障排查](https://github.com/Johnson-Tang2019/AbsTool/wiki/Troubleshooting.zh-CN)
 
 ## 项目链接
 

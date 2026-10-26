@@ -1,6 +1,6 @@
 # AbsServerTool integration
 
-[简体中文](Server-Integration.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Server-Integration.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 Ab's Tool stays client-side. Server-owned features are provided by the separate AbsServerTool project.
 

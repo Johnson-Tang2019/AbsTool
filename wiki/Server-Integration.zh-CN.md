@@ -1,6 +1,6 @@
 # AbsServerTool 联动
 
-[English](Server-Integration.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Server-Integration) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 `abstoolmod`（Ab's Tool）保持客户端定位。需要服务器权威数据的功能由独立项目 AbsServerTool 提供。
 
@@ -24,7 +24,7 @@
 
 ## 性能分析
 
-详细使用说明见[性能分析 GUI](Performance-Profiler.zh-CN.md)。
+详细使用说明见[性能分析 GUI](https://github.com/Johnson-Tang2019/AbsTool/wiki/Performance-Profiler.zh-CN)。
 
 
 性能分析由服务器掌控：

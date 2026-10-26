@@ -1,6 +1,6 @@
 # 功能说明
 
-[English](Features.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Features) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 ## 不祥宝库追踪
 
@@ -51,7 +51,7 @@ Fabric 专属实验性渲染适配。
 
 它在保持光影开启的同时，继续复用 Litematica 原有方块模型、贴图、透明度、投影变换、分层与世界深度。未核查的依赖组合不会“猜着兼容”。
 
-版本范围见[兼容性矩阵](Compatibility.zh-CN.md)。
+版本范围见[兼容性矩阵](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility.zh-CN)。
 
 ## TweakerMore 联动
 
@@ -65,7 +65,7 @@ Fabric 专属实验性渲染适配。
 
 共享标点由兼容的 AbsServerTool 服务器持有权威数据。管理员可以发布、更新和删除共享点，普通玩家接收只读同步。
 
-26.3 分支已经同时支持 Fabric 与 NeoForge 的 Xaero 集成；26.2 稳定线的加载器支持范围更有限。详见[Xaero 服务器共享标点](Shared-Waypoints.zh-CN.md)。
+26.3 分支已经同时支持 Fabric 与 NeoForge 的 Xaero 集成；26.2 稳定线的加载器支持范围更有限。详见[Xaero 服务器共享标点](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints.zh-CN)。
 
 26.3 beta.7 在设置页中增加了按颜色分组、可折叠的全部共享标点列表。普通玩家可查看详情，管理员可编辑坐标、颜色等字段。
 

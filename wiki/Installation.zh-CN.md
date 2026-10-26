@@ -1,6 +1,6 @@
 # 安装与版本
 
-[English](Installation.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Installation) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 ## 先选择正确的 Minecraft 版本线
 

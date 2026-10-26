@@ -1,8 +1,8 @@
 # Features
 
-Minecraft 26.3 beta.7 adds automatic screenshot image copying to the system clipboard on both loaders, plus a color-grouped, collapsible shared waypoint browser in settings. Viewers can inspect every point; administrators can edit coordinates, colors, and other fields. See [configuration](Configuration.md) and [shared waypoints](Shared-Waypoints.md).
+Minecraft 26.3 beta.7 adds automatic screenshot image copying to the system clipboard on both loaders, plus a color-grouped, collapsible shared waypoint browser in settings. Viewers can inspect every point; administrators can edit coordinates, colors, and other fields. See [configuration](https://github.com/Johnson-Tang2019/AbsTool/wiki/Configuration) and [shared waypoints](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints).
 
-[简体中文](Features.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Features.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 ## Ominous vault tracker
 
@@ -53,7 +53,7 @@ Fabric-only experimental rendering adapter.
 
 It keeps the shader pack enabled while preserving Litematica's existing block meshes, textures, translucency, placement transforms, layer selection, and world depth. Unsupported dependency combinations are gated rather than guessed.
 
-See [Compatibility](Compatibility.md) for version coverage.
+See [Compatibility](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility) for version coverage.
 
 ## TweakerMore integration
 
@@ -67,4 +67,4 @@ On supported Fabric setups:
 
 A compatible AbsServerTool server owns the shared waypoint dataset. Administrators can publish, update, and delete server waypoints; ordinary players receive read-only synchronized waypoints.
 
-The 26.3 line supports both Fabric and NeoForge Xaero integration. The 26.2 stable line has more limited loader support. See [Shared Waypoints](Shared-Waypoints.md).
+The 26.3 line supports both Fabric and NeoForge Xaero integration. The 26.2 stable line has more limited loader support. See [Shared Waypoints](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints).

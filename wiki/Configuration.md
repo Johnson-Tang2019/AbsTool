@@ -1,6 +1,6 @@
 # Configuration and controls
 
-[简体中文](Configuration.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Configuration.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 ## Opening settings
 

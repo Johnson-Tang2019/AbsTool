@@ -1,6 +1,6 @@
 # Compatibility matrix
 
-[简体中文](Compatibility.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 This page summarizes the current source-tree policy. It is not a promise that every theoretical combination has been manually played for hours.
 
@@ -47,7 +47,7 @@ Later Iris releases can pass automatically if the required interfaces remain com
 
 ## Xaero shared waypoints
 
-See [Shared Waypoints](Shared-Waypoints.md) for the detailed version ranges.
+See [Shared Waypoints](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints) for the detailed version ranges.
 
 At the latest 26.3 code:
 

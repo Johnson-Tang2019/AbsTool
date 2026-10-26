@@ -1,6 +1,6 @@
 # 兼容性矩阵
 
-[English](Compatibility.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Compatibility) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 本页总结当前源码中的兼容策略，不代表每一种理论组合都经过了长时间人工游戏测试。
 
@@ -47,7 +47,7 @@ Iris / Sodium 必须使用匹配组合：
 
 ## Xaero 共享标点
 
-详细版本范围见[Xaero 服务器共享标点](Shared-Waypoints.zh-CN.md)。
+详细版本范围见[Xaero 服务器共享标点](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints.zh-CN)。
 
 当前 26.3 最新代码已核查：
 

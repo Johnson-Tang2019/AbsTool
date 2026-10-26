@@ -1,6 +1,6 @@
 # Troubleshooting
 
-[简体中文](Troubleshooting.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Troubleshooting.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 ## I cannot open Ab's Tool settings
 

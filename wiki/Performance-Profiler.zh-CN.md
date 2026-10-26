@@ -1,6 +1,6 @@
 # 服务器性能分析 GUI
 
-[English](Performance-Profiler.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Performance-Profiler) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 客户端 `abstoolmod`（Ab's Tool）只负责控制与显示。真正的采样、权限校验和报告都由 AbsServerTool 完成。
 

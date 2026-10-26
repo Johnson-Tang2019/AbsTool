@@ -1,6 +1,6 @@
 # 故障排查
 
-[English](Troubleshooting.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Troubleshooting) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 ## 打不开 Ab's Tool 设置
 

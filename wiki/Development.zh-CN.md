@@ -1,6 +1,6 @@
 # 开发与发布结构
 
-[English](Development.md) · [首页](Home.zh-CN.md)
+[English](https://github.com/Johnson-Tang2019/AbsTool/wiki/Development) · [首页](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home.zh-CN)
 
 ## 仓库结构
 

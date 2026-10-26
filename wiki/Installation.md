@@ -1,6 +1,6 @@
 # Installation and versions
 
-[简体中文](Installation.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Installation.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 ## Choose the correct Minecraft line
 

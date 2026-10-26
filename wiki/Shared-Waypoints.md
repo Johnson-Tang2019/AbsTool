@@ -1,6 +1,6 @@
 # Server-shared Xaero waypoints
 
-[简体中文](Shared-Waypoints.zh-CN.md) · [Home](Home.md)
+[简体中文](https://github.com/Johnson-Tang2019/AbsTool/wiki/Shared-Waypoints.zh-CN) · [Home](https://github.com/Johnson-Tang2019/AbsTool/wiki/Home)
 
 Shared waypoints are server-owned. Ab's Tool integrates the synchronized dataset into Xaero on the client; AbsServerTool owns persistence, permissions, snapshots, revisions, and mutations.
 
