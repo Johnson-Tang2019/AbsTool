@@ -76,6 +76,7 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
                     if ((entry.name.startsWith('com/abyssredemption/abstool/client/compat/xaero/')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/waypoint/')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/mobmerge/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/update/')
                             || entry.name.startsWith('com/abyssredemption/abstool/mixin/MobMerge')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/screenshot/')
                             || entry.name == 'com/abyssredemption/abstool/mixin/ScreenshotClipboardMixin.class'

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0-beta.10 — 2026-11-17 — Minecraft 26.3
+
+- Add automatic Ab's Tool update checks and in-game installation on Fabric and NeoForge.
+- Enable beta updates by default and offer a stable-only channel in settings.
+- Match the current Minecraft version and loader, verify downloads against the GitHub release checksum, and back up the old JAR before replacement after Minecraft exits.
+
 ## 0.5.0-beta.9 — 2026-10-22 — Minecraft 26.3
 
 - Add per-server personal color visibility controls beside the shared-waypoint category headers. Viewers can hide/show colors without mutating server data; keep hidden points available in the settings list.

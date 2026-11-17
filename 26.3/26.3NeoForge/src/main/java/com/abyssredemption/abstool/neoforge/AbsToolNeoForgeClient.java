@@ -2,6 +2,7 @@ package com.abyssredemption.abstool.neoforge;
 
 import com.abyssredemption.abstool.AbsTool;
 import com.abyssredemption.abstool.client.AbsToolClient;
+import com.abyssredemption.abstool.client.update.ModUpdates;
 import com.abyssredemption.abstool.client.vault.client.VaultFrame;
 import com.abyssredemption.abstool.client.vault.client.VaultRenderer;
 import com.abyssredemption.abstool.client.vault.client.VaultTrackerController;
@@ -36,6 +37,8 @@ public final class AbsToolNeoForgeClient {
                         .containsKey(com.abyssredemption.abstool.client.furnace.FurnaceNetwork.SERVUX);
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id);
         AbsToolClient.init(FMLPaths.CONFIGDIR.get());
+        ModUpdates.init(FMLPaths.GAMEDIR.get(), container.getModInfo().getOwningFile().getFile().getFilePath(),
+                "neoforge", container.getModInfo().getVersion().toString());
         com.abyssredemption.abstool.neoforge.compat.xaero.XaeroNeoForgeClient.init();
         ServerStatsClient.install(net.neoforged.neoforge.client.network.ClientPacketDistributor::sendToServer,
                 id -> Minecraft.getInstance().getConnection() != null && Minecraft.getInstance().getConnection().hasChannel(id));

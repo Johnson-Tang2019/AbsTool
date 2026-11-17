@@ -23,6 +23,7 @@ public final class ClothConfigScreenFactory {
                 .setSavingRunnable(ConfigManager::save);
         ConfigEntryBuilder entries = builder.entryBuilder();
         ConfigCategory all = builder.getOrCreateCategory(Component.translatable("text.abstool.category.all"));
+        all.addEntry(new com.abyssredemption.abstool.client.update.UpdateEntry());
         ConfigCategory tracking = builder.getOrCreateCategory(Component.translatable("text.abstool.category.tracking"));
         ConfigCategory optimization = builder.getOrCreateCategory(Component.translatable("text.abstool.category.optimization"));
         ConfigCategory serverStats = builder.getOrCreateCategory(Component.translatable("text.abstool.serverstats.category"));

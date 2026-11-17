@@ -1,6 +1,7 @@
 package com.abyssredemption.abstool.fabric;
 
 import com.abyssredemption.abstool.client.AbsToolClient;
+import com.abyssredemption.abstool.client.update.ModUpdates;
 import com.abyssredemption.abstool.client.vault.client.VaultFrame;
 import com.abyssredemption.abstool.client.vault.client.VaultRenderer;
 import com.abyssredemption.abstool.client.vault.client.VaultTrackerController;
@@ -21,6 +22,13 @@ public final class AbsToolFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         com.abyssredemption.abstool.client.furnace.FurnaceNetwork.canSend = net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking::canSend;
         AbsToolClient.init(FabricLoader.getInstance().getConfigDir());
+        FabricLoader.getInstance().getModContainer("abstool").ifPresent(mod -> {
+            var origin = mod.getOrigin();
+            var paths = origin.getKind() == net.fabricmc.loader.api.metadata.ModOrigin.Kind.PATH
+                    ? origin.getPaths() : java.util.List.<java.nio.file.Path>of();
+            ModUpdates.init(FabricLoader.getInstance().getGameDir(), paths.size() == 1 ? paths.getFirst() : null,
+                    "fabric", mod.getMetadata().getVersion().getFriendlyString());
+        });
         com.abyssredemption.abstool.client.ClientKeyMappings.register(
                 net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper::registerKeyMapping);
         ServerStatsNetworking.init();

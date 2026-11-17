@@ -2,6 +2,8 @@
 package com.abyssredemption.abstool.client.vault.config;
 
 public class ModConfig {
+    public boolean autoCheckUpdates = true;
+    public boolean receiveBetaUpdates = true;
     public boolean screenshotToClipboard = true;
     public boolean mergeOverlappingMobs = false;
     public ServerWaypoints serverWaypoints = new ServerWaypoints();
