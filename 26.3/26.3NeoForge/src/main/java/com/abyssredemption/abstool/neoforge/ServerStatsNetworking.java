@@ -13,6 +13,11 @@ public final class ServerStatsNetworking {
     private ServerStatsNetworking() {}
     public static void register(RegisterPayloadHandlersEvent event) {
         var r = event.registrar("2").optional();
+        r.playToServer(com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Request.TYPE,
+                com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Request.CODEC,(p,c)->{});
+        r.playToClient(com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Response.TYPE,
+                com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Response.CODEC,
+                (p,c)->c.enqueueWork(()->com.abyssredemption.abstool.client.serverstats.social.SocialLeaderboardClient.onResponse(p)));
         r.playToServer(HelloRequestPayload.TYPE, HelloRequestPayload.CODEC, (p, c) -> {});
         r.playToServer(OverviewRequestPayload.TYPE, OverviewRequestPayload.CODEC, (p, c) -> {});
         r.playToServer(TrendRequestPayload.TYPE, TrendRequestPayload.CODEC, (p, c) -> {});

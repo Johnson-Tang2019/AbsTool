@@ -1,6 +1,7 @@
 package com.abyssredemption.abstool.client.serverstats.network;
 
 public final class ProtocolConstants {
+    public static final int CAP_SOCIAL_LEADERBOARDS = 1 << 10;
     public static final int VERSION = 2;
     public static final int CAP_OVERVIEW = 1;
     public static final int CAP_ACTIVITY = 1 << 1;

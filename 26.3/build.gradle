@@ -42,6 +42,16 @@ subprojects {
     tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
     tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
     afterEvaluate {
+        def social = tasks.register('verifySocialLeaderboards', JavaExec) {
+            group = 'verification'
+            dependsOn tasks.named('verificationClasses')
+            classpath = sourceSets.verification.runtimeClasspath
+            mainClass = 'com.abyssredemption.abstool.verification.SocialClientVerification'
+            javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+            workingDir = layout.buildDirectory.dir('social-verification').get().asFile
+            doFirst { workingDir.mkdirs() }
+        }
+        tasks.named('check') { dependsOn social }
         def utilities = tasks.register('verifyClientUtilities', JavaExec) {
             group = 'verification'
             dependsOn tasks.named('verificationClasses')
@@ -77,6 +87,8 @@ def verifyXaeroParity = tasks.register('verifyXaeroParity') {
                             || entry.name.startsWith('com/abyssredemption/abstool/client/waypoint/')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/mobmerge/')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/update/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/serverstats/export/')
+                            || entry.name.startsWith('com/abyssredemption/abstool/client/export/')
                             || entry.name.startsWith('com/abyssredemption/abstool/mixin/MobMerge')
                             || entry.name.startsWith('com/abyssredemption/abstool/client/screenshot/')
                             || entry.name == 'com/abyssredemption/abstool/mixin/ScreenshotClipboardMixin.class'

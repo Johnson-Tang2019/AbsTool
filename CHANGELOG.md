@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0-beta.11 — 2026-11-18 — Minecraft 26.3
+
+- Export the server overview, daily and weekly trends, and all available leaderboard pages into one Excel workbook.
+- Add the Pigeon and Street Wanderer boards when the server supports them, and include their available data in the statistics workbook.
+- Add a separate Excel export for synchronized shared waypoints, including coordinates, dimension, category, color, symbol, and server-enabled status. Both exports save to the game instance's `abstool-exports` directory.
+
 ## 0.5.0-beta.10 — 2026-11-17 — Minecraft 26.3
 
 - Add automatic Ab's Tool update checks and in-game installation on Fabric and NeoForge.

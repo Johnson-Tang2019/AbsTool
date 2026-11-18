@@ -2,6 +2,7 @@ package com.abyssredemption.abstool.client.serverstats.gui;
 
 import com.abyssredemption.abstool.client.serverstats.ServerStatsAvailability;
 import com.abyssredemption.abstool.client.serverstats.ServerStatsClient;
+import com.abyssredemption.abstool.client.serverstats.export.ServerStatsExport;
 import com.abyssredemption.abstool.client.serverstats.network.LeaderboardType;
 import com.abyssredemption.abstool.client.serverstats.performance.PerformanceClient;
 import com.abyssredemption.abstool.client.serverstats.performance.PerformanceProfilerScreen;
@@ -47,6 +48,15 @@ public final class ServerStatsEntry extends TextListEntry {
         buttons.add(Button.builder(Component.translatable("abstool.performance.title"), b ->
                 Minecraft.getInstance().gui.setScreen(new PerformanceProfilerScreen(Minecraft.getInstance().gui.screen())))
                 .bounds(0, 0, 65, 20).build());
+        buttons.add(Button.builder(Component.translatable("abstool.social.title"), b ->
+                Minecraft.getInstance().gui.setScreen(new com.abyssredemption.abstool.client.serverstats.social.SocialLeaderboardScreen(Minecraft.getInstance().gui.screen())))
+                .bounds(0, 0, 65, 20).build());
+        buttons.add(Button.builder(label("export.button"), b -> ServerStatsExport.start())
+                .bounds(0, 0, 65, 20).build());
+        buttons.add(Button.builder(label("export.copy"), b -> {
+            var file = ServerStatsExport.lastFile();
+            if (file != null) Minecraft.getInstance().keyboardHandler.setClipboard(file.toAbsolutePath().toString());
+        }).bounds(0, 0, 65, 20).build());
     }
 
     private static Component label(String key, Object... args) {
@@ -76,6 +86,7 @@ public final class ServerStatsEntry extends TextListEntry {
         var state = ServerStatsClient.state();
         List<Component> lines = new ArrayList<>();
         lines.add(label("status." + state.availability().name().toLowerCase(java.util.Locale.ROOT)));
+        if (!ServerStatsExport.status().getString().isEmpty()) lines.add(ServerStatsExport.status());
         if (state.availability() != ServerStatsAvailability.READY) return lines;
         if (tab == 0) {
             var o = state.overview();
@@ -117,9 +128,9 @@ public final class ServerStatsEntry extends TextListEntry {
         int buttonWidth = Math.max(30, Math.min(90, (width - 20) / 5));
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
-            int column = i < 5 ? i : i < 10 ? i - 5 : 0;
+            int column = i % 5;
             button.setX(x + column * (buttonWidth + 3));
-            button.setY(y + (i < 5 ? 0 : i < 10 ? 24 : 48));
+            button.setY(y + (i / 5) * 24);
             button.setWidth(buttonWidth);
             button.active = i < 6 ? tab != i : ServerStatsClient.state().availability() == ServerStatsAvailability.READY;
             if (i == 6) {
@@ -134,6 +145,19 @@ public final class ServerStatsEntry extends TextListEntry {
             if (i == 10) {
                 button.active = PerformanceClient.supported();
                 button.setTooltip(button.active ? null : Tooltip.create(Component.translatable("abstool.performance.unsupported")));
+            }
+            if (i == 11) {
+                button.active = com.abyssredemption.abstool.client.serverstats.social.SocialLeaderboardClient.supported();
+                button.setTooltip(button.active ? null : Tooltip.create(Component.translatable("abstool.social.unsupported")));
+            }
+            if (i == 12) {
+                button.active &= !ServerStatsExport.busy();
+                button.setTooltip(Tooltip.create(label("export.hint")));
+            }
+            if (i == 13) {
+                var path = ServerStatsExport.lastFile();
+                button.active = path != null;
+                button.setTooltip(path == null ? null : Tooltip.create(Component.literal(path.toAbsolutePath().toString())));
             }
             button.extractRenderState(graphics, mouseX, mouseY, delta);
         }

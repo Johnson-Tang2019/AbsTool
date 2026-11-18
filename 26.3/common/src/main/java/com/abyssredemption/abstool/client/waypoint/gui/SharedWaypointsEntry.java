@@ -25,6 +25,11 @@ public final class SharedWaypointsEntry extends TextListEntry {
     private final Map<Integer, Button> visibilityActions = new HashMap<>();
     private final Map<UUID, Button> actions = new HashMap<>();
     private final List<Button> toolbar;
+    private final Button export = Button.builder(WaypointExcelExport.text("button"), button -> WaypointExcelExport.start()).build();
+    private final Button copyExportPath = Button.builder(Component.translatable("abstool.stats.export.copy"), button -> {
+        var path = WaypointExcelExport.lastFile();
+        if (path != null) Minecraft.getInstance().keyboardHandler.setClipboard(path.toAbsolutePath().toString());
+    }).build();
     public SharedWaypointsEntry() {
         super(text("list"), Component.empty());
         toolbar = List.of(button("expand_all", () -> model.foldAll(false)), button("collapse_all", () -> model.foldAll(true)),
@@ -39,7 +44,7 @@ public final class SharedWaypointsEntry extends TextListEntry {
     }
     @Override public int getItemHeight() {
         refresh();
-        return 154 + (model.rows().isEmpty() ? 26 : model.rows().stream().mapToInt(r -> r.header() ? 26 : 38).sum());
+        return 178 + (model.rows().isEmpty() ? 26 : model.rows().stream().mapToInt(r -> r.header() ? 26 : 38).sum());
     }
     @Override public void extractRenderState(GuiGraphicsExtractor graphics, int index, int y, int x, int width, int height,
                                             int mouseX, int mouseY, boolean hovered, float delta) {
@@ -58,9 +63,19 @@ public final class SharedWaypointsEntry extends TextListEntry {
             button.active = i != 2 || SharedWaypointClient.state().supported();
             draw(button, graphics, client, mouseX, mouseY, delta);
         }
+        int exportWidth = Math.max(1, Math.min(130, (width - 6) / 2));
+        export.setX(x); export.setY(y + 128); export.setWidth(exportWidth);
+        export.active = WaypointExcelExport.canExport();
+        export.setTooltip(Tooltip.create(WaypointExcelExport.text("hint")));
+        draw(export, graphics, client, mouseX, mouseY, delta);
+        var path = WaypointExcelExport.lastFile();
+        copyExportPath.setX(x + exportWidth + 3); copyExportPath.setY(y + 128); copyExportPath.setWidth(exportWidth);
+        copyExportPath.active = path != null;
+        copyExportPath.setTooltip(path == null ? null : Tooltip.create(Component.literal(path.toAbsolutePath().toString())));
+        draw(copyExportPath, graphics, client, mouseX, mouseY, delta);
         boolean canEdit = SharedWaypointClient.canManage();
-        graphics.textRenderer().accept(x + 2, y + 131, text(canEdit ? "edit_hint" : "readonly_hint"));
-        int rowY = y + 152;
+        graphics.textRenderer().accept(x + 2, y + 155, text(canEdit ? "edit_hint" : "readonly_hint"));
+        int rowY = y + 176;
         if (model.rows().isEmpty()) {
             graphics.textRenderer().accept(x + 2, rowY + 4, text(!state.supported() ? "unavailable" : !state.synced() ? "loading" : "empty"));
         }

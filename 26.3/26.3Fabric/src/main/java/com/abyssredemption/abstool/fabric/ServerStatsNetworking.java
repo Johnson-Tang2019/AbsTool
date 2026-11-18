@@ -15,6 +15,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 public final class ServerStatsNetworking {
     private ServerStatsNetworking() {}
     public static void init() {
+        PayloadTypeRegistry.serverboundPlay().register(com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Request.TYPE, com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Request.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Response.TYPE, com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Response.CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(com.abyssredemption.abstool.client.serverstats.social.SocialPayloads.Response.TYPE,
+                (p,c)->c.client().execute(()->com.abyssredemption.abstool.client.serverstats.social.SocialLeaderboardClient.onResponse(p)));
         PayloadTypeRegistry.serverboundPlay().register(HelloRequestPayload.TYPE, HelloRequestPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(OverviewRequestPayload.TYPE, OverviewRequestPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(TrendRequestPayload.TYPE, TrendRequestPayload.CODEC);
